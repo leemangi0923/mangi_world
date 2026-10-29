@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v3.4.1</title>
+  <title>만기 월드 (Mangi World) - v3.4.2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -162,6 +162,12 @@
       </div>
 
       <div class="changelog-box">
+        <h4>📌 v3.4.2 패치 노트</h4>
+        • 💾 <b>수동 저장과 자동 저장을 분리</b>했습니다. 자동 저장이 수동 저장을 덮어쓰지 않습니다<br>
+        • 🛡️ <b>파일을 검증한 뒤 가져옵니다.</b> 잘못된 파일은 기존 저장과 현재 플레이를 바꾸지 않습니다<br>
+        • ↩️ 각 저장의 <b>직전 정상 데이터 1개를 백업</b>하며 저장 화면에서 복구·내보내기할 수 있습니다<br>
+        • 📂 기존 저장도 불러올 수 있습니다. 브라우저 데이터 삭제에 대비해 <b>파일 내보내기</b>를 사용하세요<br>
+        <br>
         <h4>📌 v3.4.1 패치 노트</h4>
         • 🖼️ <b>장비마다 아이콘이 다릅니다</b> — 이모지를 돌려쓰고 있어서 👑 하나가 <b>왕관·갑옷·대검</b>에 다 붙었고, 대마왕 장비 6종은 전부 🌋였습니다. 무슨 부위인지 알 수가 없었습니다<br>
         &nbsp;&nbsp;· 이제 <b>장착했을 때 캐릭터에 그려지는 그 모양 그대로</b> 아이콘이 됩니다. 투구는 투구 모양, 검은 검 모양, 활은 활 모양이고 <b>장비마다 색과 생김새가 다릅니다</b><br>
@@ -419,7 +425,7 @@
     <!-- Center Game Container -->
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v3.4.1</div>
+      <div id="version-badge">v3.4.2</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -482,12 +488,12 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.1 : 장비 등급 + 장비마다 다른 아이콘 (대장간 목록 포함)</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.2 : 안전한 저장 · 수동/자동 저장 분리 · 백업 복구</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
       </div>
 
-      <div id="save-screen" class="hidden">
+      <div style="overflow-y:auto; justify-content:flex-start;" id="save-screen" class="hidden">
         <h2 id="save-screen-title" style="color:#fde047; margin-bottom:20px; font-family:'Cinzel';">세이브 파일 선택</h2>
         <div id="save-slots-container"></div>
         <button class="btn" style="background:#1e293b; color:#fff; margin-top:15px;" onclick="closeSaveScreen()">돌아가기</button>
@@ -519,7 +525,7 @@
         <button class="btn" style="width:180px;" onclick="closeSettingsModal()">닫기</button>
       </div>
 
-      <div id="autosave-indicator" class="hidden" style="position:absolute; top:14px; right:14px; background:rgba(15,23,42,0.92); border:1px solid #eab308; color:#fde047; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:bold; z-index:95;">💾 저장중...</div>
+      <div id="autosave-indicator" class="hidden" style="position:absolute; top:14px; right:14px; background:rgba(15,23,42,0.92); border:1px solid #eab308; color:#fde047; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:bold; z-index:95;">💾 자동 저장 완료</div>
 
       <div id="item-tooltip" class="hidden" style="position:fixed; z-index:200; background:rgba(15,23,42,0.97); border:1px solid #eab308; border-radius:8px; padding:10px 12px; max-width:240px; pointer-events:none; text-align:left;"></div>
 
@@ -712,7 +718,9 @@
 
     // ---------- 사운드 (Web Audio API 합성, 외부 파일 없음 — 배경음악은 없고 짧은 효과음만) ----------
     let audioCtx = null;
-    let sfxMuted = localStorage.getItem('mangiworld_sfx_muted') === '1';
+    let sfxMuted = (() => {
+      try { return localStorage.getItem('mangiworld_sfx_muted') === '1'; } catch (e) { return false; }
+    })();
 
     function ensureAudioCtx() {
       if (!audioCtx) {
@@ -726,7 +734,7 @@
 
     window.toggleSfxMute = function() {
       sfxMuted = !sfxMuted;
-      localStorage.setItem('mangiworld_sfx_muted', sfxMuted ? '1' : '0');
+      try { localStorage.setItem('mangiworld_sfx_muted', sfxMuted ? '1' : '0'); } catch (e) {}
       const btn = document.getElementById('sfx-toggle-btn');
       if (btn) btn.innerText = sfxMuted ? '🔇' : '🔊';
     };
@@ -1288,7 +1296,7 @@
     let bossRespawnCooldown = { slime: 0, wolf: 0, zombie: 0, ghost: 0, demon: 0 };
 
     // ---------- 무한의 탑 ----------
-    const SAVE_SCHEMA_VERSION = 2; // 세이브 파일 구조 버전. 새 필드를 추가할 때마다 올리고 applySaveData에서 방어적으로 처리할 것.
+    const SAVE_SCHEMA_VERSION = 3; // 세이브 파일 구조 버전. 새 필드를 추가할 때마다 올리고 applySaveData에서 방어적으로 처리할 것.
     let towerFloor = 0;
     let towerBestFloor = 0;
     let towerMobsRemaining = 0;
@@ -9967,20 +9975,21 @@
 
     const mapLabels = {
       village: '마을', guild_map: '모험가 길드', blacksmith_map: '대장간', potion_map: '잡화점',
-      inn: '여관', portal_room: '포탈 방', castle_entrance: '왕성 앞 입구', castle_inner: '왕성 내부',
+      elf_village: '엘프 마을', mage_tower: '대마법사의 탑', inn: '여관', portal_room: '포탈 방', castle_entrance: '왕성 앞 입구', castle_inner: '왕성 내부',
       demon_entrance: '마왕성 앞 입구', training: '훈련장', dungeon: '던전', story: '스토리 진행 중'
     };
     function mapLabel(gs) { return mapLabels[gs] || gs || '알 수 없음'; }
 
     function getSaveData() {
+      const returnToVillage = ['dungeon','tower','story','minje_duel','elf_duel','mage_duel'].includes(gameState);
       return {
         version: SAVE_SCHEMA_VERSION,
         savedAt: Date.now(),
         towerBestFloor, towerFloor,
         level, exp, nextExp, gold, hp, maxHp, mp, maxMp,
         statPoints, statStr, statVit, statAgi, statAtk, statCrit, statCritDmg, statMp,
-        gameState: (gameState === 'dungeon' || gameState === 'tower' || gameState === 'story' || gameState === 'minje_duel' || gameState === 'elf_duel' || gameState === 'mage_duel') ? 'village' : gameState,
-        player: { x: player.x, y: player.y, facing: player.facing },
+        gameState: returnToVillage ? 'village' : gameState,
+        player: { x: returnToVillage ? 400 : player.x, y: returnToVillage ? 500 : player.y, facing: player.facing },
         activeWeaponSlot,
         equipped: {
           helmet: equipped.helmet ? equipped.helmet.id : null,
@@ -10010,9 +10019,151 @@
       return blacksmithItems.find(i => i.id === id) || potionItems.find(i => i.id === id) || dropItems.find(i => i.id === id) || null;
     }
 
+    // 입력은 임시 객체에서 검증/변환한다. 검증 실패 전에는 게임 상태나 저장소를 건드리지 않는다.
+    function normalizeSaveData(input) {
+      const fail = () => { throw new Error('저장 데이터의 형식이나 값이 올바르지 않습니다.'); };
+      const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+      const number = (v, min = 0, max = Number.MAX_SAFE_INTEGER) => {
+        if (typeof v !== 'number' || !Number.isFinite(v) || v < min || v > max) fail();
+        return v;
+      };
+      const integer = (v, min = 0, max = Number.MAX_SAFE_INTEGER) => {
+        number(v, min, max); if (!Number.isSafeInteger(v)) fail(); return v;
+      };
+      const bool = (v, fallback = false) => {
+        if (v === undefined) return fallback;
+        if (typeof v !== 'boolean') fail(); return v;
+      };
+      const record = (v, optional = false) => {
+        if (v === undefined && optional) return {};
+        if (!object(v)) fail(); return v;
+      };
+      const choice = (v, choices, fallback) => {
+        if (v === undefined && fallback !== undefined) return fallback;
+        if (!choices.includes(v)) fail(); return v;
+      };
+      record(input);
+      const version = input.version === undefined ? 1 : integer(input.version, 1);
+      if (version > SAVE_SCHEMA_VERSION) throw new Error('더 최신 게임에서 만든 저장 파일입니다. 게임을 업데이트한 뒤 불러오세요.');
+      if (version >= 3) {
+        const required = ['savedAt','towerBestFloor','towerFloor','statCrit','statCritDmg','statMp','activeWeaponSlot',
+          'inventory','hotbar','lockedSlots','activeQuests','dungeonProgress','skills','npcFlags','awakenState',
+          'demonDefeated','minjeDefeated','elfQueenDefeated','archmageDefeated'];
+        if (required.some(key => input[key] === undefined)) fail();
+      }
+      const data = { version: SAVE_SCHEMA_VERSION };
+      for (const key of ['level','nextExp']) data[key] = integer(input[key], 1);
+      for (const key of ['exp','gold','statPoints']) data[key] = integer(input[key]);
+      for (const key of ['statStr','statVit','statAgi','statAtk']) data[key] = integer(input[key], 10);
+      for (const [key, fallback] of Object.entries({statCrit:0,statCritDmg:0,statMp:10,towerBestFloor:0,towerFloor:0})) {
+        data[key] = integer(input[key] === undefined ? fallback : input[key], key === 'statMp' ? 10 : 0);
+      }
+      data.maxHp = number(input.maxHp, 1); data.maxMp = number(input.maxMp, 1);
+      // 사망 직후 자동 저장에는 음수 HP가 있을 수 있다. 안전하게 0으로 변환한다.
+      data.hp = Math.max(0, number(input.hp, -Number.MAX_SAFE_INTEGER, data.maxHp));
+      data.mp = number(input.mp, 0, data.maxMp);
+      data.savedAt = input.savedAt === undefined ? 0 : integer(input.savedAt, 0, 8640000000000000);
+      for (const key of ['equipBonusHp','equipBonusDef']) data[key] = number(input[key] === undefined ? 0 : input[key]);
+      const locations = ['village','guild_map','blacksmith_map','potion_map','inn','portal_room','castle_entrance','castle_inner','demon_entrance','training','elf_village','mage_tower'];
+      const combat = ['dungeon','tower','story','minje_duel','elf_duel','mage_duel'];
+      const state = choice(input.gameState, [...locations, ...combat], 'village');
+      data.gameState = combat.includes(state) ? 'village' : state;
+      const savedPlayer = record(input.player);
+      data.player = { x:number(savedPlayer.x, 0, 800), y:number(savedPlayer.y, 0, 900), facing:choice(savedPlayer.facing, ['up','down','left','right'], 'down') };
+      if (combat.includes(state)) { data.player.x = 400; data.player.y = 500; }
+      data.activeWeaponSlot = choice(input.activeWeaponSlot, ['sword','bow','staff'], 'sword');
+      const gear = record(input.equipped);
+      if (version >= 3 && ['helmet','armor','pants','sword','bow','staff'].some(key => gear[key] === undefined)) fail();
+      const itemId = (id, type, kind) => {
+        if (id === null || id === undefined) return null;
+        if (typeof id !== 'string') fail();
+        const item = findItemById(id);
+        if (!item || (type && item.type !== type) || (kind && item.weaponKind !== kind)) fail();
+        return id;
+      };
+      data.equipped = {};
+      for (const slot of ['helmet','armor','pants']) data.equipped[slot] = itemId(gear[slot], slot);
+      const legacyWeapon = gear.weapon == null ? null : itemId(gear.weapon, 'weapon');
+      for (const slot of ['sword','bow','staff']) {
+        const old = legacyWeapon && findItemById(legacyWeapon).weaponKind === slot ? legacyWeapon : null;
+        data.equipped[slot] = itemId(gear[slot] === undefined ? old : gear[slot], 'weapon', slot);
+      }
+      const items = (value, length, hotbarOnly) => {
+        if (value === undefined) value = [];
+        if (!Array.isArray(value) || value.length > length || (version >= 3 && value.length !== length)) fail();
+        return Array.from({length}, (_, i) => {
+          const entry = value[i];
+          if (entry === null || entry === undefined) return null;
+          if (typeof entry === 'string' && !hotbarOnly) return itemId(entry);
+          record(entry);
+          const id = itemId(entry.id, hotbarOnly ? 'consumable' : undefined);
+          if (!id) fail();
+          if (entry.count === undefined && !hotbarOnly) return id;
+          const item = findItemById(id);
+          if (item.type !== 'consumable') fail();
+          return { id, count:integer(entry.count === undefined ? 1 : entry.count, 1, HOTBAR_STACK_MAX) };
+        });
+      };
+      data.inventory = items(input.inventory, 27, false);
+      data.hotbar = items(input.hotbar, 9, true);
+      data.lockedSlots = {};
+      for (const [key, value] of Object.entries(record(input.lockedSlots, true))) {
+        if (!/^(0|[1-9][0-9]*)$/.test(key)) fail();
+        integer(Number(key), 0, 26); data.lockedSlots[key] = bool(value);
+      }
+      data.activeQuests = {};
+      for (const [id, value] of Object.entries(record(input.activeQuests, true))) {
+        if (!questDefs.some(q => q.id === id)) fail();
+        record(value);
+        data.activeQuests[id] = { status:choice(value.status, ['accepted','completed','done']), progress:integer(value.progress) };
+      }
+      data.dungeonProgress = {};
+      const progress = record(input.dungeonProgress, true);
+      for (const cat of TOWER_CATS) {
+        const old = record(progress[cat], version < 3);
+        if (version >= 3 && ['progress','bossDefeated','eliteTimer'].some(key => old[key] === undefined)) fail();
+        const values = old.progress === undefined ? old.kills : old.progress;
+        if (values !== undefined && (!Array.isArray(values) || values.length !== 3)) fail();
+        if (values) values.forEach(v => integer(v));
+        data.dungeonProgress[cat] = {
+          progress:old.progress ? [...old.progress] : [values ? values[0] : 0, 0, 0],
+          bossDefeated:bool(old.bossDefeated), eliteTimer:integer(old.eliteTimer === undefined ? 0 : old.eliteTimer)
+        };
+      }
+      // 전투 자체는 재개하지 않고 마을에서 시작한다.
+      data.currentDungeon = {category:null, stage:0, isBoss:false};
+      data.skills = {};
+      const learned = record(input.skills, true);
+      for (const key of ['learned','learnedSword','learnedBow','learnedStaff']) {
+        if (version >= 3 && learned[key] === undefined) fail();
+        data.skills[key] = bool(learned[key]);
+      }
+      if (version === 1 && learned.learnedSword === undefined) data.skills.learnedSword = data.skills.learned;
+      const flags = record(input.npcFlags, true); data.npcFlags = {};
+      for (const key of ['metEnoch','metMinje','metElfQueen','metArchmage']) {
+        if (version >= 3 && flags[key] === undefined) fail();
+        data.npcFlags[key] = bool(flags[key]);
+      }
+      for (const key of ['demonDefeated','minjeDefeated','elfQueenDefeated','archmageDefeated']) data[key] = bool(input[key]);
+      data.awakenState = {};
+      const awaken = record(input.awakenState, true);
+      for (const slot of ['sword','bow','staff']) {
+        const old = record(awaken[slot], version < 3), bosses = record(old.bosses, version < 3);
+        if (version >= 3 && (['stage','mats','demonKills'].some(key => old[key] === undefined) ||
+          ['slime','wolf','zombie','ghost'].some(key => bosses[key] === undefined))) fail();
+        data.awakenState[slot] = {
+          stage:choice(old.stage, ['locked','quest','ready','awakened'], 'locked'),
+          mats:integer(old.mats === undefined ? 0 : old.mats),
+          demonKills:integer(old.demonKills === undefined ? 0 : old.demonKills),
+          bosses:Object.fromEntries(['slime','wolf','zombie','ghost'].map(c => [c,bool(bosses[c])]))
+        };
+      }
+      if (input.activeWeaponSlot === undefined && legacyWeapon) data.activeWeaponSlot = findItemById(legacyWeapon).weaponKind;
+      return data;
+    }
+
     function applySaveData(data) {
-      // data.version이 SAVE_SCHEMA_VERSION보다 낮은(또는 없는) 구버전 세이브도 아래 필드들은
-      // 전부 `data.x || 기본값` 형태로 방어적으로 읽으므로 별도 마이그레이션 없이 안전하게 로드된다.
+      data = normalizeSaveData(data); // 이 줄이 성공하기 전에는 전역 상태를 변경하지 않는다.
       towerBestFloor = data.towerBestFloor || 0;
       towerFloor = data.towerFloor || 0;
       level = data.level; exp = data.exp; nextExp = data.nextExp; gold = data.gold;
@@ -10048,23 +10199,7 @@
       });
       lockedSlots = data.lockedSlots || {};
       activeQuests = data.activeQuests || {};
-      // v2.5.0에서 dungeonProgress[cat].kills(구조: 처치수 전용) -> progress(타입별 의미 일반화)로 개편.
-      // 구버전(kills만 있는) 세이브는 1티어(처치형)만 의미가 그대로 맞아서 승계하고, 2/3티어(정예/생존형)는
-      // 옛 처치수가 새 목표(정예 수/생존 프레임)와 전혀 다른 의미라 그대로 승계하면 "이미 클리어된 것처럼
-      // 보여서 정예 타이머가 영원히 안 도는" 등의 혼란을 유발하므로 0으로 리셋한다.
-      // 이미 새 포맷(progress 필드 존재)으로 저장된 세이브는 그대로 전부 승계한다.
-      if (data.dungeonProgress) {
-        Object.keys(dungeonProgress).forEach(cat => {
-          const saved = data.dungeonProgress[cat];
-          if (!saved) return;
-          dungeonProgress[cat].bossDefeated = !!saved.bossDefeated;
-          if (Array.isArray(saved.progress)) {
-            dungeonProgress[cat].progress = [0, 1, 2].map(i => saved.progress[i] || 0);
-          } else if (Array.isArray(saved.kills)) {
-            dungeonProgress[cat].progress = [saved.kills[0] || 0, 0, 0];
-          }
-        });
-      }
+      dungeonProgress = data.dungeonProgress;
       currentDungeon = data.currentDungeon || { category: null, stage: 0, isBoss: false };
       skills.learned = !!(data.skills && data.skills.learned);
       skills.learnedSword = !!(data.skills && data.skills.learnedSword);
@@ -10118,146 +10253,204 @@
       updateHUD();
       updateQuestHUD();
       ensureGameLoopStarted();
-      showTopNotification(`📂 슬롯 ${currentSaveSlot} 불러오기 완료! (Lv.${level})`);
     }
 
+    const SAVE_SOURCES = ['manual', 'auto', 'backup', 'autoBackup'];
+    const SAVE_SOURCE_LABELS = {manual:'수동 저장', auto:'자동 저장', backup:'수동 백업', autoBackup:'자동 백업'};
+    let saveManagerMode = 'load';
+    function saveKey(slot, source = 'manual') {
+      if (!Number.isInteger(slot) || slot < 1 || slot > 3 || !SAVE_SOURCES.includes(source)) throw new Error('잘못된 저장 슬롯입니다.');
+      // 기존 수동 슬롯 키를 유지하여 업데이트 전 저장을 그대로 읽는다.
+      return 'mangiworld_save_' + slot + (source === 'manual' ? '' : '_' + source);
+    }
+    function readSaveRecord(slot, source = 'manual') {
+      let raw;
+      try { raw = localStorage.getItem(saveKey(slot, source)); }
+      catch (e) { return {status:'unavailable'}; }
+      if (raw === null) return {status:'empty'};
+      try { return {status:'valid', data:normalizeSaveData(JSON.parse(raw)), raw}; }
+      catch (e) { return {status:'corrupt', raw}; }
+    }
+    function loadSlotData(slot, source = 'manual') {
+      const record = readSaveRecord(slot, source);
+      return record.status === 'valid' ? record.data : null;
+    }
+    function writeSaveRecord(slot, source, input, preserveBackup = false) {
+      const data = normalizeSaveData(input);
+      if (!['manual','auto'].includes(source)) throw new Error('백업은 직접 덮어쓸 수 없습니다.');
+      const current = readSaveRecord(slot, source);
+      if (current.status === 'unavailable') throw new Error('브라우저 저장 공간에 접근할 수 없습니다.');
+      // 백업 저장에 실패하면 원본 쓰기를 시작하지 않는다. 손상된 원본은 정상 백업을 덮지 않는다.
+      if (current.status === 'valid' && !preserveBackup) {
+        localStorage.setItem(saveKey(slot, source === 'auto' ? 'autoBackup' : 'backup'), current.raw);
+      }
+      // localStorage의 단일 setItem은 실패 시 기존 값을 유지한다.
+      localStorage.setItem(saveKey(slot, source), JSON.stringify(data));
+      return data;
+    }
     function saveToSlot(slot, silent) {
       try {
-        localStorage.setItem('mangiworld_save_' + slot, JSON.stringify(getSaveData()));
+        writeSaveRecord(slot, silent ? 'auto' : 'manual', getSaveData());
         if (silent) showAutosaveIndicator();
-        else showTopNotification(`💾 슬롯 ${slot}에 저장했습니다!`);
+        else showTopNotification(`💾 슬롯 ${slot}에 수동 저장했습니다!`);
         return true;
       } catch(e) {
-        showTopNotification('⚠️ 저장에 실패했습니다. (브라우저 저장공간을 확인해주세요)');
+        showTopNotification('⚠️ 저장에 실패했습니다. 기존 저장은 유지됩니다. 브라우저 저장 공간을 확인해주세요.', 4500);
         return false;
       }
     }
-
-    function loadSlotData(slot) {
-      try {
-        const raw = localStorage.getItem('mangiworld_save_' + slot);
-        return raw ? JSON.parse(raw) : null;
-      } catch(e) { return null; }
-    }
-
     function deleteSlotData(slot) {
-      localStorage.removeItem('mangiworld_save_' + slot);
+      for (const source of SAVE_SOURCES) localStorage.removeItem(saveKey(slot, source));
     }
-
     function showAutosaveIndicator() {
       const el = document.getElementById('autosave-indicator');
       el.classList.remove('hidden');
       clearTimeout(el._hideTimeout);
       el._hideTimeout = setTimeout(() => el.classList.add('hidden'), 2000);
     }
-
     window.openSaveScreen = function() {
       document.getElementById('start-screen').classList.add('hidden');
       saveScreenReturnTo = 'start';
       openSaveManager('load');
     };
-
     window.openSaveManager = function(mode) {
       saveScreenReturnTo = document.getElementById('pause-menu').classList.contains('hidden') ? 'start' : 'pause';
       document.getElementById('pause-menu').classList.add('hidden');
       document.getElementById('save-screen').classList.remove('hidden');
-      document.getElementById('save-screen-title').innerText = mode === 'save' ? '저장할 슬롯 선택' : '세이브 파일 선택';
+      document.getElementById('save-screen-title').innerText = mode === 'save' ? '수동 저장할 슬롯 선택' : '세이브 파일 선택';
       renderSaveSlots(mode);
     };
-
     function renderSaveSlots(mode) {
+      saveManagerMode = mode;
       const container = document.getElementById('save-slots-container');
-      container.innerHTML = '';
+      container.replaceChildren();
+      const note = document.createElement('p');
+      note.style = 'font-size:12px; color:#cbd5e1; max-width:340px; margin:auto;';
+      note.textContent = '자동 저장은 수동 저장과 별개입니다. 각 저장의 직전 정상 데이터 1개를 백업합니다. 백업도 브라우저 데이터 삭제 시 사라지므로 파일로 내보내세요.';
+      container.appendChild(note);
       for (let slot = 1; slot <= 3; slot++) {
-        const data = loadSlotData(slot);
         const div = document.createElement('div');
         div.className = 'save-slot';
-        div.style = "background:#1e293b; padding:15px; border-radius:10px; color:#fde047; font-weight:bold; border:1px solid #eab308; width:320px; margin:10px auto; text-align:left;";
-        if (data) {
-          const d = new Date(data.savedAt);
-          const dateStr = `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-          div.innerHTML = `
-            <div>슬롯 ${slot} · Lv.${data.level} · ${mapLabel(data.gameState)}</div>
-            <div style="font-size:12px; color:#94a3b8; font-weight:normal; margin:4px 0;">💰${data.gold}G · 저장일: ${dateStr}</div>
-            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
-              ${mode === 'save'
-                ? `<button class="btn" style="padding:6px 12px; font-size:12px;" onclick="doSaveToSlot(${slot})">덮어쓰기 저장</button>`
-                : `<button class="btn" style="padding:6px 12px; font-size:12px;" onclick="doLoadSlot(${slot})">불러오기</button>`}
-              <button class="btn" style="padding:6px 12px; font-size:12px; background:#334155;" onclick="doExportSlot(${slot})">📤 파일로 내보내기</button>
-              <button class="btn" style="padding:6px 12px; font-size:12px; background:#7f1d1d;" onclick="doDeleteSlot(${slot}, '${mode}')">삭제</button>
-            </div>`;
-        } else {
-          div.innerHTML = `
-            <div>슬롯 ${slot} · 비어있음</div>
-            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
-              ${mode === 'save'
-                ? `<button class="btn" style="padding:6px 12px; font-size:12px;" onclick="doSaveToSlot(${slot})">이 슬롯에 저장</button>`
-                : `<button class="btn" style="padding:6px 12px; font-size:12px;" onclick="doNewGame(${slot})">새로운 모험 시작</button>`}
-              <button class="btn" style="padding:6px 12px; font-size:12px; background:#334155;" onclick="doImportToSlot(${slot})">📥 파일에서 불러오기</button>
-            </div>`;
+        div.style = 'background:#1e293b; padding:12px; border-radius:10px; color:#fde047; width:340px; max-width:100%; margin:10px auto; text-align:left;';
+        const title = document.createElement('strong'); title.textContent = `슬롯 ${slot}`; div.appendChild(title);
+        const records = Object.fromEntries(SAVE_SOURCES.map(source => [source, readSaveRecord(slot, source)]));
+        const button = (parent, text, handler) => {
+          const b = document.createElement('button'); b.className = 'btn';
+          b.style = 'padding:5px 9px; font-size:12px; margin:3px 4px 3px 0;';
+          b.textContent = text; b.onclick = handler; parent.appendChild(b);
+        };
+        for (const source of SAVE_SOURCES) {
+          const record = records[source];
+          if (record.status === 'empty' && (source === 'backup' || source === 'autoBackup')) continue;
+          const row = document.createElement('div'); row.style = 'margin-top:8px; font-size:12px; color:#cbd5e1;';
+          const label = document.createElement('div');
+          if (record.status === 'valid') {
+            const data = record.data;
+            const time = data.savedAt ? new Date(data.savedAt).toLocaleString('ko-KR') : '저장일 정보 없음';
+            label.textContent = `${SAVE_SOURCE_LABELS[source]} · Lv.${data.level} · ${mapLabel(data.gameState)} · ${data.gold.toLocaleString()}G · ${time}`;
+          } else {
+            label.textContent = `${SAVE_SOURCE_LABELS[source]} · ${{empty:'비어있음',corrupt:'손상 또는 지원하지 않는 저장 — 불러오기 불가',unavailable:'저장 공간 접근 실패'}[record.status]}`;
+            if (record.status === 'corrupt') label.style.color = '#fca5a5';
+          }
+          row.appendChild(label);
+          if (record.status === 'valid') {
+            if (mode === 'load') button(row, '불러오기', () => doLoadSlot(slot, source));
+            button(row, '📤 내보내기', () => doExportSlot(slot, source));
+            if (source === 'backup' || source === 'autoBackup') button(row, '이 백업으로 복구', () => doRestoreBackup(slot, source));
+          }
+          div.appendChild(row);
+        }
+        if (mode === 'save') button(div, '수동 저장', () => doSaveToSlot(slot));
+        if (mode === 'load' && SAVE_SOURCES.every(source => records[source].status === 'empty')) {
+          button(div, '새로운 모험 시작', () => doNewGame(slot));
+        }
+        button(div, '📥 파일 가져오기', () => doImportToSlot(slot));
+        if (SAVE_SOURCES.some(source => !['empty','unavailable'].includes(records[source].status))) {
+          button(div, '슬롯 전체 삭제', () => doDeleteSlot(slot, mode));
         }
         container.appendChild(div);
       }
     }
-
-    window.doExportSlot = function(slot) {
-      const data = loadSlotData(slot);
-      if (!data) return;
-      const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `mangiworld_save_slot${slot}_Lv${data.level}.json`;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showTopNotification("📤 저장 파일을 내보냈습니다. (브라우저 저장 공간이 초기화되어도 이 파일로 복구할 수 있어요)", 4500);
+    window.doExportSlot = function(slot, source = 'manual') {
+      const data = loadSlotData(slot, source);
+      if (!data) { showTopNotification('⚠️ 내보낼 정상 저장을 읽을 수 없습니다.'); return; }
+      const blob = new Blob([JSON.stringify(data)], {type:'application/json'});
+      const url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = `mangiworld_save_slot${slot}_${source}_Lv${data.level}.json`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showTopNotification('📤 저장 파일 다운로드를 요청했습니다. 다운로드 폴더를 확인해주세요.', 4500);
     };
-
+    function importSaveText(slot, text, filename) {
+      const data = normalizeSaveData(JSON.parse(text));
+      const target = readSaveRecord(slot);
+      if (target.status === 'unavailable') throw new Error('브라우저 저장 공간에 접근할 수 없습니다.');
+      const action = target.status === 'empty' ? '저장' : '덮어쓰기';
+      if (!confirm(`슬롯 ${slot}의 수동 저장에 파일을 ${action}합니다.\n파일: ${filename}\nLv.${data.level} · ${data.gold.toLocaleString()}G\n기존 정상 수동 저장은 백업되며, 자동 저장은 유지됩니다. 계속할까요?`)) return false;
+      writeSaveRecord(slot, 'manual', data);
+      showTopNotification(`📥 슬롯 ${slot}의 수동 저장으로 가져왔습니다. 불러오기를 누르면 플레이에 적용됩니다.`);
+      renderSaveSlots(saveManagerMode);
+      return true;
+    }
     window.doImportToSlot = function(slot) {
-      const input = document.createElement('input');
-      input.type = 'file'; input.accept = 'application/json,.json';
+      const input = document.createElement('input'); input.type = 'file'; input.accept = 'application/json,.json';
       input.onchange = () => {
-        const file = input.files[0];
-        if (!file) return;
+        const file = input.files[0]; if (!file) return;
+        if (file.size > 1024 * 1024) { showTopNotification('⚠️ 저장 파일은 1MB 이하여야 합니다.'); return; }
         const reader = new FileReader();
         reader.onload = () => {
-          try {
-            const data = JSON.parse(reader.result);
-            localStorage.setItem('mangiworld_save_' + slot, JSON.stringify(data));
-            showTopNotification(`📥 슬롯 ${slot}에 파일을 불러왔습니다!`);
-            renderSaveSlots('load');
-          } catch (e) {
-            showTopNotification('⚠️ 올바른 저장 파일이 아닙니다.');
-          }
+          try { importSaveText(slot, reader.result, file.name); }
+          catch (e) { showTopNotification('⚠️ 가져오기에 실패했습니다. 기존 저장과 현재 플레이는 유지됩니다. ' + e.message, 6000); }
         };
+        reader.onerror = () => showTopNotification('⚠️ 파일을 읽지 못했습니다. 다른 파일을 선택해주세요.');
         reader.readAsText(file);
       };
       input.click();
     };
-
+    window.doRestoreBackup = function(slot, source = 'backup') {
+      if (!['backup','autoBackup'].includes(source)) return;
+      const record = readSaveRecord(slot, source), target = source === 'backup' ? 'manual' : 'auto';
+      if (record.status !== 'valid') { showTopNotification('⚠️ 정상 백업을 읽을 수 없습니다.'); return; }
+      if (!confirm(`슬롯 ${slot}의 ${SAVE_SOURCE_LABELS[target]}을 ${SAVE_SOURCE_LABELS[source]}으로 복구할까요? 대상 저장은 교체되며 선택한 백업은 유지됩니다. 필요한 데이터는 먼저 내보내세요. 현재 플레이에는 불러오기 전까지 적용되지 않습니다.`)) return;
+      try {
+        writeSaveRecord(slot, target, record.data, true);
+        renderSaveSlots(saveManagerMode);
+        showTopNotification(`💾 슬롯 ${slot} 복구 완료. 불러오기를 눌러 시작하세요.`);
+      } catch (e) { showTopNotification('⚠️ 복구에 실패했습니다. 저장 공간을 확인해주세요.'); }
+    };
     window.doNewGame = function(slot) {
-      currentSaveSlot = slot;
+      if (SAVE_SOURCES.some(source => readSaveRecord(slot, source).status === 'unavailable')) {
+        showTopNotification('⚠️ 저장 공간에 접근할 수 없습니다. 브라우저의 사이트 저장 권한을 확인해주세요.'); return;
+      }
+      if (!SAVE_SOURCES.every(source => readSaveRecord(slot, source).status === 'empty')) {
+        showTopNotification('⚠️ 저장 또는 백업이 있는 슬롯입니다. 먼저 다른 슬롯을 선택하거나 내보내기 후 삭제해주세요.'); return;
+      }
+      currentSaveSlot = slot; autoSaveTimer = 0;
       document.getElementById('save-screen').classList.add('hidden');
       startNewGame();
     };
-
-    window.doLoadSlot = function(slot) {
-      const data = loadSlotData(slot);
-      if (!data) { showTopNotification('저장된 데이터가 없습니다.'); return; }
-      currentSaveSlot = slot;
-      applySaveData(data);
+    window.doLoadSlot = function(slot, source = 'manual') {
+      const record = readSaveRecord(slot, source);
+      if (record.status !== 'valid') { showTopNotification('⚠️ 저장을 불러올 수 없습니다. 정상 백업 또는 다른 저장을 선택해주세요.'); return; }
+      // 검증은 applySaveData 내부에서도 수행하며, 성공한 뒤에만 활성 슬롯을 바꾼다.
+      applySaveData(record.data);
+      currentSaveSlot = slot; autoSaveTimer = 0;
+      showTopNotification(`📂 슬롯 ${slot} ${SAVE_SOURCE_LABELS[source]} 불러오기 완료! (Lv.${level})`);
     };
-
     window.doSaveToSlot = function(slot) {
-      currentSaveSlot = slot;
-      saveToSlot(slot, false);
+      const record = readSaveRecord(slot);
+      if (record.status === 'unavailable') { showTopNotification('⚠️ 저장 공간에 접근할 수 없습니다.'); return; }
+      if (record.status !== 'empty' && !confirm(`슬롯 ${slot}의 수동 저장을 현재 진행으로 덮어쓸까요? 기존 정상 수동 저장은 백업하고 자동 저장은 유지합니다.`)) return;
+      if (saveToSlot(slot, false)) { currentSaveSlot = slot; autoSaveTimer = 0; }
       renderSaveSlots('save');
     };
-
     window.doDeleteSlot = function(slot, mode) {
-      if (!confirm(`슬롯 ${slot}의 저장 데이터를 삭제하시겠습니까?`)) return;
-      deleteSlotData(slot);
-      renderSaveSlots(mode);
+      if (isPlaying && slot === currentSaveSlot) {
+        showTopNotification('⚠️ 현재 플레이 중인 슬롯은 삭제할 수 없습니다. 메인 메뉴로 돌아간 뒤 삭제해주세요.'); return;
+      }
+      if (!confirm(`슬롯 ${slot}의 수동·자동 저장과 백업을 모두 삭제합니다. 복구할 수 없으니 필요한 데이터는 먼저 파일로 내보내세요. 계속할까요?`)) return;
+      try { deleteSlotData(slot); renderSaveSlots(mode); }
+      catch (e) { showTopNotification('⚠️ 삭제를 완료하지 못했습니다. 저장 공간 접근 상태를 확인해주세요.'); renderSaveSlots(mode); }
     };
 
     window.closeSaveScreen = function() {
@@ -10302,7 +10495,7 @@
         ? `메인 메뉴로 돌아갑니다. 진행 상황은 슬롯 ${currentSaveSlot}에 자동 저장됩니다.`
         : '자동 저장이 꺼져 있어 저장하지 않은 진행 상황은 사라집니다. 메인 메뉴로 돌아가시겠습니까?';
       if (confirm(msg)) {
-        if (autoSaveEnabled && isPlaying) saveToSlot(currentSaveSlot, true);
+        if (autoSaveEnabled && isPlaying && !saveToSlot(currentSaveSlot, true)) return;
         location.reload();
       }
     };
@@ -10311,7 +10504,7 @@
     // (자동 저장은 30초 간격이라, 그 사이에 산 포션 같은 게 통째로 날아갔다)
     window.addEventListener('beforeunload', () => {
       if (isPlaying && autoSaveEnabled) {
-        try { localStorage.setItem('mangiworld_save_' + currentSaveSlot, JSON.stringify(getSaveData())); } catch(e) {}
+        saveToSlot(currentSaveSlot, true);
       }
     });
 
