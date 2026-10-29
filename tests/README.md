@@ -1,24 +1,23 @@
 # 저장 시스템 브라우저 검증
 
 게임은 `index.html` 하나로 실행되며 별도 빌드가 필요하지 않습니다.
-이 테스트는 Node.js 18 이상, Playwright, Chromium을 사용하는 개발용 검증입니다.
-
-현재 클라우드 환경에서는 다음 명령으로 실행합니다.
+이 테스트는 Node.js 20 이상, 개발용 Playwright, Chromium을 사용합니다.
 
 ```sh
-node --test tests/save-system.test.cjs
+npm ci
+npm test
 ```
 
-Playwright가 없는 환경에서는 저장소 밖에 설치할 수 있습니다.
+시스템 Chromium이 없다면 `npx playwright install chromium`을 실행합니다. 다른 경로의 Chromium은 `CHROMIUM_PATH`로 지정합니다. `/usr/bin/chromium`이 있으면 이를 우선 사용하고, 없으면 Playwright가 설치한 브라우저를 사용합니다. 홈 디렉터리 쓰기가 제한된 환경에서는 `npm ci --cache /tmp/mangiworld-npm-cache`를 사용합니다.
 
-```sh
-npm install --prefix /tmp/mangiworld-test-tools --no-package-lock playwright@1.62.1
-NODE_PATH=/tmp/mangiworld-test-tools/node_modules CHROMIUM_PATH=/usr/bin/chromium node --test tests/save-system.test.cjs
-```
+- `npm run test:save`: 정상·구버전 저장, 잘못된 데이터 거절, 수동·자동 저장 분리, 백업, 접근·용량 오류, 파일 입력·다운로드, 종료 저장.
+- `npm run test:session`: 새 게임 초기화, 불러오기 시 일시 상태 정리, 메인 메뉴 복귀/취소/저장 실패, 루프 중복과 이전 타이머 제거, 실제 이동·일시정지·무기 전환·세 무기 평타, 대표 던전의 처치·정예·생존 목표와 포탈 이동, 세 스승의 일반 스킬 습득·각성 시련·재대결·저장 유지, 엔딩 전환, 설정 유지.
 
-Chromium 위치가 다르면 `CHROMIUM_PATH`를 지정하세요. 테스트는 임시 HTTP 서버와 각 테스트별 새 브라우저 컨텍스트를 사용하며 사용자의 실제 저장 데이터는 건드리지 않습니다.
+`tests/helpers/browser.cjs`가 임시 HTTP 서버와 브라우저 생명주기를 관리합니다. 각 테스트는 새 브라우저 컨텍스트를 사용하고 사용자의 실제 localStorage를 읽거나 변경하지 않습니다. 예상하지 않은 페이지 오류도 테스트 실패입니다.
 
-검증 범위: 정상/구버전 저장, 잘못된 데이터의 원자적 거절, 수동·자동 저장 분리, 백업 회전/복구, 저장 공간 접근·용량 오류, 파일 입력/다운로드 왕복, 새 게임과 마을 이동, 새로고침 시 자동 저장.
+긴 플레이를 반복하는 대신 일부 테스트는 마지막 처치 직전의 진행도, 각성 재료·과제 등의 전제를 준비합니다. 이후 실제 게임의 피해/승리 처리, 프레임 갱신, UI 클릭과 저장·불러오기 경로를 검증합니다. 전체 게임 플레이나 모든 보스 패턴·밸런스를 검증한 것은 아닙니다. 선택 사항인 외부 글꼴은 테스트에서 차단하여 네트워크에 의존하지 않습니다.
+
+GitHub Actions 설정은 `.github/workflows/test.yml`에 있습니다. 로컬 테스트 통과와 원격 CI 실행 결과는 별개입니다.
 
 ## 저장 규칙 (v3.4.2)
 

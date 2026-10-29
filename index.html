@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v3.4.2</title>
+  <title>만기 월드 (Mangi World) - v3.4.3</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -162,6 +162,12 @@
       </div>
 
       <div class="changelog-box">
+        <h4>📌 v3.4.3 패치 노트</h4>
+        • 🌱 <b>새 게임은 처음부터 시작합니다.</b> 이전 모험의 성장·장비·퀘스트·각성이 남지 않도록 정리했습니다<br>
+        • 📂 <b>불러오기 시 이전 전투 상태를 정리</b>합니다. 버프·빙결·위험 구역·대화창이 다른 저장으로 넘어가지 않습니다<br>
+        • ⚔️ <b>스승과의 첫 결투가 일반 결투로 시작</b>합니다. 각성 재대결로 잘못 인식하던 문제를 수정했습니다<br>
+        • 🏠 메인 메뉴 복귀와 스토리 전환에서 <b>이전 효과·타이머·중복 루프</b>를 정리합니다<br>
+        <br>
         <h4>📌 v3.4.2 패치 노트</h4>
         • 💾 <b>수동 저장과 자동 저장을 분리</b>했습니다. 자동 저장이 수동 저장을 덮어쓰지 않습니다<br>
         • 🛡️ <b>파일을 검증한 뒤 가져옵니다.</b> 잘못된 파일은 기존 저장과 현재 플레이를 바꾸지 않습니다<br>
@@ -425,7 +431,7 @@
     <!-- Center Game Container -->
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v3.4.2</div>
+      <div id="version-badge">v3.4.3</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -488,7 +494,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.2 : 안전한 저장 · 수동/자동 저장 분리 · 백업 복구</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.3 : 새 게임·불러오기 초기화 · 스승 결투 수정</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
       </div>
@@ -1220,6 +1226,8 @@
     let guildCooldown = false, blacksmithCooldown = false, potionCooldown = false, portalCooldown = 0;
     let respawnTimer = 0, periodicSpawnTimer = 0;
     let notifTimeout = null;
+    const sessionTimers = new Set();
+    let gameLoopFrame = null;
     let gameLoopStarted = false;
     let frameCount = 0;
     let projectiles = [];
@@ -3197,6 +3205,7 @@
     }
 
     function startMinjeDuel(awakened) {
+      awakened = awakened === true;
       closeNpcModal();
       gameState = 'minje_duel';
       enemies = [createMinjeBoss(awakened)];
@@ -3422,6 +3431,7 @@
     }
 
     function startElfQueenDuel(awakened) {
+      awakened = awakened === true;
       closeNpcModal();
       gameState = 'elf_duel';
       enemies = [createElfQueenBoss(awakened)];
@@ -3643,6 +3653,7 @@
     }
 
     function startMageDuel(awakened) {
+      awakened = awakened === true;
       closeNpcModal();
       gameState = 'mage_duel';
       enemies = [createArchmageBoss(awakened)];
@@ -4091,15 +4102,15 @@
 
       notif.innerText = text;
       notif.classList.add('show');
-      if(notifTimeout) clearTimeout(notifTimeout);
-      notifTimeout = setTimeout(() => { notif.classList.remove('show'); }, duration);
+      if(notifTimeout) clearSessionTimeout(notifTimeout);
+      notifTimeout = setSessionTimeout(() => { notif.classList.remove('show'); }, duration);
     }
 
     document.getElementById('guild-close').onclick = (e) => {
       e.stopPropagation();
       document.getElementById('guild-ui').classList.add('hidden');
       guildCooldown = true; player.y += 35;
-      setTimeout(() => { guildCooldown = false; }, 800);
+      setSessionTimeout(() => { guildCooldown = false; }, 800);
     };
 
     document.getElementById('bs-tab-shop').onclick  = (e) => { e.stopPropagation(); setBlacksmithTab('shop'); };
@@ -4109,14 +4120,14 @@
       e.stopPropagation();
       document.getElementById('blacksmith-ui').classList.add('hidden');
       blacksmithCooldown = true; player.y += 35;
-      setTimeout(() => { blacksmithCooldown = false; }, 800);
+      setSessionTimeout(() => { blacksmithCooldown = false; }, 800);
     };
 
     document.getElementById('potion-close').onclick = (e) => {
       e.stopPropagation();
       document.getElementById('potion-ui').classList.add('hidden');
       potionCooldown = true; player.y += 35;
-      setTimeout(() => { potionCooldown = false; }, 800);
+      setSessionTimeout(() => { potionCooldown = false; }, 800);
     };
 
     function updateBlacksmithUI() {
@@ -4872,20 +4883,10 @@
     ];
 
     function startEndingSequence() {
-      isPlaying = false;
-      isPaused = true;
       ['status-hud','quest-hud','dungeon-hud','skill-hud','boss-hud'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
-      storyIndex = 0;
-      gameState = "story";
-      currentScript = endingScripts;
-      onStoryComplete = showClearScreen;
-      document.getElementById('story-screen').classList.remove('hidden');
-      updateStory();
-      storyAnimRunning = true;
-      storySceneStart = performance.now();
-      requestAnimationFrame(storyLoop);
+      beginStory(endingScripts, showClearScreen);
     }
 
     function showClearScreen() {
@@ -4899,6 +4900,7 @@
     }
 
     let storyAnimRunning = false;
+    let storyFrame = null;
     let storySceneStart = 0;
 
     function drawSkyGradient(top, bottom) {
@@ -5256,7 +5258,7 @@
 
     function storyLoop(ts) {
       if (!storyAnimRunning) return;
-      requestAnimationFrame(storyLoop);
+      storyFrame = requestAnimationFrame(storyLoop);
       const s = currentScript[storyIndex];
       if (!s) return;
       renderStoryScene(s, storyIndex, ts - storySceneStart);
@@ -8017,8 +8019,9 @@
       if (!learned) { hud.classList.add('hidden'); return; }
       hud.classList.remove('hidden');
       const defs = activeSkillDefs();
-      if (lastHudWeaponSlot !== activeWeaponSlot) {
-        lastHudWeaponSlot = activeWeaponSlot;
+      const weaponState = activeWeaponSlot + ':' + isAwakened(activeWeaponSlot);
+      if (lastHudWeaponSlot !== weaponState) {
+        lastHudWeaponSlot = weaponState;
         ['q','e','f','r'].forEach(k => {
           const iconEl = document.querySelector(`#skill-slot-${k} .skill-icon`);
           const slotEl = document.getElementById(`skill-slot-${k}`);
@@ -8723,7 +8726,7 @@
         } else {
           content.innerText = "허허, 자네가 이세계에서 왔다는 그 청년인가?\n\n내 검술을 전수받고 싶다면, 먼저 나를 이겨야 하네. 진심으로 상대해 줄 테니 각오하게.\n\n[삼단 베기] [회전 베기] [발도술] [폭풍 베기] — 내가 평생 갈고닦은 네 가지 검술로 자네를 시험하겠네.";
           actionBtn.innerText = "⚔️ 결투를 신청한다";
-          actionBtn.onclick = startMinjeDuel;
+          actionBtn.onclick = () => startMinjeDuel(false);
           actionBtn2.innerText = "다음에 하겠다";
           actionBtn2.classList.remove('hidden');
           actionBtn2.onclick = closeNpcModal;
@@ -8740,7 +8743,7 @@
         } else {
           content.innerText = "인간이여, 이곳까지 오다니 대단하군요.\n\n우리 엘프의 궁술은 아무에게나 전수하지 않습니다. 저를 이긴다면 그 자격을 증명하는 것이겠죠.\n\n[다중 사격] [그림자 저격] [자연의 분노] [질풍 연사] — 제 모든 궁술로 당신을 시험하겠습니다.";
           actionBtn.innerText = "🏹 결투를 신청한다";
-          actionBtn.onclick = startElfQueenDuel;
+          actionBtn.onclick = () => startElfQueenDuel(false);
           actionBtn2.innerText = "다음에 하겠다";
           actionBtn2.classList.remove('hidden');
           actionBtn2.onclick = closeNpcModal;
@@ -8779,7 +8782,7 @@
         } else {
           content.innerText = "오, 이세계에서 온 이방인이군요. 반갑습니다, 만기님. 저는 대마법사 에녹입니다.\n\n당신에게서 특별한 마력의 기운이 느껴지는군요. 제 마법을 전수받고 싶다면, 먼저 저를 이겨야 합니다. 저를 이긴다면 그 자격을 증명하는 것이겠지요.\n\n[화염구 연사] [운석 낙하] [빙결 파동] [순간이동 작렬] — 제 모든 마법으로 당신을 시험하겠습니다.\n\n그리고... 한 가지 알려드릴 것이 있습니다. 마왕을 물리치고 이곳으로 돌아오신다면, 제가 반드시 당신을 원래 세계로 돌려보내 드리겠습니다. 그러니 부디 살아남아 주세요.";
           actionBtn.innerText = "🔮 결투를 신청한다";
-          actionBtn.onclick = startMageDuel;
+          actionBtn.onclick = () => startMageDuel(false);
           actionBtn2.innerText = "다음에 하겠다";
           actionBtn2.classList.remove('hidden');
           actionBtn2.onclick = closeNpcModal;
@@ -8792,7 +8795,7 @@
       document.getElementById('npc-modal').classList.add('hidden');
       activeNpc = null;
       guildCooldown = true; player.y += 30;
-      setTimeout(() => { guildCooldown = false; }, 600);
+      setSessionTimeout(() => { guildCooldown = false; }, 600);
     }
 
     document.getElementById('npc-close').onclick = (e) => { e.stopPropagation(); closeNpcModal(); };
@@ -10162,96 +10165,113 @@
       return data;
     }
 
-    function applySaveData(data) {
-      data = normalizeSaveData(data); // 이 줄이 성공하기 전에는 전역 상태를 변경하지 않는다.
-      towerBestFloor = data.towerBestFloor || 0;
-      towerFloor = data.towerFloor || 0;
-      level = data.level; exp = data.exp; nextExp = data.nextExp; gold = data.gold;
-      hp = data.hp; maxHp = data.maxHp; mp = data.mp; maxMp = data.maxMp;
-      statPoints = data.statPoints; statStr = data.statStr; statVit = data.statVit;
-      statAgi = data.statAgi; statAtk = data.statAtk;
-      statCrit = data.statCrit || 0; statCritDmg = data.statCritDmg || 0; statMp = data.statMp || 10;
-      player.x = data.player.x; player.y = data.player.y; player.facing = data.player.facing || 'down';
-      player.vx = 0; player.vy = 0;
-      activeWeaponSlot = data.activeWeaponSlot || 'sword';
-      equipped = {
-        helmet: findItemById(data.equipped.helmet),
-        armor: findItemById(data.equipped.armor),
-        sword: findItemById(data.equipped.sword || data.equipped.weapon),
-        bow: findItemById(data.equipped.bow),
-        staff: findItemById(data.equipped.staff),
-        weapon: null,
-        pants: findItemById(data.equipped.pants)
+    // ---------- 세션 생명주기 ----------
+    // 저장 형식 검증/변환과 실제 게임 상태 적용을 분리한다.
+    // 새 게임과 불러오기는 같은 초기화 경로를 사용하며 브라우저 설정·캐시는 유지한다.
+    function prepareSavedSession(input) {
+      const data = normalizeSaveData(input);
+      const item = id => id ? {...findItemById(id)} : null;
+      return {
+        data,
+        equipped: {...Object.fromEntries(['helmet','armor','pants','sword','bow','staff'].map(slot => [slot,item(data.equipped[slot])])), weapon:null},
+        inventory: data.inventory.map(entry => entry === null ? null : typeof entry === 'string' ? item(entry) : {...item(entry.id),count:entry.count}),
+        hotbar: data.hotbar.map(entry => entry === null ? null : {...item(entry.id),count:entry.count})
       };
-      syncActiveWeapon();
-      // 구버전 세이브는 id 문자열만, 신버전은 {id, count} 형태로 들어 있다
-      inventory = (data.inventory || []).map(entry => {
-        if (!entry) return null;
-        if (typeof entry === 'string') return findItemById(entry);
-        const def = findItemById(entry.id);
-        if (!def) return null;
-        return entry.count != null ? { ...def, count: entry.count } : def;
-      });
-      hotbar = (data.hotbar || Array(9).fill(null)).map(s => {
-        if (!s) return null;
-        const def = findItemById(s.id);
-        return def ? { ...def, count: s.count || 1 } : null;
-      });
-      lockedSlots = data.lockedSlots || {};
-      activeQuests = data.activeQuests || {};
-      dungeonProgress = data.dungeonProgress;
-      currentDungeon = data.currentDungeon || { category: null, stage: 0, isBoss: false };
-      skills.learned = !!(data.skills && data.skills.learned);
-      skills.learnedSword = !!(data.skills && data.skills.learnedSword);
-      skills.learnedBow = !!(data.skills && data.skills.learnedBow);
-      skills.learnedStaff = !!(data.skills && data.skills.learnedStaff);
-      skills.cooldowns = { q: 0, e: 0, r: 0, f: 0 };
-      bowState = { homingActive: false, rapidFireTimer: 0 };
-      npcFlags = data.npcFlags || { metEnoch: false, metMinje: false, metElfQueen: false };
-      // 각성 상태 — 구버전 세이브에는 없으므로 슬롯별로 기본값을 채워 병합한다
-      awakenState = { sword: makeAwakenSlot(), bow: makeAwakenSlot(), staff: makeAwakenSlot() };
-      if (data.awakenState) {
-        ['sword','bow','staff'].forEach(s => {
-          const src = data.awakenState[s];
-          if (!src) return;
-          const dst = awakenState[s];
-          dst.stage = src.stage || 'locked';
-          dst.mats = src.mats || 0;
-          dst.demonKills = src.demonKills || 0;
-          if (src.bosses) ['slime','wolf','zombie','ghost'].forEach(c => { dst.bosses[c] = !!src.bosses[c]; });
-        });
+    }
+
+    function stopStoryPlayback() {
+      storyAnimRunning = false;
+      if (storyFrame !== null) cancelAnimationFrame(storyFrame);
+      storyFrame = null;
+    }
+    function stopGameLoop() {
+      if (gameLoopFrame !== null) cancelAnimationFrame(gameLoopFrame);
+      gameLoopFrame = null;
+      gameLoopStarted = false;
+    }
+    function setSessionTimeout(callback, delay) {
+      const timer = setTimeout(() => { sessionTimers.delete(timer); callback(); }, delay);
+      sessionTimers.add(timer);
+      return timer;
+    }
+    function clearSessionTimeout(timer) {
+      clearTimeout(timer); sessionTimers.delete(timer);
+    }
+    function resetSessionRuntime() {
+      isPlaying = false; isPaused = true;
+      stopGameLoop(); stopStoryPlayback();
+      for (const timer of sessionTimers) clearTimeout(timer);
+      sessionTimers.clear(); notifTimeout = null;
+      currentScript = null; onStoryComplete = null; storyIndex = 0; storySceneStart = 0;
+      equipBonusHp = 0;
+      player = {...INITIAL_PLAYER_STATE, swing:{...INITIAL_PLAYER_STATE.swing}};
+      keys = {}; mouseX = 400; mouseY = 450;
+      enemies = []; projectiles = []; floatingTexts = []; pendingSpawns = [];
+      slimeZones = []; ghostZones = []; ghostDecoys = []; demonZones = [];
+      minjeZones = []; elfZones = []; archmageZones = [];
+      returnStack = []; respawnTimer = 0; periodicSpawnTimer = 0; portalCooldown = 0;
+      guildCooldown = false; blacksmithCooldown = false; potionCooldown = false;
+      frameCount = 0; lastFrameTime = 0; frameAccum = 0;
+      activeBuffs = {}; manaRegenTimer = 0; magicMpBonus = 0;
+      questStatus = 'none'; slimeKillCount = 0;
+      bossRespawnCooldown = Object.fromEntries(TOWER_CATS.map(cat => [cat,0]));
+      towerMobsRemaining = 0;
+      skills.cooldowns = {q:0,e:0,r:0,f:0}; ultCooldown = {sword:0,bow:0,staff:0};
+      bowState = {homingActive:false,rapidFireTimer:0};
+      moonSlashFx = null; skyArrows = []; sanctuary = null; crescents = [];
+      swordChain = {left:0,timer:0}; iaiFx = null; frostFx = null; skyBlade = null;
+      sanctum = null; meteorStorm = null; meteors = []; fireZones = []; scorchMarks = [];
+      stormVolley = null; windCorridors = []; skyJudge = null; arrowRain = null; delayedArrows = []; rainShock = null;
+      staffMeteorZones = []; staffTeleportFx = []; staffUltimateFx = null;
+      voidChain = {left:0,timer:0,points:[]}; voidRifts = []; voidCollapse = null;
+      dashGhosts = []; dashSparks = []; dashStreaks = [];
+      skillSlashFx = null; skillThrustFx = null; skillNovaFx = null; skillLeapFx = null; skillLandFx = null;
+      skillParticles = []; cameraShake = 0; screenFlash = 0; shakeFlip = 1; hitStop = 0;
+      impactRings = []; dustPuffs = []; lastHudWeaponSlot = null;
+      trainingDummy = null; resetTrainingStats(); trainingLatch = {};
+      trainingOpts = {infMana:true,noCd:false,moving:false};
+      activeNpc = null; hoveredSlot = {area:null,index:null}; tooltipCompareItem = null;
+      blacksmithTab = 'shop'; autoSaveTimer = 0; saveScreenReturnTo = 'start'; saveManagerMode = 'load';
+    }
+    function resetSessionPresentation() {
+      for (const id of ['start-screen','save-screen','help-screen','story-screen','clear-screen','pause-menu','settings-modal',
+        'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal',
+        'status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator','item-tooltip']) {
+        document.getElementById(id).classList.add('hidden');
       }
-      ultCooldown = { sword: 0, bow: 0, staff: 0 };
-      moonSlashFx = null; skyArrows = []; sanctuary = null;
-      crescents = []; swordChain = { left: 0, timer: 0 }; iaiFx = null;
-      frostFx = null; meteorStorm = null; meteors = []; fireZones = [];
-      sanctum = null; scorchMarks = [];
-      stormVolley = null; windCorridors = []; skyJudge = null; arrowRain = null;
-      delayedArrows = []; rainShock = null;
-      impactRings = []; dustPuffs = [];
-      voidChain = { left: 0, timer: 0, points: [] }; voidRifts = []; voidCollapse = null;
-      dashGhosts = []; dashSparks = []; dashStreaks = []; skyBlade = null;
-
-      demonDefeated = !!data.demonDefeated;
-      minjeDefeated = !!data.minjeDefeated;
-      elfQueenDefeated = !!data.elfQueenDefeated;
-      archmageDefeated = !!data.archmageDefeated;
-      equipBonusHp = data.equipBonusHp || 0;
-      equipBonusDef = data.equipBonusDef || 0;
-      enemies = []; projectiles = []; floatingTexts = [];
-      returnStack = [];
-      respawnTimer = 0; periodicSpawnTimer = 0; portalCooldown = 30;
-      gameState = data.gameState || 'village';
-
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('save-screen').classList.add('hidden');
-      document.getElementById('pause-menu').classList.add('hidden');
+      const notice = document.getElementById('top-notification');
+      notice.classList.remove('show'); notice.textContent = '';
+      document.getElementById('autosave-indicator')._hideTimeout = null;
+      document.getElementById('npc-action-btn').onclick = null;
+      document.getElementById('npc-action-btn2').onclick = null;
+      for (const key of ['q','e','f','r','g']) {
+        document.getElementById('cd-' + key).style.height = '0%';
+        setCooldownText('cdt-' + key,0);
+      }
+      document.getElementById('skill-slot-q').style.outline = 'none';
+      ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,800,900);
+    }
+    function restoreSessionState(prepared) {
+      const {data} = prepared;
+      resetSessionRuntime(); resetSessionPresentation();
+      ({towerBestFloor,towerFloor,level,exp,nextExp,gold,hp,maxHp,mp,maxMp,
+        statPoints,statStr,statVit,statAgi,statAtk,statCrit,statCritDmg,statMp,
+        activeWeaponSlot,lockedSlots,activeQuests,dungeonProgress,currentDungeon,npcFlags,awakenState,
+        demonDefeated,minjeDefeated,elfQueenDefeated,archmageDefeated} = data);
+      player.x = data.player.x; player.y = data.player.y; player.facing = data.player.facing;
+      player.faceDir = data.player.facing === 'left' ? -1 : 1;
+      equipped = prepared.equipped; inventory = prepared.inventory; hotbar = prepared.hotbar;
+      skills = {...data.skills,cooldowns:{q:0,e:0,r:0,f:0}};
+      gameState = data.gameState;
+      syncActiveWeapon(); recalcEquipmentStats(); setupInventory(); updateQuestHUD(); updateBuffHUD();
+    }
+    function applySaveData(input) {
+      // 검증과 아이템 준비를 모두 마친 뒤 현재 세션을 교체한다.
+      const prepared = prepareSavedSession(input);
+      restoreSessionState(prepared);
+      portalCooldown = 30;
       document.getElementById('status-hud').classList.remove('hidden');
       isPlaying = true; isPaused = false;
-      setupInventory();
-      recalcEquipmentStats();
-      updateHUD();
-      updateQuestHUD();
       ensureGameLoopStarted();
     }
 
@@ -10305,8 +10325,8 @@
     function showAutosaveIndicator() {
       const el = document.getElementById('autosave-indicator');
       el.classList.remove('hidden');
-      clearTimeout(el._hideTimeout);
-      el._hideTimeout = setTimeout(() => el.classList.add('hidden'), 2000);
+      clearSessionTimeout(el._hideTimeout);
+      el._hideTimeout = setSessionTimeout(() => el.classList.add('hidden'), 2000);
     }
     window.openSaveScreen = function() {
       document.getElementById('start-screen').classList.add('hidden');
@@ -10496,7 +10516,9 @@
         : '자동 저장이 꺼져 있어 저장하지 않은 진행 상황은 사라집니다. 메인 메뉴로 돌아가시겠습니까?';
       if (confirm(msg)) {
         if (autoSaveEnabled && isPlaying && !saveToSlot(currentSaveSlot, true)) return;
-        location.reload();
+        restoreSessionState(prepareSavedSession(INITIAL_GAME_SAVE));
+        currentSaveSlot = 1; gameState = 'menu';
+        document.getElementById('start-screen').classList.remove('hidden');
       }
     };
 
@@ -10540,34 +10562,31 @@
 
     let currentScript = null, onStoryComplete = null;
 
-    window.startNewGame = function() {
-      storyIndex = 0;
-      gameState = "story";
-      gold = 100;
-      currentScript = storyScripts;
-      onStoryComplete = goToVillage;
-      document.getElementById('save-screen').classList.add('hidden');
+    function beginStory(script, onComplete) {
+      stopGameLoop(); stopStoryPlayback();
+      isPlaying = false; isPaused = true; keys = {};
+      storyIndex = 0; gameState = 'story';
+      currentScript = script; onStoryComplete = onComplete;
       document.getElementById('story-screen').classList.remove('hidden');
       updateStory();
-      storyAnimRunning = true;
-      storySceneStart = performance.now();
-      requestAnimationFrame(storyLoop);
+      storyAnimRunning = true; storySceneStart = performance.now();
+      storyFrame = requestAnimationFrame(storyLoop);
+    }
+    window.startNewGame = function() {
+      restoreSessionState(prepareSavedSession(INITIAL_GAME_SAVE));
+      beginStory(storyScripts, goToVillage);
     };
-
     window.advanceStory = function() {
+      if (!storyAnimRunning || !currentScript) return;
       storyIndex++;
-      if(storyIndex < currentScript.length) {
-        const s = currentScript[storyIndex];
-        if(s.action === "giveGold") {
-          gold += 50;
-          updateHUD();
-        }
-        updateStory();
-        storySceneStart = performance.now();
+      if (storyIndex < currentScript.length) {
+        if (currentScript[storyIndex].action === 'giveGold') { gold += 50; updateHUD(); }
+        updateStory(); storySceneStart = performance.now();
       } else {
-        storyAnimRunning = false;
+        const complete = onStoryComplete;
+        stopStoryPlayback(); currentScript = null; onStoryComplete = null;
         document.getElementById('story-screen').classList.add('hidden');
-        onStoryComplete();
+        if (complete) complete();
       }
     };
 
@@ -10586,7 +10605,7 @@
 
     function goToVillage() {
       gameState = "village";
-      storyAnimRunning = false;
+      stopStoryPlayback();
       document.getElementById('story-screen').classList.add('hidden');
       document.getElementById('quest-hud').classList.remove('hidden');
       document.getElementById('status-hud').classList.remove('hidden');
@@ -10723,7 +10742,7 @@
     let lastFrameTime = 0, frameAccum = 0;
 
     function loop(now) {
-      requestAnimationFrame(loop);
+      gameLoopFrame = requestAnimationFrame(loop);
       if(!isPlaying || isPaused) { lastFrameTime = 0; return; }
 
       if (now === undefined) now = performance.now();
@@ -12108,6 +12127,9 @@
     }
 
     let isPlaying = false, isPaused = true;
+    // 유저 입력 전의 실제 시작값을 한 번 보관한다. 이후 변환은 항상 독립된 객체를 만든다.
+    const INITIAL_PLAYER_STATE = Object.freeze({...player,swing:Object.freeze({...player.swing})});
+    const INITIAL_GAME_SAVE = Object.freeze({...getSaveData(),gameState:'village',savedAt:0});
   </script>
 </body>
 </html>

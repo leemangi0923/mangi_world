@@ -1,38 +1,10 @@
 // Run: node --test tests/save-system.test.cjs (requires Playwright and Chromium).
 const {test, before, after} = require('node:test');
 const assert = require('node:assert/strict');
-const http = require('node:http');
 const fs = require('node:fs');
-const path = require('node:path');
-const {chromium} = require('playwright');
-let server, browser, origin;
-before(async () => {
-  server = http.createServer((req, res) => {
-    if (req.url === '/' || req.url === '/index.html') {
-      res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      res.end(fs.readFileSync(path.join(__dirname, '../index.html')));
-    } else { res.writeHead(404); res.end(); }
-  });
-  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-  origin = `http://127.0.0.1:${server.address().port}`;
-  browser = await chromium.launch({executablePath:process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless:true, args:['--no-sandbox']});
-});
-after(async () => {
-  if (browser) await browser.close();
-  if (server) await new Promise(resolve => server.close(resolve));
-});
-async function run(fn, init) {
-  const context = await browser.newContext({viewport:{width:1600,height:1000}, acceptDownloads:true});
-  if (init) await context.addInitScript(init);
-  const page = await context.newPage();
-  const errors = [];
-  page.on('pageerror', e => errors.push(e.message));
-  await page.route('https://fonts.googleapis.com/**', route => route.abort());
-  await page.goto(origin);
-  await page.evaluate(() => { gameState = 'village'; });
-  try { await fn(page); assert.deepEqual(errors, [], 'No unhandled page errors'); }
-  finally { await context.close(); }
-}
+const {createBrowserHarness} = require('./helpers/browser.cjs');
+const harness = createBrowserHarness({before, after});
+const run = (fn, init) => harness.run(fn, {init, scene:'village'});
 
 test('current save roundtrip preserves equipment, quantities, quests, dungeon and awakening', () => run(async page => {
   const result = await page.evaluate(() => {

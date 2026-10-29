@@ -1,0 +1,14 @@
+{
+  "name": "mangi-world",
+  "version": "3.4.3",
+  "private": true,
+  "description": "Standalone HTML canvas RPG with browser regression tests",
+  "scripts": {
+    "start": "python3 -m http.server 8000 --bind 127.0.0.1",
+    "test": "node --test tests/*.test.cjs",
+    "test:save": "node --test tests/save-system.test.cjs",
+    "test:session": "node --test tests/session-regression.test.cjs"
+  },
+  "engines": { "node": ">=20" },
+  "devDependencies": { "playwright": "1.62.1" }
+}
