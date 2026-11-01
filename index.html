@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v3.4.9</title>
+  <title>만기 월드 (Mangi World) - v4.0.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -213,6 +213,27 @@
     .slot-state { bottom:0; left:0; right:0; text-align:center; color:#fff; background:rgba(15,23,42,.8); font-size:8px; }
     .inv-slot[data-active="true"] .slot-state { color:#fde047; }
     .inventory-help { color:#334155; font-size:11px; line-height:1.5; }
+
+    :focus-visible { outline:3px solid #38bdf8!important; outline-offset:3px; }
+    #settings-modal { justify-content:flex-start!important; }
+    #settings-modal > * { width:100%;max-width:520px;flex-shrink:0; }
+    #settings-modal label { display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;background:#1e293b;border-radius:8px; }
+    #settings-modal input[type="checkbox"] { width:20px;height:20px;flex-shrink:0; }
+    #right-ui-panel #active-weapon-label { color:#854d0e!important; }
+    #settings-modal input[type="range"] { width:120px;max-width:45%; }
+    #settings-modal select { max-width:55%;background:#0f172a;color:#fff;padding:7px;border:1px solid #94a3b8;border-radius:5px; }
+    #key-bindings { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px; }
+    #key-bindings label { font-size:13px; }
+    #key-bindings select { width:100px; }
+    #settings-status { color:#fef08a;min-height:24px; }
+    .binding-guide { white-space:pre-line;line-height:1.6;color:#bae6fd; }
+    body[data-large-ui] :is(.btn,.stat-panel-box,#settings-modal label,#settings-modal p,.binding-guide,#combat-report-content,#objective-list,#item-tooltip,.inventory-help,.shop-item) { font-size:calc(14px * var(--ui-scale))!important; }
+    body[data-large-ui] :is(#help-screen,#npc-modal,#guild-ui,#blacksmith-ui,#potion-ui,#story-screen) :is(p,span,label) { font-size:calc(14px * var(--ui-scale))!important; }
+    body[data-large-ui] :is(#quest-hud-text,#dungeon-hud-text,.changelog-box,#weapon-switch-hint) { font-size:calc(11px * var(--ui-scale))!important; }
+    body[data-large-ui] .bar-label { font-size:calc(10px * var(--ui-scale))!important; }
+    body[data-large-ui] .bar-wrapper { height:calc(16px * var(--ui-scale))!important; }
+    body[data-large-ui] .btn { white-space:normal;overflow-wrap:anywhere; }
+    @media(max-width:520px) { #key-bindings { grid-template-columns:1fr; } }
   </style>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -257,7 +278,13 @@
         <div style="font-size:16px; font-weight:bold; color:#fff;"><span id="tower-best-floor">0</span>층</div>
       </div>
 
+      <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
+        <h4>📌 v4.0.0 패치 노트</h4>
+        • ⌨️ <b>이동·달리기·스킬·무기 전환·퀵슬롯·훈련 키</b>를 변경합니다. 중복 키를 막고 현재 키를 안내합니다<br>
+        • ⚙️ <b>UI 글자 크기·효과음 볼륨·히트스톱·화면 효과 강도</b>를 설정합니다. 시작 화면에서도 설정을 열 수 있습니다<br>
+        • 💾 자동 저장과 키·접근성 설정은 <b>같은 브라우저에서 다음 실행에도 유지</b>됩니다<br>
+        <br>
         <h4>📌 v3.4.9 패치 노트</h4>
         • 🛡️ <b>최근 피격 기록과 사망 원인</b>을 확인합니다. 빙결·밀려남 남은 시간도 전투 중 표시합니다<br>
         • ⚔️ 패배 후 <b>입장 조건을 충족한 보스에 즉시 재도전</b>할 수 있습니다. 소모한 아이템·소지금은 복구되지 않습니다<br>
@@ -563,7 +590,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v3.4.9</div>
+      <div id="version-badge">v4.0.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -627,9 +654,10 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.9 : 전투 기록 · 보스 재도전 · 본 연출 건너뛰기</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v4.0.0 : 키 설정 · 접근성 · 통합 개선</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
+        <button class="btn" onclick="openSettingsModal()">설정</button>
       </div>
 
       <div style="overflow-y:auto; justify-content:flex-start;" id="save-screen" class="hidden">
@@ -659,20 +687,21 @@
         <button class="btn" style="width:220px; background:#1e293b; border:2px solid #eab308;" onclick="quitGame()">게임 종료</button>
       </div>
 
-      <div id="settings-modal" class="hidden" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,15,26,0.95); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:90; gap:14px;">
-        <h2 style="color:#fde047; font-family:'Cinzel';">설정</h2>
-        <label style="display:flex; align-items:center; gap:8px; color:#fff; background:#1e293b; padding:12px 18px; border-radius:10px; border:1px solid #eab308;">
-          <input type="checkbox" id="autosave-toggle" checked style="width:18px; height:18px;">
-          자동 저장 사용 (30초마다)
-        </label>
-        <label style="display:flex; align-items:center; gap:8px; color:#fff; background:#1e293b; padding:12px 18px; border-radius:10px; border:1px solid #eab308;">
-          <input type="checkbox" id="shake-toggle" checked style="width:18px; height:18px;">
-          화면 흔들림 사용
-        </label>
-        <p style="color:#94a3b8; font-size:12px; margin:0; max-width:300px; text-align:center;">
-          어지러우면 흔들림을 끄세요. 타격 시 화면이 잠깐 멈추는 연출은 그대로 남습니다.
-        </p>
-        <button class="btn" style="width:180px;" onclick="closeSettingsModal()">닫기</button>
+      <div id="settings-modal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title" style="position:absolute;inset:0;background:rgba(10,15,26,.97);display:flex;flex-direction:column;align-items:center;z-index:90;gap:12px;">
+        <h2 id="settings-title" style="color:#fde047;">설정</h2>
+        <p>닫으면 적용됩니다. 키 설정은 선택 즉시 적용됩니다. 같은 브라우저의 모든 슬롯에서 함께 사용합니다.</p>
+        <label>자동 저장 사용 (30초마다)<input type="checkbox" id="autosave-toggle"></label>
+        <label>화면 흔들림 사용<input type="checkbox" id="shake-toggle"></label>
+        <label>효과음 음소거<input type="checkbox" id="mute-toggle"></label>
+        <label>효과음 볼륨 <output id="volume-value">100%</output><input aria-label="효과음 볼륨" id="volume-setting" type="range" min="0" max="100" step="5" oninput="document.getElementById('volume-value').value=this.value+'%'"></label>
+        <label>UI 글자 크기<select id="ui-size-setting"><option value="1">기본 (100%)</option><option value="1.15">크게 (115%)</option><option value="1.3">더 크게 (130%)</option></select></label>
+        <label>타격 시 잠깐 멈춤 (히트스톱)<input type="checkbox" id="hitstop-toggle"></label>
+        <label>흔들림·화면 섬광 강도 <output id="effects-value">100%</output><input aria-label="흔들림·화면 섬광 강도" id="effects-setting" type="range" min="0" max="100" step="10" oninput="document.getElementById('effects-value').value=this.value+'%'"></label>
+        <p>강도 0%는 흔들림과 화면 전체 섬광을 끕니다. 공격 범위와 위험 예고는 계속 표시됩니다. UI 글자 크기는 메뉴·정보 패널·HUD에 적용됩니다.</p>
+        <details id="key-settings"><summary>키 설정 (펼치기)</summary><p>중복 키는 사용할 수 없습니다. Escape는 메뉴 닫기, Shift+퀵슬롯 키는 물약 등록으로 유지합니다. 마우스 조준·클릭 공격은 고정입니다.</p><div id="key-bindings"></div></details>
+        <p id="settings-status" role="status" aria-live="polite"></p>
+        <button class="btn" onclick="resetAccessibilitySettings()">기본 설정 복원</button>
+        <button id="settings-close" class="btn" onclick="closeSettingsModal()">닫기</button>
       </div>
 
       <div id="autosave-indicator" class="hidden" style="position:absolute; top:14px; right:14px; background:rgba(15,23,42,0.92); border:1px solid #eab308; color:#fde047; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:bold; z-index:95;">💾 자동 저장 완료</div>
@@ -680,6 +709,8 @@
       <div id="item-tooltip" class="hidden" style="position:fixed; z-index:200; background:rgba(15,23,42,0.97); border:1px solid #eab308; border-radius:8px; padding:10px 12px; max-width:240px; pointer-events:none; text-align:left;"></div>
 
       <div id="help-screen" class="hidden">
+        <p class="binding-guide" id="help-binding-guide"></p>
+        <p>아래 도움말·패치 노트의 키 표기는 기본키 기준입니다. 변경한 키는 현재 조작 안내를 확인하세요.</p>
         <h2 style="color:#fde047;">도움말</h2>
         <p style="text-align:left; margin:20px 0; color:#cbd5e1; font-size:13px; line-height:1.6;">
           • 🔵 <strong>오른쪽 파란색 길</strong>: '왕성 앞 입구 맵'으로 이동합니다.<br>
@@ -782,12 +813,12 @@
           <div class="inv-slot" id="inv-staff-slot"></div>
         </div>
       </div>
-      <div style="text-align:center; font-size:11px; color:#94a3b8; margin:2px 0 4px;">⌨️ <b>Tab</b> 키로 검 ↔ 활 ↔ 지팡이 전환 (현재: <span id="active-weapon-label" style="color:#fde047; font-weight:bold;">검</span>)</div>
+      <div id="weapon-switch-hint" style="text-align:center; font-size:11px; color:#334155; margin:2px 0 4px;">⌨️ <b id="weapon-switch-key">Tab</b> 키로 검 ↔ 활 ↔ 지팡이 전환 (현재: <span id="active-weapon-label" style="color:#fde047; font-weight:bold;">검</span>)</div>
       <div class="inv-title" style="margin-top:5px;">소지품 가방</div>
       <div class="inv-grid-main" id="inv-main-grid"></div>
       <div class="inv-title" style="margin-top:5px;">퀵슬롯</div>
       <div class="inv-grid-hotbar" id="inv-hotbar"></div>
-      <p class="inventory-help">게임 화면에서 1–9: 물약 사용(가방 패널에서는 클릭) · 가방 물약 위에서 Shift+숫자: 등록(최대 64개) · 퀵슬롯 위에서 Shift+숫자: 자리 이동/교체<br>장비 클릭: 장착/탈착 · Shift+클릭: 판매 · 우클릭: 잠금<br>잠금은 판매·물약 소모·등록·제작 재료 사용을 막으며 장비 이동 시 유지됩니다.</p>
+      <p class="inventory-help"><span id="inventory-key-guide"></span><br>장비 클릭: 장착/탈착 · Shift+클릭: 판매 · 우클릭: 잠금<br>잠금은 판매·물약 소모·등록·제작 재료 사용을 막으며 장비 이동 시 유지됩니다.</p>
     </div>
   </div>
 
@@ -891,6 +922,102 @@
       shelfOrange: [8,0], shelfTeal: [8,2], rugOrange: [0,9], rugTeal: [7,9], wardrobe: [0,12]
     };
 
+    const KEY_ACTIONS = [
+      ['KeyW','위로 이동'],['KeyA','왼쪽 이동'],['KeyS','아래로 이동'],['KeyD','오른쪽 이동'],['ShiftLeft','달리기'],
+      ['KeyQ','Q 스킬'],['KeyE','E 스킬'],['KeyF','F 스킬'],['KeyR','R 스킬'],['KeyG','각성 궁극기'],['Tab','무기 전환'],
+      ...Array.from({length:9},(_,i)=>['Digit'+(i+1),'퀵슬롯 '+(i+1)]),
+      ['KeyZ','훈련 무한 마나'],['KeyX','훈련 쿨타임'],['KeyC','훈련 표적 이동'],['KeyV','훈련 기록 초기화']
+    ];
+    const BINDABLE_KEYS = [...Array.from({length:26},(_,i)=>'Key'+String.fromCharCode(65+i)),
+      ...Array.from({length:10},(_,i)=>'Digit'+i),'ArrowUp','ArrowLeft','ArrowDown','ArrowRight','Space','Tab','ShiftLeft'];
+    const DEFAULT_BINDINGS = Object.freeze(Object.fromEntries(KEY_ACTIONS.map(([key])=>[key,key])));
+    const heldPhysicalKeys = new Set();
+    function normalizePreferences(raw) {
+      const data = raw && typeof raw==='object' && !Array.isArray(raw) ? raw : {};
+      const number=(value,min,max,fallback)=>typeof value==='number' && Number.isFinite(value) && value>=min && value<=max ? value : fallback;
+      const bindings=data.bindings;
+      const validBindings=bindings && typeof bindings==='object' && KEY_ACTIONS.every(([key])=>BINDABLE_KEYS.includes(bindings[key]) && (bindings[key]!=='ShiftLeft' || key==='ShiftLeft')) &&
+        new Set(KEY_ACTIONS.map(([key])=>bindings[key])).size===KEY_ACTIONS.length;
+      return {version:1,volume:number(data.volume,0,1,1),uiScale:[1,1.15,1.3].includes(data.uiScale)?data.uiScale:1,
+        effects:number(data.effects,0,1,1),hitStop:typeof data.hitStop==='boolean'?data.hitStop:true,
+        autoSave:typeof data.autoSave==='boolean'?data.autoSave:true,
+        bindings:validBindings?Object.fromEntries(KEY_ACTIONS.map(([key])=>[key,bindings[key]])):{...DEFAULT_BINDINGS}};
+    }
+    function readPreferences() { try {return normalizePreferences(JSON.parse(localStorage.getItem('mangiworld_preferences')));} catch {return normalizePreferences(null);} }
+    let accessibility = readPreferences(), settingsReturnTo = 'pause', settingsFocusReturn = null;
+    function keyLabel(code) {
+      return code.startsWith('Key')?code.slice(3):code.startsWith('Digit')?code.slice(5):
+        ({ArrowUp:'↑',ArrowLeft:'←',ArrowDown:'↓',ArrowRight:'→',ShiftLeft:'Shift',Space:'Space'})[code] || code;
+    }
+    function displayControlText(text) {
+      return String(text).replace(/\[([QEFRG])\]/g,(_,key)=>'['+bindingLabel('Key'+key)+']')
+        .replace(/([QEFRG]) 키/g,(_,key)=>bindingLabel('Key'+key)+' 키').replace(/Tab 키/g,bindingLabel('Tab')+' 키');
+    }
+    function gameCode(physical) {
+      if (physical==='ShiftRight') physical='ShiftLeft';
+      return KEY_ACTIONS.find(([key])=>accessibility.bindings[key]===physical)?.[0] || null;
+    }
+    function bindingLabel(canonical) { return keyLabel(accessibility.bindings[canonical]); }
+    function persistPreferences() {
+      accessibility.autoSave=autoSaveEnabled;
+      try {
+        localStorage.setItem('mangiworld_preferences',JSON.stringify(accessibility));
+        localStorage.setItem('mangiworld_shake',shakeEnabled?'1':'0');
+        localStorage.setItem('mangiworld_sfx_muted',sfxMuted?'1':'0');
+        return true;
+      } catch { document.getElementById('settings-status').textContent='브라우저 저장에 실패했습니다. 현재 실행에는 적용되지만 재실행하면 유지되지 않을 수 있습니다.';return false; }
+    }
+    function refreshBindingLabels() {
+      for(const key of ['q','e','f','r','g']) document.querySelector('#skill-slot-'+key+' .key-label').textContent=bindingLabel('Key'+key.toUpperCase());
+      const guide=`현재 조작 · 이동 ${['KeyW','KeyA','KeyS','KeyD'].map(bindingLabel).join('/')} · 달리기 ${bindingLabel('ShiftLeft')}\n스킬 ${['KeyQ','KeyE','KeyF','KeyR'].map(bindingLabel).join('/')} · 궁극기 ${bindingLabel('KeyG')} · 무기 전환 ${bindingLabel('Tab')}\n퀵슬롯 ${Array.from({length:9},(_,i)=>bindingLabel('Digit'+(i+1))).join('/')} · 메뉴 Escape`;
+      document.getElementById('weapon-switch-key').textContent=bindingLabel('Tab');
+      document.getElementById('inventory-key-guide').textContent=`게임 화면 퀵슬롯 키 ${Array.from({length:9},(_,i)=>bindingLabel('Digit'+(i+1))).join('/')} : 물약 사용(가방에서는 클릭) · Shift+퀵슬롯 키: 등록(최대 64개)/자리 이동·교체`;
+      document.getElementById('help-binding-guide').textContent=guide;
+      document.getElementById('current-binding-guide').textContent=guide;
+    }
+    function applyAccessibilityPresentation() {
+      document.body.style.setProperty('--ui-scale',String(accessibility.uiScale));
+      document.body.toggleAttribute('data-large-ui',accessibility.uiScale!==1);
+      refreshBindingLabels();
+      const button=document.getElementById('sfx-toggle-btn');
+      button.textContent=sfxMuted?'🔇':'🔊';button.setAttribute('aria-label',sfxMuted?'효과음 켜기':'효과음 끄기');button.setAttribute('aria-pressed',String(sfxMuted));
+    }
+    function renderKeyBindings() {
+      const host=document.getElementById('key-bindings');host.replaceChildren();
+      for(const [canonical,label] of KEY_ACTIONS) {
+        const row=document.createElement('label');row.append(label);
+        const select=document.createElement('select');select.id='binding-'+canonical;select.setAttribute('aria-label',label+' 키');
+        for(const code of BINDABLE_KEYS.filter(code=>code!=='ShiftLeft' || canonical==='ShiftLeft')) {const option=document.createElement('option');option.value=code;option.textContent=keyLabel(code);select.appendChild(option);}
+        select.value=accessibility.bindings[canonical];
+        select.onchange=()=>{
+          const duplicate=KEY_ACTIONS.find(([key])=>key!==canonical && accessibility.bindings[key]===select.value);
+          if(duplicate){select.value=accessibility.bindings[canonical];document.getElementById('settings-status').textContent=duplicate[1]+'에서 이미 사용하는 키입니다. 다른 키를 선택하세요.';return;}
+          releaseGameplayInput();accessibility.bindings[canonical]=select.value;
+          applyAccessibilityPresentation();setupInventory();
+          document.getElementById('settings-status').textContent=label+' 키를 '+bindingLabel(canonical)+'(으)로 변경했습니다.';
+          persistPreferences();
+        };
+        row.appendChild(select);host.appendChild(row);
+      }
+    }
+    function populateSettings() {
+      document.getElementById('autosave-toggle').checked=autoSaveEnabled;
+      document.getElementById('shake-toggle').checked=shakeEnabled;
+      document.getElementById('mute-toggle').checked=sfxMuted;
+      document.getElementById('volume-setting').value=Math.round(accessibility.volume*100);
+      document.getElementById('volume-value').value=Math.round(accessibility.volume*100)+'%';
+      document.getElementById('ui-size-setting').value=accessibility.uiScale;
+      document.getElementById('hitstop-toggle').checked=accessibility.hitStop;
+      document.getElementById('effects-setting').value=Math.round(accessibility.effects*100);
+      document.getElementById('effects-value').value=Math.round(accessibility.effects*100)+'%';
+      renderKeyBindings();
+    }
+    window.resetAccessibilitySettings=function() {
+      accessibility=normalizePreferences(null);autoSaveEnabled=true;shakeEnabled=true;sfxMuted=false;hitStop=0;
+      releaseGameplayInput();applyAccessibilityPresentation();setupInventory();populateSettings();
+      document.getElementById('settings-status').textContent='기본 설정으로 복원했습니다.';persistPreferences();
+    };
+
     // ---------- 사운드 (Web Audio API 합성, 외부 파일 없음 — 배경음악은 없고 짧은 효과음만) ----------
     let audioCtx = null;
     let sfxMuted = (() => {
@@ -912,6 +1039,7 @@
       try { localStorage.setItem('mangiworld_sfx_muted', sfxMuted ? '1' : '0'); } catch (e) {}
       const btn = document.getElementById('sfx-toggle-btn');
       if (btn) btn.innerText = sfxMuted ? '🔇' : '🔊';
+      applyAccessibilityPresentation();
     };
 
     const SFX_DEFS = {
@@ -926,7 +1054,7 @@
     };
 
     function playSfx(name) {
-      if (sfxMuted) return;
+      if (sfxMuted || accessibility.volume===0) return;
       const notes = SFX_DEFS[name];
       if (!notes) return;
       const ac = ensureAudioCtx();
@@ -937,7 +1065,7 @@
         osc.type = n.type;
         osc.frequency.value = n.freq;
         const startAt = ac.currentTime + (n.delay || 0);
-        gainNode.gain.setValueAtTime(n.gain, startAt);
+        gainNode.gain.setValueAtTime(n.gain * accessibility.volume, startAt);
         gainNode.gain.exponentialRampToValueAtTime(0.0001, startAt + n.dur);
         osc.connect(gainNode).connect(ac.destination);
         osc.start(startAt);
@@ -2094,7 +2222,7 @@
     function showAlertModal(title, msg) {
       releaseGameplayInput();
       document.getElementById('alert-title').innerText = title;
-      document.getElementById('alert-msg').innerText = msg;
+      document.getElementById('alert-msg').innerText = displayControlText(msg);
       document.getElementById('alert-modal').classList.remove('hidden');
     }
 
@@ -4412,7 +4540,7 @@
     function showTopNotification(text, duration = 3000) {
       const notif = document.getElementById('top-notification');
 
-      notif.innerText = text;
+      notif.innerText = displayControlText(text);
       notif.classList.add('show');
       if(notifTimeout) clearSessionTimeout(notifTimeout);
       notifTimeout = setSessionTimeout(() => { notif.classList.remove('show'); }, duration);
@@ -4988,7 +5116,8 @@
           bindItemInspection(slot,stack,{area:'hotbar',index:i});makeItemControl(slot);
           slot.onclick = () => handleHotbarClick(i);
         }
-        addSlotBadge(slot,String(i+1),'key');
+        addSlotBadge(slot,bindingLabel('Digit'+(i+1)),'key');
+        slot.setAttribute('aria-label',`퀵슬롯 ${i+1} · 키 ${bindingLabel('Digit'+(i+1))}${stack?' · '+stack.name+' · '+stack.count+'개':' · 비어 있음'}`);
         hotbarEl.appendChild(slot);
       }
 
@@ -5049,7 +5178,7 @@
         }
       }
       const footer=context.area==='shop'?'상점 미리보기 · 같은 슬롯의 장비와 비교':context.area==='forge'?'교환 결과 미리보기':context.area==='equipment'?'클릭: 탈착 · 우클릭: 잠금/해제':
-        context.area==='hotbar'?'클릭: 사용 · 게임 화면 1–9: 사용 · Shift+숫자: 자리 이동/교체':item.type==='consumable'?'클릭: 1개 사용 · Shift+숫자: 퀵슬롯 등록 · 우클릭: 잠금':'클릭: 장착 · Shift+클릭: 판매 · 우클릭: 잠금';
+        context.area==='hotbar'?`클릭 또는 ${bindingLabel('Digit'+(context.index+1))}: 사용 · Shift+퀵슬롯 키: 자리 이동/교체`:item.type==='consumable'?'클릭: 1개 사용 · Shift+퀵슬롯 키: 등록 · 우클릭: 잠금':'클릭: 장착 · Shift+클릭: 판매 · 우클릭: 잠금';
       line(footer,'item-footer');tip.classList.remove('hidden');positionItemTooltip(e);
     }
     function positionItemTooltip(e) {
@@ -5754,29 +5883,32 @@
 
     window.addEventListener('keydown', e => {
       if (e.code === 'Escape') {
-        if (isPlaying || openSidePanel!==null) { e.preventDefault(); if (!e.repeat) handleEscape(); }
+        if (isPlaying || openSidePanel!==null || overlayVisible('settings-modal')) { e.preventDefault(); if (!e.repeat) handleEscape(); }
         return;
       }
       if (overlayVisible('combat-report-screen') && e.code==='Tab') { trapFocus(document.getElementById('combat-report-screen'),e); return; }
       if (overlayVisible('objective-screen') && e.code==='Tab') { trapFocus(document.getElementById('objective-screen'),e); return; }
       if (openSidePanel!==null && e.code==='Tab') { handlePanelTab(e); return; }
+      if (overlayVisible('settings-modal') && e.code==='Tab') { trapFocus(document.getElementById('settings-modal'),e); return; }
+      const code=gameCode(e.code);
       // 오른쪽 가방 패널의 Shift+숫자는 전투 입력과 분리된 인벤토리 조작이다.
-      if(openSidePanel==='right-ui-panel'&&e.shiftKey&&/^Digit[1-9]$/.test(e.code)&&isPlaying&&!isPaused&&!document.hidden&&!GAMEPLAY_OVERLAYS.some(overlayVisible)&&!e.ctrlKey&&!e.altKey&&!e.metaKey){
-        e.preventDefault();if(!e.repeat)assignToHotbar(Number(e.code.slice(5))-1);return;
+      if(openSidePanel==='right-ui-panel'&&e.shiftKey&&/^Digit[1-9]$/.test(code)&&isPlaying&&!isPaused&&!document.hidden&&!GAMEPLAY_OVERLAYS.some(overlayVisible)&&!e.ctrlKey&&!e.altKey&&!e.metaKey){
+        e.preventDefault();if(!e.repeat)assignToHotbar(Number(code.slice(5))-1);return;
       }
-      if (!canUseGameplayInput(e)) return;
+      if (!canUseGameplayInput(e) || !code) return;
       if (e.ctrlKey || e.altKey || e.metaKey) return;
-      if (e.repeat || keys[e.code]) { if (isGameKey(e.code)) e.preventDefault(); return; }
-      keys[e.code] = true;
-      if (isGameKey(e.code)) e.preventDefault();
-      if ((e.code === 'KeyQ' || e.code === 'KeyE' || e.code === 'KeyR' || e.code === 'KeyF')) {
-        castSkill(e.code === 'KeyQ' ? 'q' : e.code === 'KeyE' ? 'e' : e.code === 'KeyR' ? 'r' : 'f');
+      heldPhysicalKeys.add(e.code);
+      if (e.repeat || keys[code]) { if (isGameKey(code)) e.preventDefault(); return; }
+      keys[code] = true;
+      if (isGameKey(code)) e.preventDefault();
+      if ((code === 'KeyQ' || code === 'KeyE' || code === 'KeyR' || code === 'KeyF')) {
+        castSkill(code === 'KeyQ' ? 'q' : code === 'KeyE' ? 'e' : code === 'KeyR' ? 'r' : 'f');
       }
-      if (e.code === 'KeyG') {
+      if (code === 'KeyG') {
         if (isAwakened(activeWeaponSlot)) castAwakenUltimate();
         else showTopNotification("아직 각성하지 않은 무기입니다. 스승을 찾아가 각성 시련을 받으세요.", 1600);
       }
-      if (e.code === 'Tab') {
+      if (code === 'Tab') {
         e.preventDefault();
         const equippedSlots = ['sword', 'bow', 'staff'].filter(s => equipped[s]);
         if (equippedSlots.length <= 1) {
@@ -5792,8 +5924,8 @@
           showTopNotification(`${icon} ${weaponSlotLabels[activeWeaponSlot]}으로 전환${wpn ? ' (' + wpn.name + ')' : ''}`, 1200);
         }
       }
-      if (/^Digit[1-9]$/.test(e.code)) {
-        const idx = parseInt(e.code.slice(5), 10) - 1;
+      if (/^Digit[1-9]$/.test(code)) {
+        const idx = parseInt(code.slice(5), 10) - 1;
         if (e.shiftKey) {
           e.preventDefault();
           assignToHotbar(idx);
@@ -5803,7 +5935,10 @@
         }
       }
     });
-    window.addEventListener('keyup', e => { delete keys[e.code]; });
+    window.addEventListener('keyup', e => {
+      heldPhysicalKeys.delete(e.code);const code=gameCode(e.code);
+      if(code && ![...heldPhysicalKeys].some(physical=>gameCode(physical)===code)) delete keys[code];
+    });
 
     // Shift+숫자키: 마우스가 올라간 위치에 따라 동작이 다름
     // - 가방의 물약 위: 지정한 퀵슬롯에 등록(같은 물약이면 병합, 다른 물약이면 거부)
@@ -8437,7 +8572,7 @@
     // 한 방이 꽂혔을 때 부르는 것 — 흔들림·정지·섬광을 한 번에 건다
     function impact(shake, stop, flash) {
       cameraShake = Math.max(cameraShake, shake);
-      if (stop) hitStop = Math.max(hitStop, stop);
+      if (stop && accessibility.hitStop) hitStop = Math.max(hitStop, stop);
       if (flash) screenFlash = Math.max(screenFlash, flash);
     }
 
@@ -8661,7 +8796,7 @@
 
       if (screenFlash > 0) {
         ctx.save();
-        ctx.globalAlpha = screenFlash;
+        ctx.globalAlpha = screenFlash * accessibility.effects;
         ctx.fillStyle = '#fff';
         ctx.fillRect(-40, -40, 880, 980);
         ctx.restore();
@@ -9291,6 +9426,7 @@
           actionBtn2.onclick = closeNpcModal;
         }
       }
+      content.innerText=displayControlText(content.innerText);
       document.getElementById('npc-modal').classList.remove('hidden');
     }
 
@@ -10475,7 +10611,7 @@
 
     // ---------- 세이브 시스템 ----------
     let currentSaveSlot = 1;
-    let autoSaveEnabled = true;
+    let autoSaveEnabled = accessibility.autoSave;
     // 화면 흔들림 — 어지러워하는 사람이 있어 끌 수 있게 했다. 설정은 브라우저에 남는다.
     let shakeEnabled = (() => {
       try { return localStorage.getItem('mangiworld_shake') !== '0'; } catch(e) { return true; }
@@ -10722,7 +10858,7 @@
       currentScript = null; onStoryComplete = null; storyIndex = 0; storySceneStart = 0;
       equipBonusHp = 0;
       player = {...INITIAL_PLAYER_STATE, swing:{...INITIAL_PLAYER_STATE.swing}};
-      keys = {}; mouseX = 400; mouseY = 450; lastPointerClient = null;
+      keys = {}; heldPhysicalKeys.clear(); mouseX = 400; mouseY = 450; lastPointerClient = null;
       enemies = []; projectiles = []; floatingTexts = []; pendingSpawns = [];
       slimeZones = []; ghostZones = []; ghostDecoys = []; demonZones = [];
       minjeZones = []; elfZones = []; archmageZones = [];
@@ -11013,7 +11149,7 @@
     function hasGameplayOverlay() { return GAMEPLAY_OVERLAYS.some(overlayVisible); }
     function gameplayPaused() { return isPaused || document.hidden || openSidePanel!==null || hasGameplayOverlay(); }
     function releaseGameplayInput() {
-      keys = {}; player.vx = 0; player.vy = 0; trainingLatch = {};
+      keys = {}; heldPhysicalKeys.clear(); player.vx = 0; player.vy = 0; trainingLatch = {};
     }
     function isGameKey(code) { return /^(Key[WASDQEFRGZXCV]|ShiftLeft|ShiftRight|Tab|Digit[1-9])$/.test(code); }
     function canUseGameplayInput(event) {
@@ -11092,7 +11228,7 @@
     }
     function handlePanelTab(event) { trapFocus(document.getElementById(openSidePanel),event); }
     function trapFocus(container,event) {
-      const controls = [...container.querySelectorAll('button:not([disabled]),a[href],input,[tabindex="0"]')].filter(el=>el.getClientRects().length);
+      const controls = [...container.querySelectorAll('button:not([disabled]),a[href],input,select,summary,[tabindex="0"]')].filter(el=>el.getClientRects().length);
       if (!controls.length) return;
       const first=controls[0],last=controls[controls.length-1];
       if (event.shiftKey && document.activeElement===first) { event.preventDefault(); last.focus(); }
@@ -11144,20 +11280,32 @@
     };
 
     window.openSettingsModal = function() {
+      if (isPlaying && GAMEPLAY_OVERLAYS.some(id=>id!=='pause-menu' && overlayVisible(id))) return;
+      settingsReturnTo=isPlaying?'pause':'start';settingsFocusReturn=document.activeElement;
       releaseGameplayInput(); isPaused = true;
+      closeSidePanel(false);hideItemTooltip();
       document.getElementById('pause-menu').classList.add('hidden');
+      document.getElementById('start-screen').classList.add('hidden');
+      populateSettings();document.getElementById('settings-status').textContent='';
       document.getElementById('settings-modal').classList.remove('hidden');
-      document.getElementById('autosave-toggle').checked = autoSaveEnabled;
-      document.getElementById('shake-toggle').checked = shakeEnabled;
+      document.getElementById('autosave-toggle').focus();
     };
 
     window.closeSettingsModal = function() {
       autoSaveEnabled = document.getElementById('autosave-toggle').checked;
       shakeEnabled = document.getElementById('shake-toggle').checked;
-      // 세이브 슬롯이 아니라 브라우저에 저장한다 — 어느 슬롯으로 시작하든 취향은 유지된다
-      try { localStorage.setItem('mangiworld_shake', shakeEnabled ? '1' : '0'); } catch(e) {}
+      sfxMuted=document.getElementById('mute-toggle').checked;
+      accessibility.volume=Number(document.getElementById('volume-setting').value)/100;
+      accessibility.uiScale=Number(document.getElementById('ui-size-setting').value);
+      accessibility.hitStop=document.getElementById('hitstop-toggle').checked;
+      accessibility.effects=Number(document.getElementById('effects-setting').value)/100;
+      if(!accessibility.hitStop)hitStop=0;
+      applyAccessibilityPresentation();releaseGameplayInput();
+      const saved=persistPreferences();
       document.getElementById('settings-modal').classList.add('hidden');
-      document.getElementById('pause-menu').classList.remove('hidden');
+      document.getElementById(settingsReturnTo==='start'?'start-screen':'pause-menu').classList.remove('hidden');
+      if(settingsFocusReturn?.isConnected && settingsFocusReturn.getClientRects().length)settingsFocusReturn.focus({preventScroll:true});
+      if(!saved)showTopNotification('설정 저장에 실패했습니다. 현재 실행에만 적용될 수 있습니다.',4500);
     };
 
     window.goToMainMenu = function() {
@@ -11433,6 +11581,7 @@
         if (autoSaveTimer >= 1800) { autoSaveTimer = 0; saveToSlot(currentSaveSlot, true); }
       }
       // 히트스톱은 전투 시계와 모든 전투 효과를 함께 멈춘다.
+      if (!accessibility.hitStop) hitStop=0;
       if (hitStop > 0) { hitStop--; return; }
       if (present) loopStats.presentations++;
 
@@ -11445,8 +11594,8 @@
       // 다음 프레임 맨 위에서 어차피 초기화하기 때문 — 중간에 어디서 빠져나가도 어긋나지 않는다.
       // 미는 것과 함께 살짝 확대한다. 그냥 밀기만 하면 밀려난 쪽 가장자리에 배경이 비어
       // 이음매가 보인다 (마을 잔디 타일은 0~800만 깔리므로 넉넉히 칠해도 소용없다).
-      if (cameraShake > 0.4 && shakeEnabled) {
-        const k = Math.min(cameraShake, 16);
+      if (cameraShake > 0.4 && shakeEnabled && accessibility.effects>0) {
+        const k = Math.min(cameraShake, 16) * accessibility.effects;
         // 매 프레임 방향을 뒤집어 준다 — 무작위로만 흔들면 부르르 떨기만 하고 '때린' 느낌이 안 난다
         shakeFlip = -shakeFlip;
         const a = Math.random() * Math.PI * 2;
@@ -12805,6 +12954,7 @@
     const INITIAL_PLAYER_STATE = Object.freeze({...player,swing:Object.freeze({...player.swing})});
     const INITIAL_GAME_SAVE = Object.freeze({...getSaveData(),gameState:'village',savedAt:0});
     initializeResponsiveLayout();
+    applyAccessibilityPresentation();
     setupInventory();
   </script>
 </body>
