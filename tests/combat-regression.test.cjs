@@ -154,7 +154,7 @@ test('life drain is attributed as periodic damage and stops outside its beam',()
 test('actual fatal simulation tick opens report and repeated retry death creates a fresh ticket',()=>run(async page=>{
   await startNewAdventure(page);await page.evaluate(readyBoss);
   const result=await page.evaluate(()=>{
-    hp=1;const boss=enemies[0];boss.x=player.x;boss.y=player.y;boss.state='cooldown';boss.stateTimer=90;
+    hp=1;const boss=enemies[0];boss.x=player.x;boss.y=player.y;beginSlimeAttack(boss,'sweep');boss.slimeAttack.phase='active';boss.slimeAttack.left=12;boss.slimeAttack.angle=0;
     stepGame(false);const first={state:gameState,report:combatReportMode,log:damageLog.length};
     const retry=retryCombat();applyPlayerDamage(9999,'슬라임 왕');respawnPlayerAtInn();
     const second=retryCombat();return {first,retry,second,state:gameState,gold};
