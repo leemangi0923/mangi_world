@@ -71,3 +71,7 @@ GitHub Actions 설정은 `.github/workflows/test.yml`에 있습니다. 로컬 �
 `npm run test:undead`: 리치의 고정 판정/흡수 실피해 회복/의식 중단·안전지대/소환 상한과 무보상/탑·이탈 정리/3난이도 장기 전투/관리자 격리를 검사합니다.
 
 `npm run test:ghost`: 사령왕 5패턴/환영 구분·상한/탄막 틈·단일 피해/순차 손/양방향 안전 회랑/30·60·144Hz/3난이도·효과0/탑·관리자 격리를 검사합니다.
+
+`npm run test:demon`: 대마왕6패턴·연격2회·질주/균열/낙인·탄막 통로·심판 안전/중단/추가 피해·3단계·탑25층·3난이도 상한을 검사합니다.
+
+`node --test tests/monster-integration.test.cjs`: 실제 평타 입력으로3무기×3보스×3난이도 후딜 공격, 의식/심판 중단, 기본 달리기 회피, 신규 공격30/60/144Hz 일치를 검사합니다. 조건·수치는 [DEMON_UPDATE.md](../DEMON_UPDATE.md)에 있습니다. `npm run test:monsters`로 다섯 종족과 이 통합 검사를 함께 실행할 수 있습니다.

@@ -1,6 +1,6 @@
 {
   "name": "mangi-world",
-  "version": "5.3.0",
+  "version": "5.4.0",
   "private": true,
   "description": "Standalone HTML canvas RPG with browser regression tests",
   "scripts": {
@@ -22,7 +22,9 @@
     "test:slime": "node --test tests/slime-regression.test.cjs",
     "test:wolf": "node --test tests/wolf-regression.test.cjs",
     "test:undead": "node --test tests/undead-regression.test.cjs",
-    "test:ghost": "node --test tests/ghost-regression.test.cjs"
+    "test:ghost": "node --test tests/ghost-regression.test.cjs",
+    "test:demon": "node --test tests/demon-regression.test.cjs",
+    "test:monsters": "node --test tests/slime-regression.test.cjs tests/wolf-regression.test.cjs tests/undead-regression.test.cjs tests/ghost-regression.test.cjs tests/demon-regression.test.cjs tests/monster-integration.test.cjs"
   },
   "engines": {
     "node": ">=20"
