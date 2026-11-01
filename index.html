@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v4.1.0</title>
+  <title>만기 월드 (Mangi World) - v4.2.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -297,6 +297,10 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
+        <h4>📌 v4.2.0 패치 노트</h4>
+        • 🧑 <b>사람형 NPC·초상화</b>: 얼굴·머리·관절·복장·직업 소품을 표현합니다<br>
+        • 📖 <b>귀환 목표와 첫 길드 의뢰</b>를 연결하고 이야기 진행·장소를 안내합니다<br>
+        • 🌲 <b>지역 조명·주변 장식·몬스터 재질·정예/보스 표식</b>을 개선했습니다<br><br>
         <h4>📌 v4.1.0 패치 노트</h4>
         • 🛠️ 설정의 관리자 코드로 <b>캐릭터·아이템·스킬·맵·보스·탑을 테스트</b>합니다<br>
         • 🛡️ <b>일반 슬롯과 관리자 저장을 분리</b>하고 종료·새로고침 시 원래 진행을 복구합니다<br>
@@ -612,7 +616,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v4.1.0</div>
+      <div id="version-badge">v4.2.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -676,7 +680,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v4.1.0 : 관리자 테스트 모드 · 일반 저장 보호</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v4.2.0 : 이야기 · 사람형 NPC · 지역 그래픽</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -699,7 +703,7 @@
       </div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v4.1.0</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v4.2.0</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
@@ -730,7 +734,7 @@
           <div class="admin-actions"><button class="btn" onclick="adminStartEncounter()">선택 전투 새로 준비</button><button class="btn" onclick="adminResetBattle()">전투 초기화·마을로</button></div>
         </details>
         <details><summary>테스트 프리셋·전용 저장</summary><p>프리셋은 현재 테스트 상태를 교체합니다. 일반 저장은 변경하지 않습니다.</p><div class="admin-actions"><button class="btn" onclick="adminPreset('early')">초반 Lv.5</button><button class="btn" onclick="adminPreset('mid')">중반 Lv.40·늑대 보스</button><button class="btn" onclick="adminPreset('awakened')">각성 Lv.80</button><button class="btn" onclick="adminPreset('tower')">탑 Lv.100·30층</button><button class="btn" onclick="adminSaveTest()">관리자 전용 저장</button><button class="btn" onclick="adminLoadTest()">관리자 전용 불러오기</button></div></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v4.1.0: 관리자 테스트 도구와 일반 저장 보호. 다음 2차는 스토리·캐릭터·NPC·맵 그래픽 개편입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v4.2.0: 도입부 이야기, 얼굴·복장·소품을 갖춘 사람형 NPC와 초상화, 지역 배경·몬스터 재질 표현을 개편했습니다. 다음 3차는 난이도·밸런스·전투 UI입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
       <div id="pause-menu" class="hidden" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,15,26,0.92); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:80; gap:10px;">
         <h2 style="color:#fde047; margin-bottom:10px; font-family:'Cinzel';">일시정지</h2>
@@ -795,6 +799,7 @@
       <div id="story-screen" class="hidden" onclick="advanceStory()">
         <button id="story-skip" class="btn hidden" style="position:absolute;top:12px;right:12px;z-index:5;" onclick="skipSeenStory(event)">본 연출 건너뛰기</button>
         <div class="story-dialog-box">
+          <p id="story-progress" style="font-size:12px;color:#bae6fd;margin-bottom:8px;"></p>
           <div style="font-size:18px; font-weight:900; color:#fde047; margin-bottom:8px;" id="story-speaker">만기</div>
           <div style="font-size:15px; color:#e2e8f0; line-height:1.6; min-height:50px;" id="story-text">...</div>
         </div>
@@ -1202,11 +1207,11 @@
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v4.1.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱`;
+      document.getElementById('admin-metrics').textContent=`v4.2.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱`;
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
       const quests=document.getElementById('admin-quest');if(!quests.options.length)for(const quest of questDefs){const option=document.createElement('option');option.value=quest.id;option.textContent=quest.title||quest.name||quest.id;quests.appendChild(option);}
       const preview=document.getElementById('admin-preview'),target=preview.getContext('2d');target.clearRect(0,0,preview.width,preview.height);
-      const actors=[['만기',null],['송건',{outfitColor:'#f472b6',skirt:true,hairLong:true}],['민제',{outfitColor:'#7c2d12'}],['엘프 여왕',{outfitColor:'#15803d',skirt:true,hairLong:true,hairColor:'#fde68a'}],['에녹',{outfitColor:'#4c1d95',hairLong:true,hairColor:'#e2e8f0'}],['경비병',{outfitColor:'#64748b'}]];
+      const actors=[['만기',null],['송건',{outfitColor:'#f472b6',skirt:true,hairLong:true}],['민제',{outfitColor:'#7c2d12',role:'knight'}],['엘프 여왕',{outfitColor:'#15803d',skirt:true,hairLong:true,hairColor:'#fde68a'}],['에녹',{outfitColor:'#4c1d95',hairLong:true,hairColor:'#e2e8f0'}],['경비병',{outfitColor:'#64748b'}]];
       actors.forEach(([name,opts],i)=>{const x=45+i*80;if(opts)drawStoryFigure(x,65,opts,target);else drawPlayer(x,55,0,0,false,0,false,target);target.fillStyle='#fff';target.font='12px sans-serif';target.textAlign='center';target.fillText(name,x,108);});
     }
     function drawAdminMetrics(){
@@ -1994,6 +1999,7 @@
       g.addColorStop(1, color2);
       ctx.fillStyle = g;
       ctx.fillRect(0, y, 800, h);
+      ctx.save();ctx.fillStyle='rgba(255,255,255,.035)';for(let i=0;i<32;i++){const x=(i*137)%790,py=y+((i*71)%Math.max(1,h));ctx.fillRect(x,py,5,2);}ctx.restore();
     }
 
     function drawTorch(x, y, t) {
@@ -2043,6 +2049,8 @@
     }
 
     function drawBuilding(cx, topY, w, h, wallColor, roofColor, label, icon, t) {
+      ctx.save();ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(cx+10,topY+h,w*.58,18,0,0,Math.PI*2);ctx.fill();ctx.restore();
+
       const x = cx - w/2;
       // shadow
       ctx.fillStyle = 'rgba(0,0,0,0.18)';
@@ -2369,6 +2377,20 @@
       ctx.fillRect(en.x - 22, en.y - en.r - 16, 44 * (en.hp / en.maxHp), 6);
     }
 
+    function drawRegionScenery(category,t) {
+      ctx.save();
+      const accent={slime:'#86efac',wolf:'#bae6fd',zombie:'#c4b5a0',ghost:'#c4b5fd',demon:'#fb923c'}[category]||'#fde68a';
+      const light=ctx.createRadialGradient(400,350,20,400,350,520);light.addColorStop(0,'rgba(255,255,255,.07)');light.addColorStop(1,'rgba(0,0,0,.22)');ctx.fillStyle=light;ctx.fillRect(0,0,800,900);
+      for(let i=0;i<12;i++){
+        const x=i%2?770:30,y=95+Math.floor(i/2)*135;
+        ctx.fillStyle='rgba(0,0,0,.24)';ctx.beginPath();ctx.ellipse(x,y+20,26,9,0,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle=category==='demon'?'#492b30':category==='wolf'?'#263e3b':'#34434a';ctx.beginPath();ctx.roundRect(x-13,y-18,26,36,5);ctx.fill();
+        ctx.strokeStyle=accent;ctx.globalAlpha=.3;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-8,y-10);ctx.lineTo(x+7,y-10);ctx.stroke();ctx.globalAlpha=1;
+        if(category==='slime'||category==='wolf'){ctx.fillStyle=category==='slime'?'#477c56':'#365d56';for(let j=0;j<3;j++){ctx.beginPath();ctx.ellipse(x-12+j*10,y-17-j%2*8,11,7,-.5,0,Math.PI*2);ctx.fill();}}
+        if(category==='ghost'||category==='demon'){ctx.fillStyle=accent;ctx.globalAlpha=.35+.15*Math.sin(t*1.5+i);ctx.beginPath();ctx.arc(x,y-25,3,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
+      }
+      ctx.restore();
+    }
     function drawDungeonBackground(category, stageIndex, isBoss, t) {
       const themes = {
         slime: [ ['#166534','#052e1c'], ['#0c4a6e','#022c3e'], ['#7f1d1d','#2a0808'] ],
@@ -2380,6 +2402,8 @@
       const idx = isBoss ? 2 : Math.min(stageIndex, 2);
       const [top, bottom] = (themes[category]||themes.slime)[idx];
       fillSky(top, bottom);
+      drawRegionScenery(category,t);
+
       ctx.fillStyle = 'rgba(255,255,255,0.05)';
       for (let i=0;i<6;i++) ctx.beginPath(), ctx.ellipse(100+i*140, 200+Math.sin(t*0.5+i)*20, 120, 40, 0,0,Math.PI*2), ctx.fill();
 
@@ -4125,22 +4149,7 @@
       const dashing = en.state.includes('dash');
       if (dashing) ctx.rotate(Math.atan2(en.dashVy||0.01, en.dashVx||0.01));
 
-      // 망토
-      ctx.fillStyle = '#7c2d12';
-      ctx.beginPath(); ctx.moveTo(-14,-10); ctx.lineTo(-26,26); ctx.lineTo(-2,20); ctx.lineTo(-6,-10); ctx.closePath(); ctx.fill();
-
-      // 다리
-      ctx.fillStyle = '#292524';
-      ctx.fillRect(-13, 8, 11, 24); ctx.fillRect(2, 8, 11, 24);
-      // 몸통
-      const bodyGrad = ctx.createLinearGradient(-16,-16,16,16);
-      bodyGrad.addColorStop(0, '#f59e0b'); bodyGrad.addColorStop(1, '#92400e');
-      ctx.fillStyle = bodyGrad;
-      ctx.fillRect(-16, -16, 32, 28);
-      ctx.strokeStyle = '#451a03'; ctx.lineWidth = 2; ctx.strokeRect(-16,-16,32,28);
-      // 머리
-      ctx.fillStyle = '#FFDBAC'; ctx.fillRect(-11, -38, 22, 22);
-      ctx.fillStyle = '#1c1917'; ctx.fillRect(-13, -42, 26, 10);
+      drawStoryFigure(0,0,{...NPC_APPEARANCE.minje,noProp:true,walk:t*5,scale:en.awakened?1.08:1});
       // 칼 (평상시 등에, 공격 시 앞으로)
       const swordGlow = (en.state.includes('dash') || en.state === 'spin_hit' || en.state === 'flurry_hit');
       ctx.strokeStyle = swordGlow ? '#fef08a' : '#cbd5e1';
@@ -4358,18 +4367,7 @@
 
       ctx.save();
       ctx.translate(en.x, en.y);
-      ctx.fillStyle = '#166534';
-      ctx.beginPath(); ctx.moveTo(-16,-8); ctx.lineTo(-28,22); ctx.lineTo(0,16); ctx.lineTo(-6,-8); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#365314';
-      ctx.fillRect(-12, 6, 10, 22); ctx.fillRect(2, 6, 10, 22);
-      const bodyGrad = ctx.createLinearGradient(-14,-14,14,14);
-      bodyGrad.addColorStop(0, '#4ade80'); bodyGrad.addColorStop(1, '#15803d');
-      ctx.fillStyle = bodyGrad;
-      ctx.fillRect(-14, -14, 28, 26);
-      ctx.fillStyle = '#FFDBAC'; ctx.fillRect(-10, -34, 20, 20);
-      ctx.fillStyle = '#fde68a'; ctx.fillRect(-12, -38, 24, 8);
-      ctx.fillStyle = '#fde047';
-      ctx.beginPath(); ctx.moveTo(-4,-38); ctx.lineTo(0,-46); ctx.lineTo(4,-38); ctx.closePath(); ctx.fill();
+      drawStoryFigure(0,0,{...NPC_APPEARANCE.elfqueen,noProp:true,walk:t*5,scale:en.awakened?1.08:1});
       const bowGlow = en.state.includes('snipe') || en.state.includes('volley') || en.state.includes('flurry');
       ctx.strokeStyle = bowGlow ? '#bbf7d0' : '#78350f'; ctx.lineWidth = bowGlow ? 3 : 2;
       if (bowGlow) { ctx.shadowColor = '#4ade80'; ctx.shadowBlur = 12; }
@@ -4571,22 +4569,7 @@
 
       ctx.save();
       ctx.translate(en.x, en.y);
-      // 로브
-      const robeGrad = ctx.createLinearGradient(-18,-10,18,30);
-      robeGrad.addColorStop(0, '#4c1d95'); robeGrad.addColorStop(1, '#1e1b4b');
-      ctx.fillStyle = robeGrad;
-      ctx.beginPath(); ctx.moveTo(-18,-10); ctx.lineTo(-24,30); ctx.lineTo(24,30); ctx.lineTo(18,-10); ctx.closePath(); ctx.fill();
-      // 몸통 위
-      ctx.fillStyle = '#4c1d95'; ctx.fillRect(-15, -16, 30, 16);
-      // 머리 + 수염
-      ctx.fillStyle = '#FFDBAC'; ctx.fillRect(-10, -34, 20, 18);
-      ctx.fillStyle = '#e2e8f0'; ctx.beginPath(); ctx.moveTo(-8,-18); ctx.lineTo(8,-18); ctx.lineTo(4,-4); ctx.lineTo(-4,-4); ctx.closePath(); ctx.fill();
-      // 고깔 모자
-      ctx.fillStyle = '#312e81';
-      ctx.beginPath(); ctx.moveTo(-13,-33); ctx.lineTo(0,-58); ctx.lineTo(13,-33); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#a855f7';
-      ctx.beginPath(); ctx.arc(0,-56,4,0,Math.PI*2); ctx.fill();
-
+      drawStoryFigure(0,0,{...NPC_APPEARANCE.archmage,noProp:true,walk:t*5,scale:en.awakened?1.08:1});
       // 지팡이
       const glow = en.state.includes('firebolt') || en.state.includes('meteor') || en.state.includes('icenova') || en.state.includes('blink_hit');
       ctx.strokeStyle = '#78350f'; ctx.lineWidth = 3;
@@ -4614,6 +4597,9 @@
     }
 
     function drawDungeonMob(en, t) {
+      ctx.save();ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.ellipse(en.x,en.y+(en.r||24)*.65,(en.r||24)*.9,(en.r||24)*.25,0,0,Math.PI*2);ctx.fill();
+      if(en.isBoss||en.isElite){ctx.strokeStyle=en.isBoss?'#e6b75c':'#b8c5da';ctx.lineWidth=2;ctx.globalAlpha=.6;ctx.beginPath();ctx.ellipse(en.x,en.y+(en.r||24)*.65,(en.r||24)*1.1,(en.r||24)*.34,0,0,Math.PI*2);ctx.stroke();}ctx.restore();
+
       // 종말의 성역에 걸린 적은 공중에 떠 있다 — 몸만 올리고 그림자는 땅에 둔다
       if (en.liftY > 0) {
         ctx.save();
@@ -4641,6 +4627,13 @@
       } else if (en.category === 'demon') {
         drawDemonMob(en, t);
       }
+      ctx.save();ctx.translate(en.x,en.y);const r=en.r||24;
+      if(en.category==='slime'){ctx.fillStyle='rgba(255,255,255,.32)';ctx.beginPath();ctx.ellipse(-r*.3,-r*.38,r*.2,r*.1,-.5,0,Math.PI*2);ctx.fill();}
+      if(en.category==='wolf'){ctx.strokeStyle='#cfbfa8';ctx.lineWidth=2;for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(side*r*.55,-r*.15);ctx.lineTo(side*r*.8,r*.05);ctx.stroke();}}
+      if(en.category==='zombie'){ctx.strokeStyle='#d2c5a6';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.2,0);ctx.lineTo(r*.18,r*.2);ctx.moveTo(-r*.2,r*.2);ctx.lineTo(r*.18,0);ctx.stroke();}
+      if(en.category==='ghost'){ctx.fillStyle='rgba(196,181,253,.4)';for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(Math.sin(t+i*2)*r*.6,r*.6+i*4,2,0,Math.PI*2);ctx.fill();}}
+      if(en.category==='demon'){ctx.fillStyle='#f5b95d';ctx.beginPath();ctx.moveTo(0,-r*.12);ctx.lineTo(4,r*.08);ctx.lineTo(0,r*.25);ctx.lineTo(-4,r*.08);ctx.closePath();ctx.fill();}
+      ctx.restore();
       if (en.frozenTimer > 0) {
         ctx.save();
         ctx.globalAlpha = 0.45;
@@ -5771,20 +5764,20 @@
     }
 
     const storyScripts = [
-      { speaker: "만기", text: "수업이 끝나고 나른한 오후, 평소처럼 가방을 메고 하굣길을 걷고 있었다.", bg: "school", scene: "walk" },
-      { speaker: "만기", text: "횡단보도 푸른 불이 켜져 건너려던 찰나...", bg: "school", scene: "crosswalk" },
-      { speaker: "만기", text: "앗... 저 트럭이 왜 브레이크를 안 밟지?! 콰아앙-!!!!!", bg: "truck", scene: "impact" },
-      { speaker: "시스템", text: "......", bg: "black", scene: "silence" },
-      { speaker: "만기", text: "...여긴 어디지? 분명 학교 앞이었는데... 온통 숲속이잖아?", bg: "forest", scene: "wake" },
-      { speaker: "송건", text: "꺅?! 저기요, 정신이 드세요?!", bg: "forest", scene: "shout" },
-      { speaker: "송건", text: "다행이다... 괜찮으세요? 제 이름은 송건이에요.", bg: "forest", scene: "kneel" },
-      { speaker: "만기", text: "아... 네, 겨우 살았네요. 제 이름은 만기라고 합니다.", bg: "forest", scene: "talk" },
-      { speaker: "송건", text: "만기요? 정말 처음 들어보는 이름이네요. 이세계 분이 아니신가 봐요?", bg: "forest", scene: "talk" },
-      { speaker: "만기", text: "(잠시 후, 하굣길 트럭 사고부터 이세계로 날아오게 된 사정을 전부 털어놓았다.)", bg: "black", scene: "flashback" },
-      { speaker: "송건", text: "아... 그런 기막힌 일이 있으셨군요. 이국에서 홀로 고생이 많으셨겠어요. 이거라도 드릴게요!", bg: "forest", scene: "give", action: "giveGold" },
-      { speaker: "만기", text: "(송건에게서 50G를 받았다!)", bg: "forest", scene: "receive" },
-      { speaker: "만기", text: "와, 정말 감사합니다! 그럼 일단 마을로 가볼게요.", bg: "forest", scene: "walkoff" },
-      { speaker: "만기", text: "(송건을 따라 평화로운 분위기의 마을에 도착했다.)", bg: "village", scene: "arrive" }
+      { speaker: "만기", text: "수업을 마친 만기는 집으로 돌아가던 길이었다. 횡단보도 앞에서 신호가 바뀌기를 기다렸다.", bg: "school", scene: "walk" },
+      { speaker: "만기", text: "초록불이다. 길을 건너려는 순간, 멈추지 않는 트럭의 경적이 들렸다.", bg: "school", scene: "crosswalk" },
+      { speaker: "만기", text: "피해야 해…! 눈앞이 새하얗게 번쩍였다. 그 뒤로는 아무것도 기억나지 않았다.", bg: "truck", scene: "impact" },
+      { speaker: "시스템", text: "얼마나 시간이 지났을까. 차 소리 대신 바람과 나뭇잎 소리가 들려왔다.", bg: "black", scene: "silence" },
+      { speaker: "만기", text: "…숲? 방금까지 학교 앞이었는데. 휴대폰도 신호가 없어. 집으로 돌아가야 하는데…", bg: "forest", scene: "wake" },
+      { speaker: "송건", text: "거기, 괜찮아요? 숲길 한가운데 쓰러져 있었어요!", bg: "forest", scene: "shout" },
+      { speaker: "송건", text: "저는 근처 마을에 사는 송건이에요. 다친 곳은 없어요? 일어날 수 있겠어요?", bg: "forest", scene: "kneel" },
+      { speaker: "만기", text: "제 이름은 만기예요. 차에 치일 뻔했는데 정신을 차리니 여기였어요. 여긴 어디죠?", bg: "forest", scene: "talk" },
+      { speaker: "송건", text: "여긴 루미아 마을 밖의 숲이에요. 학교나 자동차라는 건 들어본 적이 없어요. 마을 사람이 아니군요.", bg: "forest", scene: "talk" },
+      { speaker: "만기", text: "말도 통하고 몸도 멀쩡하다. 하지만 내가 알던 세상은 아니다. 우선 이곳에서 집으로 돌아갈 단서를 찾아야 한다.", bg: "black", scene: "flashback" },
+      { speaker: "송건", text: "귀환 방법은 마법사 에녹님이 알지도 몰라요. 우선 마을로 가요. 준비에 쓸 50G를 드릴게요.", bg: "forest", scene: "give", action: "giveGold" },
+      { speaker: "만기", text: "송건에게서 50G를 받았다. 에녹이라는 마법사… 그 사람을 만나면 돌아갈 방법을 찾을 수 있을까?", bg: "forest", scene: "receive" },
+      { speaker: "만기", text: "지금은 장비도 이곳에 대한 지식도 없다. 송건의 안내를 따라 마을 길드부터 찾아가기로 했다.", bg: "forest", scene: "walkoff" },
+      { speaker: "만기", text: "첫 목표: 마을의 모험가 길드에서 슬라임 의뢰를 받자. 장비와 경험을 쌓으며 에녹을 만날 길을 찾자.", bg: "village", scene: "arrive" }
     ];
 
     const endingScripts = [
@@ -5845,67 +5838,52 @@
     }
 
     // Simple blocky figure in the same visual style as the in-game player sprite
-    function drawStoryFigure(x, y, opts, target) {
-      const ctx=target || canvas.getContext('2d');
-      opts = opts || {};
-      const walk = opts.walk || 0;
-      const skirt = !!opts.skirt;
-      const hairLong = !!opts.hairLong;
-      const skin = '#FFDBAC';
-      const outfitColor = opts.outfitColor || '#90EE90';
-      const pantsColor = opts.pantsColor || '#000033';
-      const hairColor = opts.hairColor || '#3b2314';
-      const sit = !!opts.sit;
-      const lie = !!opts.lie;
-
-      ctx.save();
-      ctx.translate(x, y);
-      if (opts.scale && opts.scale !== 1) ctx.scale(opts.scale, opts.scale);
-
-      if (lie) {
-        ctx.rotate(Math.PI/2);
-        ctx.translate(-10, 0);
-      }
-
-      // legs / lower body
-      if (!sit) {
-        ctx.fillStyle = pantsColor;
-        if (skirt) {
-          ctx.beginPath();
-          ctx.moveTo(-14, 6); ctx.lineTo(14, 6); ctx.lineTo(18, 30); ctx.lineTo(-18, 30);
-          ctx.closePath(); ctx.fill();
-        } else {
-          ctx.fillRect(-12, 6 + (walk > 0 ? -2 : 0), 10, 24);
-          ctx.fillRect(2, 6 + (walk < 0 ? -2 : 0), 10, 24);
-        }
-      } else {
-        ctx.fillStyle = pantsColor;
-        ctx.fillRect(-14, 14, 30, 12);
-      }
-
-      // torso
-      ctx.fillStyle = outfitColor;
-      ctx.fillRect(-15, -18, 30, 26);
-
-      // arms
-      ctx.fillStyle = skin;
-      const armSwing = Math.sin(walk * 0.3) * 6;
-      ctx.fillRect(-20, -14 + armSwing*0.3, 6, 18);
-      ctx.fillRect(14, -14 - armSwing*0.3, 6, 18);
-
-      // head
-      ctx.fillStyle = skin;
-      ctx.fillRect(-11, -40, 22, 22);
-
-      // hair
-      ctx.fillStyle = hairColor;
-      ctx.fillRect(-13, -42, 26, 9);
-      if (hairLong) {
-        ctx.fillRect(-13, -33, 6, 26);
-        ctx.fillRect(7, -33, 6, 26);
-      }
-
-      ctx.restore();
+    const NPC_APPEARANCE = {
+      songgun:{outfitColor:'#f472b6',pantsColor:'#831843',hairColor:'#49291f',hairLong:true,skirt:true,role:'resident'},
+      minje:{outfitColor:'#7c2d12',pantsColor:'#292524',hairColor:'#241c19',role:'knight'},
+      elfqueen:{outfitColor:'#15803d',pantsColor:'#166534',hairColor:'#fde68a',hairLong:true,skirt:true,role:'elf'},
+      archmage:{outfitColor:'#4c1d95',pantsColor:'#1e1b4b',hairColor:'#e2e8f0',hairLong:true,role:'mage'},
+      guard:{outfitColor:'#64748b',pantsColor:'#1e293b',hairColor:'#292524',role:'guard'}
+    };
+    function drawStoryFigure(x,y,opts={},target) {
+      const c=target||ctx;
+      const role=opts.role || (opts.outfitColor==='#4c1d95'?'mage':opts.outfitColor==='#15803d'?'elf':opts.outfitColor==='#64748b'||opts.outfitColor==='#3f3f46'?'guard':'resident');
+      const walk=opts.walk||0,swing=Math.sin(walk*.3),bob=(walk?Math.abs(swing)*1.2:0)+Math.sin(frameCount*.045+x*.01)*.6;
+      const skin=opts.skin||'#f2c49d',hair=opts.hairColor||'#422b24',coat=opts.outfitColor||'#67a864';
+      const round=(x,y,w,h,r,color)=>{c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();};
+      const limb=(x,y,angle,color)=>{c.save();c.translate(x,y);c.rotate(angle);round(-4,0,8,20,4,color);round(-3,18,6,6,3,skin);c.restore();};
+      c.save();c.translate(x,y);if(opts.scale)c.scale(opts.scale,opts.scale);
+      c.fillStyle='rgba(5,12,22,.28)';c.beginPath();c.ellipse(0,33,22,6,0,0,Math.PI*2);c.fill();
+      if(opts.lie){c.rotate(Math.PI/2);c.translate(-10,0);}c.translate(0,-bob);
+      if(opts.hairLong)round(-14,-36,28,35,8,hair);
+      for(const side of [-1,1]){c.save();c.translate(side*8,8);c.rotate(opts.sit?side*.8:side*swing*.13);round(-5,0,10,21,4,opts.pantsColor||'#25324a');round(-6,18,13,7,3,'#302b2b');c.restore();}
+      if(opts.skirt){c.fillStyle=coat;c.beginPath();c.moveTo(-12,0);c.lineTo(12,0);c.lineTo(20,22);c.quadraticCurveTo(0,28,-20,22);c.closePath();c.fill();}
+      limb(-18,-14,swing*.2,coat);limb(18,-14,-swing*.2,coat);
+      round(-16,-20,32,30,8,coat);
+      const shade=c.createLinearGradient(-16,0,16,0);shade.addColorStop(0,'rgba(0,0,0,.25)');shade.addColorStop(.5,'rgba(255,255,255,.15)');shade.addColorStop(1,'rgba(0,0,0,.25)');round(-16,-20,32,30,8,shade);
+      round(-4,-25,8,9,3,skin);round(-15,3,30,5,2,'#44312b');round(-3,3,6,5,1,'#e6bd65');
+      c.fillStyle='#f7e4be';c.beginPath();c.moveTo(-9,-20);c.lineTo(0,-12);c.lineTo(9,-20);c.lineTo(5,-7);c.lineTo(-5,-7);c.closePath();c.fill();
+      if(role==='knight'||role==='guard'){round(-21,-21,13,9,4,'#a9bac4');round(8,-21,13,9,4,'#a9bac4');round(-9,-12,18,14,4,'#647885');}
+      if(role==='mage'){round(-17,-20,7,29,2,'#c5a768');round(10,-20,7,29,2,'#c5a768');}
+      round(-14,-40,28,25,10,skin);round(-17,-32,5,8,2,skin);round(12,-32,5,8,2,skin);
+      if(role==='elf'){c.fillStyle=skin;for(const side of [-1,1]){c.beginPath();c.moveTo(side*11,-31);c.lineTo(side*25,-36);c.lineTo(side*14,-24);c.fill();}}
+      const back=opts.facing==='up';
+      if(!back){for(const side of [-1,1]){round(side*6-3,-31,6,5,2,'#fff6e9');round(side*6-1,-30,3,4,1,'#293246');}round(-2,-24,4,2,1,'#cf946f');c.strokeStyle='#9a554b';c.lineWidth=1.3;c.beginPath();c.moveTo(-3,-20);c.quadraticCurveTo(0,-18,3,-20);c.stroke();}
+      round(-15,-43,30,12,7,hair);round(-15,-36,5,13,2,hair);round(10,-36,5,13,2,hair);
+      if(back)round(-14,-37,28,21,7,hair);
+      c.fillStyle='rgba(255,255,255,.15)';c.beginPath();c.ellipse(-5,-40,8,2,0,0,Math.PI*2);c.fill();
+      if(role==='mage'){c.fillStyle=coat;c.beginPath();c.moveTo(-23,-41);c.lineTo(0,-66);c.lineTo(20,-41);c.closePath();c.fill();round(-23,-43,46,5,2,'#c5a768');}
+      if(role==='elf'){round(-12,-38,24,3,1,'#d4b85e');round(-2,-39,4,6,1,'#bbf7d0');}
+      if(role==='guard'){round(-17,-45,34,10,4,'#879aa7');round(-19,-36,38,4,2,'#bacbd2');}
+      if(!opts.noProp && role==='mage'){round(24,-23,4,56,2,'#785b3d');c.fillStyle='#a5f3fc';c.beginPath();c.arc(26,-27,6,0,Math.PI*2);c.fill();}
+      if(!opts.noProp && (role==='knight'||role==='guard')){round(25,-5,4,36,1,'#cedde4');round(19,-7,16,4,1,'#b68d48');round(25,-16,4,10,1,'#563b31');}
+      if(!opts.noProp && role==='elf'){c.strokeStyle='#c79c58';c.lineWidth=3;c.beginPath();c.ellipse(28,1,9,26,0,-Math.PI/2,Math.PI/2);c.stroke();c.lineWidth=1;c.beginPath();c.moveTo(28,-25);c.lineTo(28,27);c.stroke();}
+      c.restore();
+    }
+    function renderNpcPortrait(id,host) {
+      const look=NPC_APPEARANCE[id];if(!look)return;
+      host.replaceChildren();const image=document.createElement('canvas');image.width=100;image.height=110;image.style='width:64px;height:70px;cursor:default;';image.setAttribute('role','img');image.setAttribute('aria-label',document.getElementById('npc-title').textContent+' 초상화');
+      drawStoryFigure(50,65,look,image.getContext('2d'));host.appendChild(image);
     }
 
     function drawTree(x, y, s) {
@@ -6191,6 +6169,7 @@
     }
 
     window.addEventListener('keydown', e => {
+      if(overlayVisible('story-screen') && ['Enter','Space'].includes(e.code) && !(e.target instanceof Element && e.target.closest('button') && e.target.getClientRects().length)){e.preventDefault();if(!e.repeat)advanceStory();return;}
       if (e.code === 'Escape') {
         if (isPlaying || openSidePanel!==null || overlayVisible('settings-modal')) { e.preventDefault(); if (!e.repeat) handleEscape(); }
         return;
@@ -9738,6 +9717,7 @@
           actionBtn2.onclick = closeNpcModal;
         }
       }
+      renderNpcPortrait(id,portrait);
       content.innerText=displayControlText(content.innerText);
       document.getElementById('npc-modal').classList.remove('hidden');
     }
@@ -11719,6 +11699,7 @@
       const s = currentScript[storyIndex];
       document.getElementById('story-speaker').innerText = s.speaker;
       document.getElementById('story-text').innerText = s.text;
+      document.getElementById('story-progress').textContent=`${storyIndex+1} / ${currentScript.length} · ${s.bg==='school'||s.bg==='truck'?'하굣길':s.bg==='forest'?'낯선 숲':s.bg==='village'?'루미아 마을':'이야기'} · 클릭 또는 Enter로 계속`;
     }
 
     function ensureGameLoopStarted() {
@@ -12443,7 +12424,7 @@
         drawTorch(160, 372, t); drawTorch(640, 372, t);
 
         // 전설의 용사 민제 (중앙)
-        drawStoryFigure(400, 500, { outfitColor: '#7c2d12', pantsColor: '#292524', hairColor:'#1c1917' });
+        drawStoryFigure(400, 500, { outfitColor: '#7c2d12', pantsColor: '#292524', hairColor:'#1c1917',role:'knight' });
         ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 4;
         ctx.beginPath(); ctx.moveTo(430, 480); ctx.lineTo(430, 520); ctx.stroke();
         ctx.fillStyle = '#fff'; ctx.font="bold 13px Noto Sans KR"; ctx.textAlign='center';
@@ -12852,7 +12833,7 @@
         ctx.fillStyle = '#fde047'; ctx.font="bold 15px Noto Sans KR"; ctx.textAlign='center';
         ctx.fillText("🛠️ 무기/갑옷 판매 카운터 (다가가면 상점 열림)", 400, 282); ctx.textAlign='left';
 
-        drawStoryFigure(400, 250, { outfitColor: '#7c2d12', pantsColor: '#292524', hairColor:'#1c1917' });
+        drawStoryFigure(400, 250, { outfitColor: '#7c2d12', pantsColor: '#292524', hairColor:'#1c1917',role:'knight' });
         ctx.fillStyle = '#fff'; ctx.font="bold 13px Noto Sans KR"; ctx.textAlign='center';
         ctx.fillText("🧔 대장장이 서율", 400, 200); ctx.textAlign='left';
 
