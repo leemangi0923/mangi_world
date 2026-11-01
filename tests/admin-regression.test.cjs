@@ -200,9 +200,9 @@ test('admin controls remain available during ending scenes and safely stop the s
   await enter(page);
   const result=await page.evaluate(()=>{
     let completed=0;beginStory(endingScripts,()=>completed++);openAdminPanel();resumeAdminPlay();
-    return {active:adminMode.active,playing:isPlaying,state:gameState,running:storyAnimRunning,script:currentScript,completed,paused:gameplayPaused()};
+    return {active:adminMode.active,playing:isPlaying,state:gameState,running:storyAnimRunning,script:currentScript,completed,paused:gameplayPaused(),hud:overlayVisible('status-hud')};
   });
-  assert.deepEqual(result,{active:true,playing:true,state:'village',running:false,script:null,completed:0,paused:false});
+  assert.deepEqual(result,{active:true,playing:true,state:'village',running:false,script:null,completed:0,paused:false,hud:true});
 },options));
 
 test('infinite mana can cast an ultimate above maximum mana without negative or invalid saved MP',()=>run(async page=>{

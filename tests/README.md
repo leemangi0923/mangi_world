@@ -61,3 +61,5 @@ GitHub Actions 설정은 `.github/workflows/test.yml`에 있습니다. 로컬 �
 `npm run test:graphics`: 도입부 목표·키보드 진행·중복 보상 방지, NPC 초상화와 역할별 외형, 다섯 지역/몬스터 렌더링의 게임 상태 보존, 작은 화면과 스승의 공통 외형을 검증합니다.
 
 `npm run test:balance`: 난이도별 전투·보상·저장/구버전 변환, 자원 초기화 없는 난이도 변경·전투 차단, 쉬움 경고 렌더링, 관리자/재도전 분리, 실제 피해와 명목 평타 DPS·성장 기준 수치를 확인합니다. 측정 한계는 BALANCE_NOTES.md에 명시합니다.
+
+`npm run test:integration`: 진행 체크포인트 연결, 엔딩 HUD 정리, 세 난이도의 8개 전투 43,200틱 반복·개체 수/좌표 유한성, 구버전 변환·사용자 설정·관리자 새로고침 복구를 검증합니다. 전제와 측정 한계는 INTEGRATION_REPORT.md에 명시합니다.

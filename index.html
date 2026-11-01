@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v4.3.0</title>
+  <title>만기 월드 (Mangi World) - v4.4.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -299,6 +299,10 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
+        <h4>📌 v4.4.0 패치 노트</h4>
+        • ✅ <b>진행·난이도·저장·관리자 복구</b>를 통합 검증합니다<br>
+        • 📖 <b>엔딩의 전투 HUD 잔류와 이동 안내</b>를 정리했습니다<br>
+        • ⚔️ <b>세 난이도의 보스·스승 전투</b>를 반복 실행해 안정성을 확인합니다<br><br>
         <h4>📌 v4.3.0 패치 노트</h4>
         • ⚔️ <b>쉬움·보통·어려움</b>을 선택하고 진행에 저장합니다. 전투 중 변경은 막습니다<br>
         • ⚖️ <b>원거리 피해·마나 회복·적 성장·정예 보상·레벨업 곡선</b>을 조정했습니다<br>
@@ -622,7 +626,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v4.3.0</div>
+      <div id="version-badge">v4.4.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -686,7 +690,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v4.3.0 : 난이도 · 성장 밸런스 · 전투 안내</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v4.4.0 : 전체 통합 검증 · 이야기 HUD 정리</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -710,7 +714,7 @@
       <div id="battle-summary" class="hidden" aria-label="현재 전투 상황" style="position:absolute;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:360px;padding:5px 8px;border:1px solid #64748b;border-radius:6px;background:rgba(10,15,26,.9);font-size:12px;text-align:center;pointer-events:none;z-index:22;"></div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v4.3.0</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v4.4.0</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
@@ -742,7 +746,7 @@
           <div class="admin-actions"><button class="btn" onclick="adminStartEncounter()">선택 전투 새로 준비</button><button class="btn" onclick="adminResetBattle()">전투 초기화·마을로</button></div>
         </details>
         <details><summary>테스트 프리셋·전용 저장</summary><p>프리셋은 현재 테스트 상태를 교체합니다. 일반 저장은 변경하지 않습니다.</p><div class="admin-actions"><button class="btn" onclick="adminPreset('early')">초반 Lv.5</button><button class="btn" onclick="adminPreset('mid')">중반 Lv.40·늑대 보스</button><button class="btn" onclick="adminPreset('awakened')">각성 Lv.80</button><button class="btn" onclick="adminPreset('tower')">탑 Lv.100·30층</button><button class="btn" onclick="adminSaveTest()">관리자 전용 저장</button><button class="btn" onclick="adminLoadTest()">관리자 전용 불러오기</button></div></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v4.3.0: 쉬움·보통·어려움, 성장·원거리·정예 밸런스와 공격 예고/보스 상태 안내. 다음 4차는 전체 통합 검증입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v4.4.0: 저장·난이도·관리자 복구·보스/스승 반복 전투 통합 검증, 엔딩 HUD 정리. 다음은 몬스터 외형·모션·스킬·패턴의 대규모 개편입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
       <div id="pause-menu" class="hidden" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,15,26,0.92); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:80; gap:10px;">
         <h2 style="color:#fde047; margin-bottom:10px; font-family:'Cinzel';">일시정지</h2>
@@ -1012,7 +1016,7 @@
     }
     function armDifficultyZones(zones){
       if(difficulty!=='easy'||(adminMode.active&&adminMode.freezeAI))return;
-      for(const z of zones)if(!z.difficultyArmed){z.difficultyArmed=true;z.timer=Math.ceil(z.timer*difficultyProfile().warning);if(z.totalTimer)z.totalTimer=z.timer;}
+      for(const z of zones)if(!z.difficultyArmed){z.difficultyArmed=true;z.timer=Math.ceil(z.timer*difficultyProfile().warning);z.totalTimer=z.timer;}
     }
     function setDifficulty(value) {
       if(!Object.hasOwn(DIFFICULTIES,value))return false;
@@ -1096,7 +1100,7 @@
     window.resumeAdminPlay=function() {
       if(!adminOnly())return;
       document.getElementById('admin-panel').classList.add('hidden');document.getElementById('pause-menu').classList.add('hidden');
-      releaseGameplayInput();isPaused=false;ensureGameLoopStarted();
+      releaseGameplayInput();isPaused=false;document.getElementById('status-hud').classList.remove('hidden');document.getElementById('quest-hud').classList.remove('hidden');updateHUD();updateSkillHUD();ensureGameLoopStarted();
     };
     window.exitAdminMode=function() {
       if(!adminMode.active || !adminReturn)return false;
@@ -1257,7 +1261,7 @@
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v4.3.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
+      document.getElementById('admin-metrics').textContent=`v4.4.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
       const quests=document.getElementById('admin-quest');if(!quests.options.length)for(const quest of questDefs){const option=document.createElement('option');option.value=quest.id;option.textContent=quest.title||quest.name||quest.id;quests.appendChild(option);}
       const preview=document.getElementById('admin-preview'),target=preview.getContext('2d');target.clearRect(0,0,preview.width,preview.height);
@@ -4400,7 +4404,7 @@
 
     function drawElfZones(t) {
       elfZones.forEach(z => {
-        const prog = Math.max(0,Math.min(1,1-z.timer/36));
+        const prog = Math.max(0,Math.min(1,1-z.timer/(z.totalTimer||36)));
         ctx.save();
         ctx.globalAlpha = 0.3 + prog*0.4;
         ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 3;
@@ -4608,7 +4612,7 @@
     function drawArchmageZones(t) {
       archmageZones.forEach(z => {
         const isMeteor = z.type === 'meteor';
-        const prog = 1 - z.timer / (isMeteor ? 52 : 18);
+        const prog = Math.max(0,Math.min(1,1-z.timer/(z.totalTimer || (isMeteor ? 52 : 18))));
         ctx.save();
         ctx.globalAlpha = 0.3 + prog*0.4;
         ctx.strokeStyle = isMeteor ? '#f97316' : '#a855f7'; ctx.lineWidth = 3;
@@ -5848,7 +5852,7 @@
       { speaker: "만기", text: "하아... 하아... 드디어... 끝난 건가.", bg: "victory" },
       { speaker: "시스템", text: "마왕성 전체를 뒤덮고 있던 어둠의 기운이 서서히 걷히기 시작했다.", bg: "peace" },
       { speaker: "만기", text: "세상이... 다시 밝아지고 있어. 정말로 평화가 찾아온 거구나.", bg: "peace" },
-      { speaker: "만기", text: "이제 약속을 지키러 갈 시간이다. 에녹님을 만나러 왕성으로 돌아가자.", bg: "peace" },
+      { speaker: "만기", text: "이제 에녹님과의 약속을 지킬 시간이다. 대마법사의 탑에서 귀환의 문을 열자.", bg: "peace" },
       { speaker: "에녹", text: "만기님... 해내셨군요. 정말 장한 일을 하셨습니다.", bg: "castle_ending" },
       { speaker: "에녹", text: "약속대로, 당신을 원래 세계로 돌려보내 드리겠습니다. 이곳에서의 인연은 절대 잊지 않을게요.", bg: "castle_ending" },
       { speaker: "만기", text: "에녹님, 송건이, 민제님... 모두 감사했습니다. 정말 잊지 못할 거예요.", bg: "castle_ending" },
@@ -5863,7 +5867,9 @@
     ];
 
     function startEndingSequence() {
-      ['status-hud','quest-hud','dungeon-hud','skill-hud','boss-hud'].forEach(id => {
+      if(isPlaying && autoSaveEnabled && !adminMode.active && !saveToSlot(currentSaveSlot,true)){showTopNotification('엔딩 전 진행 저장에 실패했습니다. 현재 플레이는 유지됩니다. 저장 공간을 확인한 뒤 다시 시도하세요.',6000);return;}
+
+      ['battle-summary','buff-hud','status-hud','quest-hud','dungeon-hud','skill-hud','boss-hud'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
       beginStory(endingScripts, showClearScreen);
@@ -11732,6 +11738,8 @@
     function beginStory(script, onComplete) {
       stopGameLoop(); stopStoryPlayback();
       isPlaying = false; isPaused = true; keys = {};
+      for(const id of ['battle-summary','status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator'])document.getElementById(id).classList.add('hidden');
+      clearSessionTimeout(notifTimeout);notifTimeout=null;document.getElementById('top-notification').classList.remove('show');
       storyIndex = 0; gameState = 'story';
       currentScript = script; onStoryComplete = onComplete;
       document.getElementById('story-skip').classList.toggle('hidden',!seenStories().includes(storyKey(script)));
