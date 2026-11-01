@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v4.2.0</title>
+  <title>만기 월드 (Mangi World) - v4.3.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -251,6 +251,8 @@
     [data-normal-save]:disabled { opacity:.45;cursor:not-allowed; }
     body[data-large-ui] #admin-panel { font-size:calc(14px * var(--ui-scale)); }
     @media(max-width:520px) { .admin-grid { grid-template-columns:1fr; } #admin-panel { font-size:13px; } }
+    body[data-large-ui] #battle-summary { font-size:calc(12px * var(--ui-scale)); }
+    #status-hud.critical-health { border-color:#fb7185;box-shadow:0 0 0 2px rgba(251,113,133,.5); }
   </style>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -297,6 +299,10 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
+        <h4>📌 v4.3.0 패치 노트</h4>
+        • ⚔️ <b>쉬움·보통·어려움</b>을 선택하고 진행에 저장합니다. 전투 중 변경은 막습니다<br>
+        • ⚖️ <b>원거리 피해·마나 회복·적 성장·정예 보상·레벨업 곡선</b>을 조정했습니다<br>
+        • ⚠️ <b>시전 예고 시간·보스 잔여 체력·저체력 표시</b>로 전투 상황을 안내합니다<br><br>
         <h4>📌 v4.2.0 패치 노트</h4>
         • 🧑 <b>사람형 NPC·초상화</b>: 얼굴·머리·관절·복장·직업 소품을 표현합니다<br>
         • 📖 <b>귀환 목표와 첫 길드 의뢰</b>를 연결하고 이야기 진행·장소를 안내합니다<br>
@@ -616,7 +622,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v4.2.0</div>
+      <div id="version-badge">v4.3.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -680,7 +686,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v4.2.0 : 이야기 · 사람형 NPC · 지역 그래픽</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v4.3.0 : 난이도 · 성장 밸런스 · 전투 안내</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -701,12 +707,14 @@
         <button id="combat-retry" class="btn hidden" style="flex-shrink:0;" onclick="retryCombat()">보스 즉시 재도전</button>
         <button id="combat-report-close" class="btn" style="flex-shrink:0;" onclick="closeCombatReport()">닫기</button>
       </div>
+      <div id="battle-summary" class="hidden" aria-label="현재 전투 상황" style="position:absolute;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:360px;padding:5px 8px;border:1px solid #64748b;border-radius:6px;background:rgba(10,15,26,.9);font-size:12px;text-align:center;pointer-events:none;z-index:22;"></div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v4.2.0</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v4.3.0</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
+        <label>테스트 난이도<select id="admin-difficulty"><option value="easy">쉬움</option><option value="normal">보통</option><option value="hard">어려움</option></select></label><button class="btn" onclick="adminChangeDifficulty()">난이도 적용·전투 초기화</button>
         <details open><summary>테스트 옵션·측정</summary><div class="admin-grid">
           <label><input id="admin-flag-invincible" type="checkbox" onchange="setAdminFlag('invincible',this.checked)">무적 (피해 차단)</label>
           <label><input id="admin-flag-infiniteMana" type="checkbox" onchange="setAdminFlag('infiniteMana',this.checked)">무한 마나</label>
@@ -734,7 +742,7 @@
           <div class="admin-actions"><button class="btn" onclick="adminStartEncounter()">선택 전투 새로 준비</button><button class="btn" onclick="adminResetBattle()">전투 초기화·마을로</button></div>
         </details>
         <details><summary>테스트 프리셋·전용 저장</summary><p>프리셋은 현재 테스트 상태를 교체합니다. 일반 저장은 변경하지 않습니다.</p><div class="admin-actions"><button class="btn" onclick="adminPreset('early')">초반 Lv.5</button><button class="btn" onclick="adminPreset('mid')">중반 Lv.40·늑대 보스</button><button class="btn" onclick="adminPreset('awakened')">각성 Lv.80</button><button class="btn" onclick="adminPreset('tower')">탑 Lv.100·30층</button><button class="btn" onclick="adminSaveTest()">관리자 전용 저장</button><button class="btn" onclick="adminLoadTest()">관리자 전용 불러오기</button></div></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v4.2.0: 도입부 이야기, 얼굴·복장·소품을 갖춘 사람형 NPC와 초상화, 지역 배경·몬스터 재질 표현을 개편했습니다. 다음 3차는 난이도·밸런스·전투 UI입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v4.3.0: 쉬움·보통·어려움, 성장·원거리·정예 밸런스와 공격 예고/보스 상태 안내. 다음 4차는 전체 통합 검증입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
       <div id="pause-menu" class="hidden" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,15,26,0.92); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:80; gap:10px;">
         <h2 style="color:#fde047; margin-bottom:10px; font-family:'Cinzel';">일시정지</h2>
@@ -753,6 +761,8 @@
         <p>닫으면 적용됩니다. 키 설정은 선택 즉시 적용됩니다. 같은 브라우저의 모든 슬롯에서 함께 사용합니다.</p>
         <label>자동 저장 사용 (30초마다)<input type="checkbox" id="autosave-toggle"></label>
         <label>화면 흔들림 사용<input type="checkbox" id="shake-toggle"></label>
+        <label>게임 난이도<select id="difficulty-setting" onchange="if(!setDifficulty(this.value))updateDifficultyUI();"><option value="easy">쉬움</option><option value="normal">보통</option><option value="hard">어려움</option></select></label>
+        <p id="difficulty-description"></p><p>난이도는 선택 즉시 적용되며 진행 저장에 포함됩니다. 전투 중에는 변경할 수 없습니다.</p>
         <label>효과음 음소거<input type="checkbox" id="mute-toggle"></label>
         <label>효과음 볼륨 <output id="volume-value">100%</output><input aria-label="효과음 볼륨" id="volume-setting" type="range" min="0" max="100" step="5" oninput="document.getElementById('volume-value').value=this.value+'%'"></label>
         <label>UI 글자 크기<select id="ui-size-setting"><option value="1">기본 (100%)</option><option value="1.15">크게 (115%)</option><option value="1.3">더 크게 (130%)</option></select></label>
@@ -987,6 +997,46 @@
       shelfOrange: [8,0], shelfTeal: [8,2], rugOrange: [0,9], rugTeal: [7,9], wardrobe: [0,12]
     };
 
+    const DIFFICULTIES=Object.freeze({
+      easy:Object.freeze({label:'쉬움',incoming:.65,hp:.85,speed:.9,warning:1.3}),
+      normal:Object.freeze({label:'보통',incoming:1,hp:1,speed:1,warning:1}),
+      hard:Object.freeze({label:'어려움',incoming:1.3,hp:1.1,speed:1.05,warning:1})
+    });
+    let difficulty='normal',newGameDifficulty='normal';
+    const difficultyProfile=()=>DIFFICULTIES[difficulty];
+    const enemyIsWarning=en=>/telegraph|wind|aim|cast|charge|wait/.test(en.state||'');
+    function armDifficultyWarning(en) {
+      if(difficulty!=='easy'||!COMBAT_STATES.includes(gameState)||(adminMode.active&&adminMode.freezeAI))return;
+      if(en.warningState!==en.state || (en.warningLastTimer!==undefined&&en.stateTimer>en.warningLastTimer)){en.warningState=en.state;if(enemyIsWarning(en)&&en.stateTimer>0)en.stateTimer=Math.ceil(en.stateTimer*difficultyProfile().warning);}
+      en.warningLastTimer=en.stateTimer;
+    }
+    function armDifficultyZones(zones){
+      if(difficulty!=='easy'||(adminMode.active&&adminMode.freezeAI))return;
+      for(const z of zones)if(!z.difficultyArmed){z.difficultyArmed=true;z.timer=Math.ceil(z.timer*difficultyProfile().warning);if(z.totalTimer)z.totalTimer=z.timer;}
+    }
+    function setDifficulty(value) {
+      if(!Object.hasOwn(DIFFICULTIES,value))return false;
+      if(isPlaying&&COMBAT_STATES.includes(gameState)){showTopNotification('전투 중에는 난이도를 변경할 수 없습니다. 전투를 마치고 안전한 마을에서 변경하세요.');return false;}
+      difficulty=value;if(!isPlaying)newGameDifficulty=value;
+      retryTicket=null;updateDifficultyUI();return true;
+    }
+    function updateDifficultyUI(){
+      for(const id of ['difficulty-setting','admin-difficulty'])document.getElementById(id).value=difficulty;
+      const select=document.getElementById('difficulty-setting');select.disabled=isPlaying&&COMBAT_STATES.includes(gameState);
+      document.getElementById('difficulty-description').textContent=`현재 ${difficultyProfile().label} · 받는 피해 ×${difficultyProfile().incoming} · 적 체력 ×${difficultyProfile().hp} · 공격 예고 ×${difficultyProfile().warning}. 경험치·골드·드롭 확률은 난이도에 따라 달라지지 않습니다.`;
+    }
+    function drawBattleReadability(){
+      const summary=document.getElementById('battle-summary');
+      const active=COMBAT_STATES.includes(gameState)&&gameState!=='training';summary.classList.toggle('hidden',!active);if(!active)return;
+      ctx.save();ctx.textAlign='center';ctx.font='bold 13px sans-serif';
+      const boss=enemies.find(en=>en.isBoss),warn=enemies.some(enemyIsWarning);
+      setTextIfChanged(summary,`${difficultyProfile().label} · ${boss?'보스 HP '+Math.ceil(Math.max(0,boss.hp)/boss.maxHp*100)+'%':'남은 적 '+enemies.length} · ${warn?'⚠ 시전 예고 — 범위를 확인하세요':'이동하며 공격 기회를 찾으세요'}`);
+      summary.style.color=warn?'#fde68a':'#e2e8f0';
+      for(const en of enemies)if(enemyIsWarning(en)&&en.stateTimer>0){ctx.fillStyle='#fde68a';ctx.fillText('! '+(en.stateTimer/60).toFixed(1)+'초',en.x,en.y-(en.r||24)-25);}
+      ctx.restore();
+    }
+    window.adminChangeDifficulty=function(){if(!adminOnly())return;const value=document.getElementById('admin-difficulty').value;if(!Object.hasOwn(DIFFICULTIES,value))return;adminResetBattle();setDifficulty(value);adminMessage('테스트 난이도를 변경하고 전투를 초기화했습니다. 일반 진행의 난이도는 복귀 시 복구됩니다.');};
+
     // 관리자 테스트는 일반 저장과 별개이며 권한 인증이 아닌 로컬 개발 도구다.
     const ADMIN_RETURN_KEY='mangiworld_admin_return', ADMIN_SAVE_KEY='mangiworld_admin_save';
     const ADMIN_FLAG_NAMES=['invincible','infiniteMana','noCooldown','freezeAI'];
@@ -1018,7 +1068,7 @@
       if(code!=='6974'){status.textContent='관리자 코드가 올바르지 않습니다.';field.focus();return;}
       try {
         if(localStorage.getItem(ADMIN_RETURN_KEY)!==null)throw new Error('남아 있는 복구 지점이 있습니다. 새로고침하여 먼저 복구하세요.');
-        const record=validateAdminReturn({version:1,slot:currentSaveSlot,playing:isPlaying,data:isPlaying?getSaveData():INITIAL_GAME_SAVE});
+        const record=validateAdminReturn({version:1,slot:currentSaveSlot,playing:isPlaying,data:isPlaying?getSaveData():{...INITIAL_GAME_SAVE,difficulty:newGameDifficulty}});
         const raw=JSON.stringify(record);localStorage.setItem(ADMIN_RETURN_KEY,raw);
         if(localStorage.getItem(ADMIN_RETURN_KEY)!==raw)throw new Error('복구 지점 저장을 확인할 수 없습니다.');
         adminReturn=record;closeSettingsModal();adminMode={...freshAdminState(),active:true};
@@ -1057,7 +1107,7 @@
         applySaveData(record.data,true);currentSaveSlot=record.slot;
         adminMode=freshAdminState();adminReturn=null;updateAdminBadge();
         if(record.playing){isPaused=true;document.getElementById('pause-menu').classList.remove('hidden');}
-        else{restoreSessionState(prepareSavedSession(INITIAL_GAME_SAVE));gameState='menu';document.getElementById('start-screen').classList.remove('hidden');}
+        else{restoreSessionState(prepareSavedSession(INITIAL_GAME_SAVE));difficulty=record.data.difficulty;newGameDifficulty=difficulty;updateDifficultyUI();gameState='menu';document.getElementById('start-screen').classList.remove('hidden');}
         showTopNotification('관리자 모드를 종료하고 진입 전 일반 진행으로 복귀했습니다.',4000);return true;
       } catch(error) {
         // 복구가 끝나기 전까지 일반 저장 차단을 유지한다.
@@ -1176,7 +1226,7 @@
     window.adminResetBattle=function(){if(!adminOnly())return;prepareAdminArena();gameState='village';player.x=400;player.y=500;resetAdminMetrics();refreshAdminPanel();adminMessage('전투·잔여 효과·측정값을 정리하고 마을로 이동했습니다.');};
     window.adminPreset=function(name){
       if(!adminOnly() || !['early','mid','awakened','tower'].includes(name))return;
-      applySaveData(INITIAL_GAME_SAVE,true);
+      applySaveData({...INITIAL_GAME_SAVE,difficulty},true);
       const target={early:5,mid:40,awakened:80,tower:100}[name];level=target;nextExp=expForLevel(level);exp=0;gold=100000;statPoints=target*2;
       statStr=statVit=target===5?12:target===40?30:60;statMp=name==='early'?10:37;
       for(const slot of ['sword','bow','staff']){
@@ -1201,13 +1251,13 @@
       }catch(error){adminMessage('테스트 불러오기 실패: '+error.message);}
     };
     function refreshAdminPanel(){
-      if(!adminMode.active)return;updateAdminBadge();
+      if(!adminMode.active)return;updateAdminBadge();updateDifficultyUI();
       const values={'admin-level':level,'admin-gold':gold,'admin-points':statPoints};
       for(const [name,value] of Object.entries({Str:statStr,Vit:statVit,Agi:statAgi,Atk:statAtk,Crit:statCrit,CritDmg:statCritDmg,Mp:statMp}))values['admin-stat-'+name]=value;
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v4.2.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱`;
+      document.getElementById('admin-metrics').textContent=`v4.3.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
       const quests=document.getElementById('admin-quest');if(!quests.options.length)for(const quest of questDefs){const option=document.createElement('option');option.value=quest.id;option.textContent=quest.title||quest.name||quest.id;quests.appendChild(option);}
       const preview=document.getElementById('admin-preview'),target=preview.getContext('2d');target.clearRect(0,0,preview.width,preview.height);
@@ -1307,7 +1357,7 @@
       document.getElementById('hitstop-toggle').checked=accessibility.hitStop;
       document.getElementById('effects-setting').value=Math.round(accessibility.effects*100);
       document.getElementById('effects-value').value=Math.round(accessibility.effects*100)+'%';
-      renderKeyBindings();
+      renderKeyBindings();updateDifficultyUI();
     }
     window.resetAccessibilitySettings=function() {
       accessibility=normalizePreferences(null);autoSaveEnabled=true;shakeEnabled=true;sfxMuted=false;hitStop=0;
@@ -1375,7 +1425,7 @@
     })();
     
     let gameState = "menu", storyIndex = 0;
-    let gold = 100, hp = 100, maxHp = 100, mp = 50, maxMp = 50, level = 1, exp = 0, nextExp = 55;
+    let gold = 100, hp = 100, maxHp = 100, mp = 50, maxMp = 50, level = 1, exp = 0, nextExp = 54;
     let equipBonusHp = 0, equipBonusDef = 0;
     let magicMpBonus = 0;
     let statPoints = 0, statStr = 10, statVit = 10, statAgi = 10, statAtk = 10, statCrit = 0, statCritDmg = 0, statMp = 10;
@@ -1900,7 +1950,7 @@
     let bossRespawnCooldown = { slime: 0, wolf: 0, zombie: 0, ghost: 0, demon: 0 };
 
     // ---------- 무한의 탑 ----------
-    const SAVE_SCHEMA_VERSION = 5; // 세이브 파일 구조 버전. 새 필드를 추가할 때마다 올리고 applySaveData에서 방어적으로 처리할 것.
+    const SAVE_SCHEMA_VERSION = 6; // 세이브 파일 구조 버전. 새 필드를 추가할 때마다 올리고 applySaveData에서 방어적으로 처리할 것.
     let towerFloor = 0;
     let towerBestFloor = 0;
     let towerMobsRemaining = 0;
@@ -2695,11 +2745,11 @@
     };
 
     function mobHpForLevel(lvl) {
-      // 초반 몬스터가 한 방에 죽지 않도록 기본 체력 상향 + 후반 상승폭 강화
-      return 15 + lvl*5.0 + lvl*lvl*0.2;
+      // v4.3: 기본 체력을 유지하면서 후반 체력 증가 완화
+      return 15 + lvl*4.5 + lvl*lvl*0.16;
     }
     function bossHpForLevel(lvl) {
-      return 400 + lvl*45 + lvl*lvl*1.2;
+      return 400 + lvl*40 + lvl*lvl;
     }
 
     function createDungeonMob(category, stageIndex, x, y, forcedPattern, hpMult, rMult) {
@@ -2709,16 +2759,16 @@
       const pool = dungeonPatternPools[category] || ['dash'];
       const aiType = forcedPattern || pool[Math.floor(Math.random()*pool.length)];
       const hpM = hpMult || 1, rM = rMult || 1;
-      const mobHp = mobHpForLevel(lvl) * hpM;
+      const mobHp = mobHpForLevel(lvl) * hpM * difficultyProfile().hp;
       return {
         x: x != null ? x : Math.random()*600+100,
         y: y != null ? y : Math.random()*400+150,
         r: (24 + stageIndex*3) * rM,
         hp: mobHp, maxHp: mobHp,
-        speed: (aiType === 'shamble' ? 0.9 : aiType === 'ranged' ? 0.5 : 0.6) + stageIndex*0.12,
+        speed: ((aiType === 'shamble' ? 0.9 : aiType === 'ranged' ? 0.5 : 0.6) + stageIndex*0.12)*difficultyProfile().speed,
         state: 'idle', stateTimer: 0, dashVx: 0, dashVy: 0, biteTimer: 0, floatSeed: Math.random()*10,
         category, stageIndex, aiType, isBoss: false, comboCount: 0, circleDir: Math.random() < 0.5 ? 1 : -1, circleAngle: Math.random()*Math.PI*2,
-        exp: Math.max(3, Math.round(lvl*1.5 * hpM)), gold: Math.max(1, Math.round(lvl*0.35 * hpM)),
+        exp: Math.max(3, Math.round(lvl*1.8 * hpM)), gold: Math.max(2, Math.round(lvl*0.5 * hpM)),
         name: tierDef.name, level: lvl, colors: tierDef.colors, isMini: hpM < 1
       };
     }
@@ -2728,11 +2778,11 @@
     // AI 코드를 건드리지 않고도 level만 올리면 자연히 더 세게 때린다.
     function createEliteMob(category, stageIndex, x, y) {
       const tierDef = dungeonDefs[category].tiers[stageIndex];
-      const m = createDungeonMob(category, stageIndex, x, y, undefined, 9, 2);
+      const m = createDungeonMob(category, stageIndex, x, y, undefined, 6, 2);
       m.level += 16;
       m.isElite = true;
-      m.exp = Math.round(m.exp * 5);
-      m.gold = Math.round(m.gold * 5);
+      m.exp = Math.round(m.exp * 3);
+      m.gold = Math.round(m.gold * 3);
       m.name = `정예 ${tierDef.name}`;
       return m;
     }
@@ -2741,14 +2791,14 @@
       const def = dungeonDefs[category];
       const bossDef = def.boss;
       const lvl = bossDef.level;
-      const bHp = bossHpForLevel(lvl);
+      const bHp = bossHpForLevel(lvl)*difficultyProfile().hp;
       return {
         x: 400, y: 230, r: 60,
-        hp: bHp, maxHp: bHp, speed: 1.1,
+        hp: bHp, maxHp: bHp, speed: 1.1*difficultyProfile().speed,
         state: 'idle', stateTimer: 90, dashVx: 0, dashVy: 0,
         category, isBoss: true, phase: 0, attackIndex: 0, attackTelegraph: 0,
         floatSeed: Math.random()*10,
-        exp: lvl*25, gold: lvl*15, name: bossDef.name, level: lvl, colors: bossDef.colors
+        exp: lvl*30, gold: lvl*15, name: bossDef.name, level: lvl, colors: bossDef.colors
       };
     }
 
@@ -3089,6 +3139,7 @@
     let pendingSpawns = [];
 
     function updateDungeonMobAI(en) {
+      armDifficultyWarning(en);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
@@ -3327,6 +3378,7 @@
     let demonZones = [];
 
     function tickZoneArray(zones, source = combatSource()) {
+      armDifficultyZones(zones);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       for (let i = zones.length - 1; i >= 0; i--) {
@@ -3386,6 +3438,7 @@
 
     // ===== 슬라임 킹: 분열 소환 / 산성 웅덩이 =====
     function updateSlimeBossAI(en) {
+      armDifficultyWarning(en);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
@@ -3449,6 +3502,7 @@
 
     // ===== 늑대왕 페릴: 표식 도약 / 발톱 연격 =====
     function updateWolfBossAI(en) {
+      armDifficultyWarning(en);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
@@ -3533,6 +3587,7 @@
 
     // ===== 리치 로드: 생명 흡수 / 해골 소환 =====
     function updateZombieBossAI(en) {
+      armDifficultyWarning(en);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
@@ -3603,6 +3658,7 @@
 
     // ===== 사령왕: 환영 분신 / 그림자 손아귀 =====
     function updateGhostBossAI(en) {
+      armDifficultyWarning(en);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
@@ -3717,6 +3773,7 @@
     }
 
     function updateDemonBossAI(en) {
+      armDifficultyWarning(en);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
@@ -3954,7 +4011,7 @@
     const AWAKEN_BOSS_HP = 2.2, AWAKEN_BOSS_SPEED = 1.25;
 
     function createMinjeBoss(awakened) {
-      const hp = Math.round(3400 * (awakened ? AWAKEN_BOSS_HP : 1));
+      const hp = Math.round(3400 * (awakened ? AWAKEN_BOSS_HP : 1)*difficultyProfile().hp);
       return {
         x: 400, y: 260, r: awakened ? 36 : 32,
         hp, maxHp: hp, speed: 1.5 * (awakened ? AWAKEN_BOSS_SPEED : 1),
@@ -3995,6 +4052,7 @@
     const minjePatternPoolAwakened = ['triple', 'spin', 'iai', 'flurry', 'skyfall'];
 
     function updateMinjeAI(en) {
+      armDifficultyWarning(en);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
@@ -4129,13 +4187,13 @@
 
       // 예열/공격 이펙트
       if (en.state === 'spin_wind' || en.state === 'spin_hit') {
-        const prog = en.state === 'spin_wind' ? 1 - en.stateTimer/34 : 1;
+        const prog = en.state === 'spin_wind' ? Math.max(0,Math.min(1,1-en.stateTimer/34)) : 1;
         ctx.strokeStyle = `rgba(239,68,68,${en.state==='spin_hit' ? 0.7 : 0.3 + prog*0.4})`;
         ctx.lineWidth = en.state === 'spin_hit' ? 6 : 2;
         ctx.beginPath(); ctx.arc(en.x, en.y, 110 * (en.state==='spin_hit' ? 1 : prog), 0, Math.PI*2); ctx.stroke();
       }
       if (en.state === 'iai_wind') {
-        const prog = 1 - en.stateTimer/50;
+        const prog = Math.max(0,Math.min(1,1-en.stateTimer/50));
         ctx.save();
         ctx.globalAlpha = prog;
         ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2; ctx.setLineDash([8,6]);
@@ -4169,7 +4227,7 @@
     let elfZones = [];
 
     function createElfQueenBoss(awakened) {
-      const hp = Math.round(3000 * (awakened ? AWAKEN_BOSS_HP : 1));
+      const hp = Math.round(3000 * (awakened ? AWAKEN_BOSS_HP : 1)*difficultyProfile().hp);
       return {
         x: 400, y: 260, r: awakened ? 34 : 30,
         hp, maxHp: hp, speed: 1.3 * (awakened ? AWAKEN_BOSS_SPEED : 1),
@@ -4210,6 +4268,7 @@
     const elfPatternPoolAwakened = ['volley', 'snipe', 'nature', 'flurry', 'thornfield'];
 
     function updateElfQueenAI(en) {
+      armDifficultyWarning(en);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
@@ -4341,7 +4400,7 @@
 
     function drawElfZones(t) {
       elfZones.forEach(z => {
-        const prog = 1 - z.timer/36;
+        const prog = Math.max(0,Math.min(1,1-z.timer/36));
         ctx.save();
         ctx.globalAlpha = 0.3 + prog*0.4;
         ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 3;
@@ -4358,7 +4417,7 @@
 
       if (en.state === 'snipe_aim') {
         ctx.save();
-        ctx.globalAlpha = 1 - en.stateTimer/45;
+        ctx.globalAlpha = Math.max(0,Math.min(1,1-en.stateTimer/45));
         ctx.strokeStyle = '#fde047'; ctx.lineWidth = 2; ctx.setLineDash([6,5]);
         ctx.beginPath(); ctx.moveTo(en.x, en.y); ctx.lineTo(en.x + Math.cos(en.snipeAng)*600, en.y + Math.sin(en.snipeAng)*600); ctx.stroke();
         ctx.setLineDash([]);
@@ -4384,7 +4443,7 @@
     let archmageZones = [];
 
     function createArchmageBoss(awakened) {
-      const hp = Math.round(3600 * (awakened ? AWAKEN_BOSS_HP : 1));
+      const hp = Math.round(3600 * (awakened ? AWAKEN_BOSS_HP : 1)*difficultyProfile().hp);
       return {
         x: 400, y: 260, r: awakened ? 36 : 32,
         hp, maxHp: hp, speed: 1.0 * (awakened ? AWAKEN_BOSS_SPEED : 1),
@@ -4425,6 +4484,7 @@
     const archmagePatternPoolAwakened = ['firebolt', 'meteorzone', 'icenova', 'blink', 'starfall'];
 
     function updateArchmageAI(en) {
+      armDifficultyWarning(en);
       if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
@@ -4587,7 +4647,7 @@
         ctx.beginPath(); ctx.arc(en.x, en.y, 30 + Math.sin(t*10)*6, 0, Math.PI*2); ctx.stroke();
         ctx.restore();
       } else if (en.state === 'icenova_wind') {
-        const prog = 1 - en.stateTimer/42;
+        const prog = Math.max(0,Math.min(1,1-en.stateTimer/42));
         ctx.strokeStyle = `rgba(125,211,252,${0.3+prog*0.5})`; ctx.lineWidth = 3;
         ctx.beginPath(); ctx.arc(en.x, en.y, 150*prog, 0, Math.PI*2); ctx.stroke();
       }
@@ -4666,7 +4726,7 @@
           ctx.strokeStyle = 'rgba(74,222,128,0.7)'; ctx.lineWidth = 3;
           ctx.beginPath(); ctx.arc(en.x, en.y, en.r*1.2 + Math.sin(t*12)*6, 0, Math.PI*2); ctx.stroke();
         } else if (en.state === 'mark_leap_wait') {
-          const prog = 1 - en.stateTimer/45;
+          const prog = Math.max(0,Math.min(1,1-en.stateTimer/45));
           ctx.strokeStyle = 'rgba(239,68,68,0.85)'; ctx.lineWidth = 3;
           ctx.beginPath(); ctx.arc(en.markX, en.markY, 45 * (0.4+prog*0.6), 0, Math.PI*2); ctx.stroke();
           ctx.fillStyle = 'rgba(239,68,68,0.15)';
@@ -5319,8 +5379,8 @@
     function updateQuestHUD() { refreshObjectiveUI(true); }
 
     function expForLevel(lvl) {
-      // 가파른 성장 곡선: 초반은 완만하되 레벨이 오를수록 요구량이 급증해 연속 레벨업을 방지
-      return Math.floor(40 + lvl*12 + lvl*lvl*3.0);
+      // v4.3: 후반 성장 요구량 완화. 구버전 진행 비율은 저장 변환에서 유지한다.
+      return Math.floor(40 + lvl*12 + lvl*lvl*2.6);
     }
 
     function gainExp(amount) {
@@ -5581,7 +5641,7 @@
       if (manaRegenTimer >= 60) { // 1초마다
         manaRegenTimer = 0;
         if (mp < maxMp) {
-          mp = Math.min(maxMp, mp + Math.max(1, Math.round(maxMp * 0.05)));
+          mp = Math.min(maxMp, mp + Math.max(2, Math.round(maxMp * 0.06)));
           updateHUD();
         }
       }
@@ -5648,8 +5708,15 @@
     // 하위 호환 별칭
     function recalcEquipmentStats() { recalcAllStats(); }
 
+    function weaponDamageScale(slot){return ({sword:.945,bow:.72,staff:.78})[slot]||.945;}
+    function attackIntervalMs(slot,attackStat=statAtk,rapid=false){const bow=slot==='bow';return Math.max(bow?220:150,(bow?620:500)-(attackStat-10)*15)/(bow&&rapid?1.8:1);}
+    function weaponBalanceSummary(){return ['sword','bow','staff'].filter(slot=>equipped[slot]).map(slot=>{
+      const attack=calculateEquipmentStats(equipped,slot).attackPower;
+      const hit=attack*weaponDamageScale(slot)*(slot==='bow'?1.3:slot==='staff'?1.1:1);
+      return `${weaponSlotLabels[slot]} ${(hit*1000/attackIntervalMs(slot)).toFixed(1)}`;
+    }).join(' / ');}
     function mitigateDamage(raw) {
-      return Math.max(1, raw * (1 - equipBonusDef/100));
+      return Math.max(1, raw * difficultyProfile().incoming * (1 - equipBonusDef/100));
     }
 
     function getPlayerAttackPower() {
@@ -5658,11 +5725,7 @@
 
     function rollPlayerDamage(multiplier) {
       let atk = getPlayerAttackPower() * (multiplier || 1);
-      // 무기별 밸런스: 근접(검)은 위험 감수 보상으로 버프, 원거리(활)/마법(지팡이)은 하향
-      // v2.13.0 재조정: 검이 압도적이라 -30%, 활·지팡이는 +20%
-      if (activeWeaponSlot === 'sword') atk *= 0.945;      // 1.35 × 0.7
-      else if (activeWeaponSlot === 'bow') atk *= 0.66;    // 0.55 × 1.2
-      else if (activeWeaponSlot === 'staff') atk *= 0.72;  // 0.60 × 1.2
+      atk *= weaponDamageScale(activeWeaponSlot);
       // [각성 · 정령의 눈] 유도 사격을 켠 동안 치명타 확률이 오른다
       let effCrit = critChance;
       if (activeWeaponSlot === 'bow' && isAwakened('bow') && bowState.homingActive) effCrit += 15;
@@ -8803,7 +8866,7 @@
       for (let i = staffMeteorZones.length - 1; i >= 0; i--) {
         const z = staffMeteorZones[i];
         z.timer--;
-        const prog = 1 - z.timer / 60;
+        const prog = Math.max(0,Math.min(1,1-z.timer/60));
         ctx.save();
         if (z.timer > 15) {
           // 마법진 표시
@@ -8820,7 +8883,7 @@
           }
         } else {
           // 낙하 및 폭발 임박
-          const fallProg = 1 - z.timer/15;
+          const fallProg = Math.max(0,Math.min(1,1-z.timer/15));
           ctx.globalAlpha = 0.9;
           ctx.fillStyle = 'rgba(255,255,255,0.7)';
           ctx.beginPath(); ctx.arc(z.x, z.y - (1-fallProg)*260, 16, 0, Math.PI*2); ctx.fill();
@@ -9747,8 +9810,7 @@
         updateCanvasAim(e);
         const now = frameCount * FRAME_MS;
         const isBow = equipped.weapon && equipped.weapon.weaponKind === 'bow';
-        let cooldown = Math.max(isBow ? 220 : 150, (isBow ? 620 : 500) - (statAtk - 10) * 15);
-        if (isBow && bowState.rapidFireTimer > 0) cooldown = cooldown / 1.8;
+        const cooldown = attackIntervalMs(isBow?'bow':'sword',statAtk,bowState.rapidFireTimer>0);
         if(player.lastAttackTime !== null && now - player.lastAttackTime + 1e-7 < cooldown) return;
 
         player.lastAttackTime = now;
@@ -10922,6 +10984,7 @@
       const returnToVillage = ['dungeon','tower','story','minje_duel','elf_duel','mage_duel'].includes(gameState);
       return {
         version: SAVE_SCHEMA_VERSION,
+        difficulty,
         trackedObjective,
         savedAt: Date.now(),
         towerBestFloor, towerFloor,
@@ -10992,6 +11055,8 @@
         if (required.some(key => input[key] === undefined)) fail();
       }
       const data = { version: SAVE_SCHEMA_VERSION };
+      data.difficulty=version>=6?choice(input.difficulty,Object.keys(DIFFICULTIES)):'normal';
+      if(version>=6&&input.difficulty===undefined)fail();
       if(version>=4 && input.trackedObjective===undefined)fail();
       const tracking=input.trackedObjective===undefined?null:input.trackedObjective;
       if(tracking!==null&&(typeof tracking!=='string'||!validObjectiveId(tracking)))fail();
@@ -11006,6 +11071,7 @@
       // 사망 직후 자동 저장에는 음수 HP가 있을 수 있다. 안전하게 0으로 변환한다.
       data.hp = Math.max(0, number(input.hp, -Number.MAX_SAFE_INTEGER, data.maxHp));
       data.mp = number(input.mp, 0, data.maxMp);
+      if(version<6){const ratio=Math.min(.999999,data.exp/data.nextExp);data.nextExp=expForLevel(data.level);data.exp=Math.floor(ratio*data.nextExp);}
       data.savedAt = input.savedAt === undefined ? 0 : integer(input.savedAt, 0, 8640000000000000);
       for (const key of ['equipBonusHp','equipBonusDef']) data[key] = number(input[key] === undefined ? 0 : input[key]);
       const locations = ['village','guild_map','blacksmith_map','potion_map','inn','portal_room','castle_entrance','castle_inner','demon_entrance','training','elf_village','mage_tower'];
@@ -11185,7 +11251,7 @@
       closeSidePanel(false);
       for (const id of ['start-screen','save-screen','help-screen','story-screen','clear-screen','pause-menu','settings-modal',
         'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal','admin-panel','combat-report-screen','objective-screen',
-        'status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator','item-tooltip']) {
+        'battle-summary','status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator','item-tooltip']) {
         document.getElementById(id).classList.add('hidden');
       }
       const notice = document.getElementById('top-notification');
@@ -11203,7 +11269,7 @@
     function restoreSessionState(prepared) {
       const {data} = prepared;
       resetSessionRuntime(); resetSessionPresentation();
-      ({towerBestFloor,towerFloor,level,exp,nextExp,gold,hp,maxHp,mp,maxMp,
+      ({difficulty,towerBestFloor,towerFloor,level,exp,nextExp,gold,hp,maxHp,mp,maxMp,
         statPoints,statStr,statVit,statAgi,statAtk,statCrit,statCritDmg,statMp,
         activeWeaponSlot,lockedSlots,lockedEquipment,activeQuests,dungeonProgress,currentDungeon,npcFlags,awakenState,
         demonDefeated,minjeDefeated,elfQueenDefeated,archmageDefeated,trackedObjective} = data);
@@ -11213,7 +11279,7 @@
       skills = {...data.skills,cooldowns:{q:0,e:0,r:0,f:0}};
       gameState = data.gameState;
       for(const slot of ['sword','bow','staff'])if(awakenState[slot].stage==='quest'&&awakenState[slot].mats>=AWAKEN_DEFS[slot].matNeed&&awakenTaskDone(slot))awakenState[slot].stage='ready';
-      syncActiveWeapon(); recalcEquipmentStats(); setupInventory(); updateQuestHUD(); updateBuffHUD();
+      syncActiveWeapon(); recalcEquipmentStats(); setupInventory(); updateQuestHUD(); updateBuffHUD();updateDifficultyUI();
     }
     function applySaveData(input, adminOperation = false) {
       if(adminMode.active && !adminOperation)return false;
@@ -11559,7 +11625,7 @@
     }
     function initializeResponsiveLayout() {
       const stage=document.getElementById('game-stage');
-      for (const id of [...GAMEPLAY_OVERLAYS,'admin-badge','status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','top-notification','autosave-indicator','sfx-toggle-btn','version-badge']) stage.appendChild(document.getElementById(id));
+      for (const id of [...GAMEPLAY_OVERLAYS,'battle-summary','admin-badge','status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','top-notification','autosave-indicator','sfx-toggle-btn','version-badge']) stage.appendChild(document.getElementById(id));
       document.body.appendChild(document.getElementById('item-tooltip'));
       for (const button of document.querySelectorAll('[data-close-panel]')) button.addEventListener('click',()=>closeSidePanel());
       for (const button of document.querySelectorAll('#panel-controls button')) button.addEventListener('click',()=>toggleSidePanel(button.getAttribute('aria-controls')));
@@ -11622,7 +11688,7 @@
       if (confirmGameAction(msg)) {
         if (autoSaveEnabled && isPlaying && !saveToSlot(currentSaveSlot, true)) return;
         restoreSessionState(prepareSavedSession(INITIAL_GAME_SAVE));
-        currentSaveSlot = 1; gameState = 'menu';
+        currentSaveSlot = 1; gameState = 'menu';difficulty=newGameDifficulty;updateDifficultyUI();
         document.getElementById('start-screen').classList.remove('hidden');
       }
     };
@@ -11677,6 +11743,7 @@
     window.startNewGame = function() {
       if(adminMode.active)return;
       restoreSessionState(prepareSavedSession(INITIAL_GAME_SAVE));
+      difficulty=newGameDifficulty;updateDifficultyUI();
       beginStory(storyScripts, goToVillage);
     };
     window.advanceStory = function() {
@@ -11738,6 +11805,7 @@
 
       const hpPct = Math.max(0, Math.min(100, (hp / maxHp) * 100));
       document.getElementById('hp-fill').style.width = hpPct + '%';
+      document.getElementById('status-hud').classList.toggle('critical-health',hpPct<=25);
       document.getElementById('hp-text').innerText = `HP: ${Math.floor(hp)} / ${maxHp}`;
 
       const mpPct = Math.max(0, Math.min(100, (mp / maxMp) * 100));
@@ -11924,6 +11992,7 @@
 
       tickBuffs();
       tickManaRegen();
+      armDifficultyZones(elfZones);armDifficultyZones(archmageZones);
 
       if(portalCooldown > 0) portalCooldown--;
       if(player.swing && player.swing.timer > 0) player.swing.timer--;
@@ -13257,6 +13326,7 @@
       ctx.globalAlpha = 1;
       drawObjectiveGuide();
       refreshCombatFeedback();
+      drawBattleReadability();
       drawAdminMetrics();
     }
 
@@ -13268,6 +13338,7 @@
     applyAccessibilityPresentation();
     setupInventory();
     updateAdminBadge();
+    updateDifficultyUI();
     recoverAdminCheckpoint();
   </script>
 </body>
