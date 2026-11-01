@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v3.4.3</title>
+  <title>만기 월드 (Mangi World) - v3.4.4</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -162,6 +162,12 @@
       </div>
 
       <div class="changelog-box">
+        <h4>📌 v3.4.4 패치 노트</h4>
+        • ⏸️ <b>창·탭을 바꾸면 일시정지</b>합니다. 돌아온 뒤 계속하기 또는 Escape로 직접 재개하세요<br>
+        • 🛡️ <b>대화·상점·알림 창에서는 전투와 게임 시간이 멈춥니다.</b> 메뉴 뒤로 이동·공격·물약 입력이 전달되지 않습니다<br>
+        • ⌨️ 무기 전환·스킬·물약·Escape는 <b>한 번 누를 때 한 번만</b> 처리하고, 창 전환 시 눌린 키를 해제합니다<br>
+        • ↩️ Escape는 <b>맨 위의 창부터</b> 닫습니다. 저장·설정에서 돌아오면 일시정지 메뉴가 유지됩니다<br>
+        <br>
         <h4>📌 v3.4.3 패치 노트</h4>
         • 🌱 <b>새 게임은 처음부터 시작합니다.</b> 이전 모험의 성장·장비·퀘스트·각성이 남지 않도록 정리했습니다<br>
         • 📂 <b>불러오기 시 이전 전투 상태를 정리</b>합니다. 버프·빙결·위험 구역·대화창이 다른 저장으로 넘어가지 않습니다<br>
@@ -431,7 +437,7 @@
     <!-- Center Game Container -->
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v3.4.3</div>
+      <div id="version-badge">v3.4.4</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -494,7 +500,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.3 : 새 게임·불러오기 초기화 · 스승 결투 수정</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.4 : 창 전환 자동 일시정지 · 메뉴 입력 보호</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
       </div>
@@ -1921,6 +1927,7 @@
     }
 
     function showAlertModal(title, msg) {
+      releaseGameplayInput();
       document.getElementById('alert-title').innerText = title;
       document.getElementById('alert-msg').innerText = msg;
       document.getElementById('alert-modal').classList.remove('hidden');
@@ -2052,7 +2059,7 @@
       if (towerFloor > 0) {
         document.getElementById('tower-choice-msg').innerText = `이어서 하면 ${towerFloor}층부터, 새로 올라가면 1층부터 시작합니다.`;
         document.getElementById('tower-resume-btn').innerText = `이어서 하기 (${towerFloor}층)`;
-        document.getElementById('tower-choice-modal').classList.remove('hidden');
+        document.getElementById('tower-choice-modal').classList.remove('hidden'); releaseGameplayInput();
       } else {
         enterTowerAt(1);
       }
@@ -4465,7 +4472,7 @@
         showTopNotification("초기화할 스탯이 없습니다.");
         return;
       }
-      if (!confirm("모든 스탯 포인트를 초기화하시겠습니까?")) return;
+      if (!confirmGameAction("모든 스탯 포인트를 초기화하시겠습니까?")) return;
       const spent = (statStr-10) + (statVit-10) + (statAgi-10) + (statAtk-10) + statCrit + statCritDmg + (statMp-10);
       statPoints += spent;
       statStr = 10; statVit = 10; statAgi = 10; statAtk = 10; statCrit = 0; statCritDmg = 0; statMp = 10;
@@ -5261,19 +5268,28 @@
       storyFrame = requestAnimationFrame(storyLoop);
       const s = currentScript[storyIndex];
       if (!s) return;
-      renderStoryScene(s, storyIndex, ts - storySceneStart);
+      // 입력 이벤트의 performance.now()가 같은 프레임의 RAF 시각보다 늦을 수 있다.
+      renderStoryScene(s, storyIndex, Math.max(0, ts - storySceneStart));
     }
 
     window.addEventListener('keydown', e => {
+      if (e.code === 'Escape') {
+        if (isPlaying) { e.preventDefault(); if (!e.repeat) handleEscape(); }
+        return;
+      }
+      if (!canUseGameplayInput(e)) return;
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      if (e.repeat || keys[e.code]) { if (isGameKey(e.code)) e.preventDefault(); return; }
       keys[e.code] = true;
-      if (isPlaying && !isPaused && (e.code === 'KeyQ' || e.code === 'KeyE' || e.code === 'KeyR' || e.code === 'KeyF')) {
+      if (isGameKey(e.code)) e.preventDefault();
+      if ((e.code === 'KeyQ' || e.code === 'KeyE' || e.code === 'KeyR' || e.code === 'KeyF')) {
         castSkill(e.code === 'KeyQ' ? 'q' : e.code === 'KeyE' ? 'e' : e.code === 'KeyR' ? 'r' : 'f');
       }
-      if (isPlaying && !isPaused && e.code === 'KeyG') {
+      if (e.code === 'KeyG') {
         if (isAwakened(activeWeaponSlot)) castAwakenUltimate();
         else showTopNotification("아직 각성하지 않은 무기입니다. 스승을 찾아가 각성 시련을 받으세요.", 1600);
       }
-      if (isPlaying && !isPaused && e.code === 'Tab') {
+      if (e.code === 'Tab') {
         e.preventDefault();
         const equippedSlots = ['sword', 'bow', 'staff'].filter(s => equipped[s]);
         if (equippedSlots.length <= 1) {
@@ -5289,7 +5305,7 @@
           showTopNotification(`${icon} ${weaponSlotLabels[activeWeaponSlot]}으로 전환${wpn ? ' (' + wpn.name + ')' : ''}`, 1200);
         }
       }
-      if (isPlaying && !isPaused && /^Digit[1-9]$/.test(e.code)) {
+      if (/^Digit[1-9]$/.test(e.code)) {
         const idx = parseInt(e.code.slice(5), 10) - 1;
         if (e.shiftKey) {
           e.preventDefault();
@@ -5300,7 +5316,7 @@
         }
       }
     });
-    window.addEventListener('keyup', e => { keys[e.code] = false; });
+    window.addEventListener('keyup', e => { delete keys[e.code]; });
 
     // Shift+숫자키: 마우스가 올라간 위치에 따라 동작이 다름
     // - 가방의 물약 위: 지정한 퀵슬롯에 등록(같은 물약이면 병합, 다른 물약이면 거부)
@@ -8705,6 +8721,7 @@
 
     let activeNpc = null;
     function openNpcModal(id) {
+      releaseGameplayInput();
       activeNpc = id;
       const portrait = document.getElementById('npc-portrait');
       const title = document.getElementById('npc-title');
@@ -8809,7 +8826,7 @@
     let bowState = { homingActive: false, rapidFireTimer: 0 };
 
     canvas.addEventListener('mousedown', e => {
-      if(e.button === 0 && isPlaying && !isPaused && player.frozenTimer <= 0) {
+      if(e.button === 0 && canUseGameplayInput(e) && player.frozenTimer <= 0) {
         const now = Date.now();
         const isBow = equipped.weapon && equipped.weapon.weaponKind === 'bow';
         let cooldown = Math.max(isBow ? 220 : 150, (isBow ? 620 : 500) - (statAtk - 10) * 15);
@@ -10334,7 +10351,9 @@
       openSaveManager('load');
     };
     window.openSaveManager = function(mode) {
-      saveScreenReturnTo = document.getElementById('pause-menu').classList.contains('hidden') ? 'start' : 'pause';
+      releaseGameplayInput();
+      saveScreenReturnTo = isPlaying ? 'pause' : 'start';
+      if (isPlaying) isPaused = true;
       document.getElementById('pause-menu').classList.add('hidden');
       document.getElementById('save-screen').classList.remove('hidden');
       document.getElementById('save-screen-title').innerText = mode === 'save' ? '수동 저장할 슬롯 선택' : '세이브 파일 선택';
@@ -10406,7 +10425,7 @@
       const target = readSaveRecord(slot);
       if (target.status === 'unavailable') throw new Error('브라우저 저장 공간에 접근할 수 없습니다.');
       const action = target.status === 'empty' ? '저장' : '덮어쓰기';
-      if (!confirm(`슬롯 ${slot}의 수동 저장에 파일을 ${action}합니다.\n파일: ${filename}\nLv.${data.level} · ${data.gold.toLocaleString()}G\n기존 정상 수동 저장은 백업되며, 자동 저장은 유지됩니다. 계속할까요?`)) return false;
+      if (!confirmGameAction(`슬롯 ${slot}의 수동 저장에 파일을 ${action}합니다.\n파일: ${filename}\nLv.${data.level} · ${data.gold.toLocaleString()}G\n기존 정상 수동 저장은 백업되며, 자동 저장은 유지됩니다. 계속할까요?`)) return false;
       writeSaveRecord(slot, 'manual', data);
       showTopNotification(`📥 슬롯 ${slot}의 수동 저장으로 가져왔습니다. 불러오기를 누르면 플레이에 적용됩니다.`);
       renderSaveSlots(saveManagerMode);
@@ -10431,7 +10450,7 @@
       if (!['backup','autoBackup'].includes(source)) return;
       const record = readSaveRecord(slot, source), target = source === 'backup' ? 'manual' : 'auto';
       if (record.status !== 'valid') { showTopNotification('⚠️ 정상 백업을 읽을 수 없습니다.'); return; }
-      if (!confirm(`슬롯 ${slot}의 ${SAVE_SOURCE_LABELS[target]}을 ${SAVE_SOURCE_LABELS[source]}으로 복구할까요? 대상 저장은 교체되며 선택한 백업은 유지됩니다. 필요한 데이터는 먼저 내보내세요. 현재 플레이에는 불러오기 전까지 적용되지 않습니다.`)) return;
+      if (!confirmGameAction(`슬롯 ${slot}의 ${SAVE_SOURCE_LABELS[target]}을 ${SAVE_SOURCE_LABELS[source]}으로 복구할까요? 대상 저장은 교체되며 선택한 백업은 유지됩니다. 필요한 데이터는 먼저 내보내세요. 현재 플레이에는 불러오기 전까지 적용되지 않습니다.`)) return;
       try {
         writeSaveRecord(slot, target, record.data, true);
         renderSaveSlots(saveManagerMode);
@@ -10460,7 +10479,7 @@
     window.doSaveToSlot = function(slot) {
       const record = readSaveRecord(slot);
       if (record.status === 'unavailable') { showTopNotification('⚠️ 저장 공간에 접근할 수 없습니다.'); return; }
-      if (record.status !== 'empty' && !confirm(`슬롯 ${slot}의 수동 저장을 현재 진행으로 덮어쓸까요? 기존 정상 수동 저장은 백업하고 자동 저장은 유지합니다.`)) return;
+      if (record.status !== 'empty' && !confirmGameAction(`슬롯 ${slot}의 수동 저장을 현재 진행으로 덮어쓸까요? 기존 정상 수동 저장은 백업하고 자동 저장은 유지합니다.`)) return;
       if (saveToSlot(slot, false)) { currentSaveSlot = slot; autoSaveTimer = 0; }
       renderSaveSlots('save');
     };
@@ -10468,7 +10487,7 @@
       if (isPlaying && slot === currentSaveSlot) {
         showTopNotification('⚠️ 현재 플레이 중인 슬롯은 삭제할 수 없습니다. 메인 메뉴로 돌아간 뒤 삭제해주세요.'); return;
       }
-      if (!confirm(`슬롯 ${slot}의 수동·자동 저장과 백업을 모두 삭제합니다. 복구할 수 없으니 필요한 데이터는 먼저 파일로 내보내세요. 계속할까요?`)) return;
+      if (!confirmGameAction(`슬롯 ${slot}의 수동·자동 저장과 백업을 모두 삭제합니다. 복구할 수 없으니 필요한 데이터는 먼저 파일로 내보내세요. 계속할까요?`)) return;
       try { deleteSlotData(slot); renderSaveSlots(mode); }
       catch (e) { showTopNotification('⚠️ 삭제를 완료하지 못했습니다. 저장 공간 접근 상태를 확인해주세요.'); renderSaveSlots(mode); }
     };
@@ -10482,19 +10501,76 @@
       }
     };
 
+    // 입력은 현재 가장 위의 메뉴에만 전달한다. 모달이 열려 있으면 게임 시간도 멈춘다.
+    const GAMEPLAY_OVERLAYS = ['pause-menu','settings-modal','save-screen','help-screen','npc-modal',
+      'alert-modal','tower-choice-modal','guild-ui','blacksmith-ui','potion-ui','start-screen','clear-screen','story-screen'];
+    function overlayVisible(id) { return !document.getElementById(id).classList.contains('hidden'); }
+    function hasGameplayOverlay() { return GAMEPLAY_OVERLAYS.some(overlayVisible); }
+    function gameplayPaused() { return isPaused || document.hidden || hasGameplayOverlay(); }
+    function releaseGameplayInput() {
+      keys = {}; player.vx = 0; player.vy = 0; trainingLatch = {};
+    }
+    function isGameKey(code) { return /^(Key[WASDQEFRGZXCV]|ShiftLeft|ShiftRight|Tab|Digit[1-9])$/.test(code); }
+    function canUseGameplayInput(event) {
+      if (!isPlaying || gameplayPaused()) return false;
+      const control = event && event.target instanceof Element && event.target.closest('input,textarea,select,[contenteditable="true"]');
+      return !control || control.getClientRects().length === 0;
+    }
+    function pauseForFocusLoss() {
+      releaseGameplayInput();
+      if (!isPlaying) return;
+      isPaused = true;
+      // 저장/설정 화면을 덮지 않는다. 닫으면 기존 일시정지 메뉴로 돌아간다.
+      if (!overlayVisible('save-screen') && !overlayVisible('settings-modal')) {
+        document.getElementById('pause-menu').classList.remove('hidden');
+      }
+    }
+    window.addEventListener('blur', pauseForFocusLoss);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) pauseForFocusLoss(); });
+    window.addEventListener('pointercancel', releaseGameplayInput);
+    for (const type of ['click','contextmenu']) document.addEventListener(type, event => {
+      if (event.target instanceof Element && event.target.closest('#left-ui-panel,#right-ui-panel') && (!isPlaying || gameplayPaused())) {
+        event.preventDefault(); event.stopImmediatePropagation();
+      }
+    }, true);
+    function confirmGameAction(message) {
+      releaseGameplayInput();
+      return window.confirm(message);
+    }
+    function handleEscape() {
+      releaseGameplayInput();
+      if (overlayVisible('tower-choice-modal')) {
+        document.getElementById('tower-choice-modal').classList.add('hidden');
+        player.y = Math.min(875,player.y+60); portalCooldown = 60; return;
+      }
+      if (overlayVisible('alert-modal')) { closeAlertModal(); return; }
+      if (overlayVisible('settings-modal')) { closeSettingsModal(); return; }
+      if (overlayVisible('pause-menu')) { togglePauseMenu(); return; }
+      if (overlayVisible('save-screen')) { closeSaveScreen(); return; }
+      if (overlayVisible('npc-modal')) { closeNpcModal(); return; }
+      for (const [id,close] of [['potion-ui','potion-close'],['blacksmith-ui','blacksmith-close'],['guild-ui','guild-close']]) {
+        if (overlayVisible(id)) { document.getElementById(close).click(); return; }
+      }
+      togglePauseMenu();
+    }
+
     // ---------- ESC 일시정지 메뉴 ----------
     window.togglePauseMenu = function() {
+      if (!isPlaying || document.hidden) return;
+      releaseGameplayInput();
       const menu = document.getElementById('pause-menu');
       if (menu.classList.contains('hidden')) {
+        if (overlayVisible('settings-modal') || overlayVisible('save-screen')) return;
         menu.classList.remove('hidden');
         isPaused = true;
       } else {
         menu.classList.add('hidden');
-        isPaused = false;
+        isPaused = overlayVisible('settings-modal') || overlayVisible('save-screen');
       }
     };
 
     window.openSettingsModal = function() {
+      releaseGameplayInput(); isPaused = true;
       document.getElementById('pause-menu').classList.add('hidden');
       document.getElementById('settings-modal').classList.remove('hidden');
       document.getElementById('autosave-toggle').checked = autoSaveEnabled;
@@ -10514,7 +10590,7 @@
       const msg = autoSaveEnabled
         ? `메인 메뉴로 돌아갑니다. 진행 상황은 슬롯 ${currentSaveSlot}에 자동 저장됩니다.`
         : '자동 저장이 꺼져 있어 저장하지 않은 진행 상황은 사라집니다. 메인 메뉴로 돌아가시겠습니까?';
-      if (confirm(msg)) {
+      if (confirmGameAction(msg)) {
         if (autoSaveEnabled && isPlaying && !saveToSlot(currentSaveSlot, true)) return;
         restoreSessionState(prepareSavedSession(INITIAL_GAME_SAVE));
         currentSaveSlot = 1; gameState = 'menu';
@@ -10531,23 +10607,11 @@
     });
 
     window.quitGame = function() {
-      if (confirm('게임을 종료하시겠습니까?')) {
+      if (confirmGameAction('게임을 종료하시겠습니까?')) {
         window.close();
         showTopNotification('브라우저 탭을 닫아 게임을 종료해주세요.', 4000);
       }
     };
-
-    document.addEventListener('keydown', e => {
-      if (e.code === 'Escape' && isPlaying) {
-        if (!document.getElementById('save-screen').classList.contains('hidden')) {
-          closeSaveScreen();
-        } else if (!document.getElementById('settings-modal').classList.contains('hidden')) {
-          closeSettingsModal();
-        } else {
-          togglePauseMenu();
-        }
-      }
-    });
 
     window.backToMain = function() {
       document.getElementById('save-screen').classList.add('hidden');
@@ -10743,7 +10807,7 @@
 
     function loop(now) {
       gameLoopFrame = requestAnimationFrame(loop);
-      if(!isPlaying || isPaused) { lastFrameTime = 0; return; }
+      if(!isPlaying || gameplayPaused()) { releaseGameplayInput(); lastFrameTime = 0; return; }
 
       if (now === undefined) now = performance.now();
       if (!lastFrameTime) { lastFrameTime = now; frameAccum = 0; return; }
@@ -11686,7 +11750,7 @@
         if(Math.hypot(player.x - 400, player.y - 300) < 90) {
           if(!guildCooldown && document.getElementById('guild-ui').classList.contains('hidden')) {
             updateGuildUI();
-            document.getElementById('guild-ui').classList.remove('hidden');
+            document.getElementById('guild-ui').classList.remove('hidden'); releaseGameplayInput();
           }
         }
 
@@ -11738,7 +11802,7 @@
         if(Math.hypot(player.x - 400, player.y - 350) < 90) {
           if(!blacksmithCooldown && document.getElementById('blacksmith-ui').classList.contains('hidden')) {
             updateBlacksmithUI();
-            document.getElementById('blacksmith-ui').classList.remove('hidden');
+            document.getElementById('blacksmith-ui').classList.remove('hidden'); releaseGameplayInput();
           }
         }
 
@@ -11787,7 +11851,7 @@
         if(Math.hypot(player.x - 400, player.y - 350) < 90) {
           if(!potionCooldown && document.getElementById('potion-ui').classList.contains('hidden')) {
             updatePotionUI();
-            document.getElementById('potion-ui').classList.remove('hidden');
+            document.getElementById('potion-ui').classList.remove('hidden'); releaseGameplayInput();
           }
         }
 
