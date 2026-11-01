@@ -1,0 +1,3025 @@
+{
+  "reference": "11a7320b54ce859115b92ab0a889114818004bba",
+  "scenarios": [
+    {
+      "input": {
+        "category": "slime",
+        "mode": "easy",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99898.145,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 505,
+              "y": 455,
+              "hp": 249459.78931359987,
+              "state": "slime_recovery",
+              "stateTimer": 70,
+              "category": "slime",
+              "isBoss": true,
+              "slime": {
+                "key": "acid",
+                "phase": "recovery",
+                "left": 69,
+                "duration": 70,
+                "angle": 0,
+                "x": 505,
+                "y": 455,
+                "fromX": 505,
+                "fromY": 455
+              },
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 6.11,
+              "tick": 433,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 6.11,
+              "tick": 463,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 6.11,
+              "tick": 493,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 6.11,
+              "tick": 523,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "젤리 휩쓸기",
+              "amount": 19.5,
+              "tick": 529,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 6.11,
+              "tick": 553,
+              "fatal": false
+            },
+            {
+              "source": "초록 슬라임",
+              "attack": "몸통 돌진",
+              "amount": 5.005,
+              "tick": 828,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "왕의 낙하",
+              "amount": 23.400000000000002,
+              "tick": 1011,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 4,
+            "readyAt": 1170
+          },
+          "randomCalls": 31,
+          "seed": 742482106
+        },
+        "rewards": {
+          "gold": 400,
+          "exp": 546,
+          "progress": {
+            "slime": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": []
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "slime",
+        "mode": "normal",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99824.50000000004,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 505,
+              "y": 455,
+              "hp": 249463.3518879999,
+              "state": "slime_windup",
+              "stateTimer": 53,
+              "category": "slime",
+              "isBoss": true,
+              "slime": {
+                "key": "sweep",
+                "phase": "windup",
+                "left": 52,
+                "duration": 54,
+                "angle": 0,
+                "x": 505,
+                "y": 455,
+                "fromX": 505,
+                "fromY": 455
+              },
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 9.4,
+              "tick": 436,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 9.4,
+              "tick": 466,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "젤리 휩쓸기",
+              "amount": 30,
+              "tick": 475,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 9.4,
+              "tick": 496,
+              "fatal": false
+            },
+            {
+              "source": "초록 슬라임",
+              "attack": "몸통 돌진",
+              "amount": 7.7,
+              "tick": 743,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "왕의 낙하",
+              "amount": 36,
+              "tick": 917,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 9.4,
+              "tick": 1153,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 9.4,
+              "tick": 1183,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 4,
+            "readyAt": 1170
+          },
+          "randomCalls": 31,
+          "seed": 742482106
+        },
+        "rewards": {
+          "gold": 400,
+          "exp": 546,
+          "progress": {
+            "slime": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": []
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "slime",
+        "mode": "hard",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99771.84999999999,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 505,
+              "y": 455,
+              "hp": 249463.3518879999,
+              "state": "slime_windup",
+              "stateTimer": 53,
+              "category": "slime",
+              "isBoss": true,
+              "slime": {
+                "key": "sweep",
+                "phase": "windup",
+                "left": 52,
+                "duration": 54,
+                "angle": 0,
+                "x": 505,
+                "y": 455,
+                "fromX": 505,
+                "fromY": 455
+              },
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 12.22,
+              "tick": 436,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 12.22,
+              "tick": 466,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "젤리 휩쓸기",
+              "amount": 39,
+              "tick": 475,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 12.22,
+              "tick": 496,
+              "fatal": false
+            },
+            {
+              "source": "초록 슬라임",
+              "attack": "몸통 돌진",
+              "amount": 10.01,
+              "tick": 743,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "왕의 낙하",
+              "amount": 46.800000000000004,
+              "tick": 917,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 12.22,
+              "tick": 1153,
+              "fatal": false
+            },
+            {
+              "source": "슬라임 킹",
+              "attack": "산성 웅덩이 (주기 피해)",
+              "amount": 12.22,
+              "tick": 1183,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 4,
+            "readyAt": 1170
+          },
+          "randomCalls": 31,
+          "seed": 742482106
+        },
+        "rewards": {
+          "gold": 400,
+          "exp": 546,
+          "progress": {
+            "slime": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": []
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "wolf",
+        "mode": "easy",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99879.09999999999,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 505,
+              "y": 455,
+              "hp": 249420.10619319967,
+              "state": "wolf_windup",
+              "stateTimer": 64,
+              "category": "wolf",
+              "isBoss": true,
+              "slime": null,
+              "wolf": {
+                "key": "rush",
+                "phase": "windup",
+                "left": 63,
+                "duration": 76,
+                "angle": 0,
+                "x": 570,
+                "y": 455,
+                "fromX": 505,
+                "fromY": 455
+              },
+              "encounter": null
+            },
+            {
+              "x": 456.03013692444665,
+              "y": 509.0714160034272,
+              "hp": 57.46000000000001,
+              "state": "idle",
+              "stateTimer": 1,
+              "category": "wolf",
+              "isBoss": false,
+              "slime": null,
+              "wolf": null,
+              "encounter": null
+            },
+            {
+              "x": 566.4172605544828,
+              "y": 493.52220470533314,
+              "hp": 10.807240000000007,
+              "state": "idle",
+              "stateTimer": 1,
+              "category": "wolf",
+              "isBoss": false,
+              "slime": null,
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "늑대왕 페릴",
+              "attack": "사냥 돌진",
+              "amount": 24.7,
+              "tick": 125,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "달빛 도약",
+              "amount": 28.6,
+              "tick": 343,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "쌍발톱 1타",
+              "amount": 18.2,
+              "tick": 534,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "쌍발톱 2타",
+              "amount": 20.8,
+              "tick": 576,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "달빛 도약",
+              "amount": 28.6,
+              "tick": 819,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 5,
+            "readyAt": 1170
+          },
+          "randomCalls": 31,
+          "seed": 742482106
+        },
+        "rewards": {
+          "gold": 700,
+          "exp": 1146,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": []
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "wolf",
+        "mode": "normal",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99761,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 570,
+              "y": 455,
+              "hp": 249420.10619319967,
+              "state": "wolf_recovery",
+              "stateTimer": 14,
+              "category": "wolf",
+              "isBoss": true,
+              "slime": null,
+              "wolf": {
+                "key": "rush",
+                "phase": "recovery",
+                "left": 13,
+                "duration": 58,
+                "angle": 0,
+                "x": 570,
+                "y": 455,
+                "fromX": 505,
+                "fromY": 455
+              },
+              "encounter": null
+            },
+            {
+              "x": 540.1940415391276,
+              "y": 400.35222383168593,
+              "hp": 67.60000000000001,
+              "state": "wolf_recovery",
+              "stateTimer": 35,
+              "category": "wolf",
+              "isBoss": false,
+              "slime": null,
+              "wolf": {
+                "key": "rush",
+                "phase": "recovery",
+                "left": 34,
+                "duration": 58,
+                "angle": -0.9986393023648245,
+                "x": 540.1940415391276,
+                "y": 400.35222383168593,
+                "fromX": 470.14214768422744,
+                "fromY": 509.12575617218255
+              },
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "늑대왕 페릴",
+              "attack": "사냥 돌진",
+              "amount": 38,
+              "tick": 107,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "달빛 도약",
+              "amount": 44,
+              "tick": 304,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "쌍발톱 1타",
+              "amount": 28,
+              "tick": 476,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "쌍발톱 2타",
+              "amount": 32,
+              "tick": 508,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "달빛 도약",
+              "amount": 44,
+              "tick": 730,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "사냥 돌진",
+              "amount": 38,
+              "tick": 1132,
+              "fatal": false
+            },
+            {
+              "source": "페릴의 사냥 늑대",
+              "attack": "사냥 돌진",
+              "amount": 15,
+              "tick": 1159,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 5,
+            "readyAt": 1170
+          },
+          "randomCalls": 32,
+          "seed": 4201969873
+        },
+        "rewards": {
+          "gold": 700,
+          "exp": 1146,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": []
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "wolf",
+        "mode": "hard",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99689.30000000002,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 570,
+              "y": 455,
+              "hp": 249420.10619319967,
+              "state": "wolf_recovery",
+              "stateTimer": 14,
+              "category": "wolf",
+              "isBoss": true,
+              "slime": null,
+              "wolf": {
+                "key": "rush",
+                "phase": "recovery",
+                "left": 13,
+                "duration": 58,
+                "angle": 0,
+                "x": 570,
+                "y": 455,
+                "fromX": 505,
+                "fromY": 455
+              },
+              "encounter": null
+            },
+            {
+              "x": 540.4684861962454,
+              "y": 400.5299487154019,
+              "hp": 74.36000000000001,
+              "state": "wolf_recovery",
+              "stateTimer": 35,
+              "category": "wolf",
+              "isBoss": false,
+              "slime": null,
+              "wolf": {
+                "key": "rush",
+                "phase": "recovery",
+                "left": 34,
+                "duration": 58,
+                "angle": -0.9936090688121852,
+                "x": 540.4684861962454,
+                "y": 400.5299487154019,
+                "fromX": 469.79732004576135,
+                "fromY": 509.06184441741567
+              },
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "늑대왕 페릴",
+              "attack": "사냥 돌진",
+              "amount": 49.4,
+              "tick": 107,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "달빛 도약",
+              "amount": 57.2,
+              "tick": 304,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "쌍발톱 1타",
+              "amount": 36.4,
+              "tick": 476,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "쌍발톱 2타",
+              "amount": 41.6,
+              "tick": 508,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "달빛 도약",
+              "amount": 57.2,
+              "tick": 730,
+              "fatal": false
+            },
+            {
+              "source": "늑대왕 페릴",
+              "attack": "사냥 돌진",
+              "amount": 49.4,
+              "tick": 1132,
+              "fatal": false
+            },
+            {
+              "source": "페릴의 사냥 늑대",
+              "attack": "사냥 돌진",
+              "amount": 19.5,
+              "tick": 1159,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 5,
+            "readyAt": 1170
+          },
+          "randomCalls": 33,
+          "seed": 3689667580
+        },
+        "rewards": {
+          "gold": 700,
+          "exp": 1146,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": []
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "zombie",
+        "mode": "easy",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99879.62,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 400,
+              "y": 420,
+              "hp": 249576.2252470401,
+              "state": "encounter_windup",
+              "stateTimer": 89,
+              "category": "zombie",
+              "isBoss": true,
+              "slime": null,
+              "wolf": null,
+              "encounter": {
+                "key": "scythe",
+                "phase": "windup",
+                "left": 88,
+                "duration": 89,
+                "angle": 0.3217505543966422,
+                "x": 505,
+                "y": 455,
+                "fromX": 400,
+                "fromY": 420,
+                "elapsed": 0
+              }
+            },
+            {
+              "x": 335.97913864044585,
+              "y": 502.1686124724346,
+              "hp": 161.09624999999997,
+              "state": "encounter_recovery",
+              "stateTimer": 59,
+              "category": "zombie",
+              "isBoss": false,
+              "slime": null,
+              "wolf": null,
+              "encounter": {
+                "key": "slash",
+                "phase": "recovery",
+                "left": 58,
+                "duration": 62,
+                "angle": -0.27214589053119204,
+                "x": 505,
+                "y": 455,
+                "fromX": 335.97913864044585,
+                "fromY": 502.1686124724346,
+                "elapsed": 12
+              }
+            },
+            {
+              "x": 510,
+              "y": 515,
+              "hp": 161.09624999999997,
+              "state": "encounter_windup",
+              "stateTimer": 21,
+              "category": "zombie",
+              "isBoss": false,
+              "slime": null,
+              "wolf": null,
+              "encounter": {
+                "key": "slash",
+                "phase": "windup",
+                "left": 20,
+                "duration": 68,
+                "angle": -1.6539375586833378,
+                "x": 505,
+                "y": 455,
+                "fromX": 510,
+                "fromY": 515,
+                "elapsed": 0
+              }
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "리치 로드",
+              "attack": "영혼 낫",
+              "amount": 33.15,
+              "tick": 139,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 13.519999999999998,
+              "tick": 365,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 13.519999999999998,
+              "tick": 383,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 13.519999999999998,
+              "tick": 401,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 13.519999999999998,
+              "tick": 419,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "부활 의식",
+              "amount": 33.15,
+              "tick": 757,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 0,
+            "readyAt": 0
+          },
+          "randomCalls": 633,
+          "seed": 2470686644
+        },
+        "rewards": {
+          "gold": 1000,
+          "exp": 1746,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": []
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "zombie",
+        "mode": "normal",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99735.54999999999,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 400,
+              "y": 420,
+              "hp": 249590.78524704004,
+              "state": "encounter_recovery",
+              "stateTimer": 44,
+              "category": "zombie",
+              "isBoss": true,
+              "slime": null,
+              "wolf": null,
+              "encounter": {
+                "key": "scythe",
+                "phase": "recovery",
+                "left": 43,
+                "duration": 76,
+                "angle": 0.3217505543966422,
+                "x": 505,
+                "y": 455,
+                "fromX": 400,
+                "fromY": 420,
+                "elapsed": 16
+              }
+            },
+            {
+              "x": 353.80212300031843,
+              "y": 497.19475637200446,
+              "hp": 189.52499999999998,
+              "state": "encounter_windup",
+              "stateTimer": 30,
+              "category": "zombie",
+              "isBoss": false,
+              "slime": null,
+              "wolf": null,
+              "encounter": {
+                "key": "slash",
+                "phase": "windup",
+                "left": 29,
+                "duration": 52,
+                "angle": -0.2721458905311892,
+                "x": 505,
+                "y": 455,
+                "fromX": 353.80212300031843,
+                "fromY": 497.19475637200446,
+                "elapsed": 0
+              }
+            },
+            {
+              "x": 510,
+              "y": 515,
+              "hp": 189.52499999999998,
+              "state": "idle",
+              "stateTimer": 1,
+              "category": "zombie",
+              "isBoss": false,
+              "slime": null,
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "리치 로드",
+              "attack": "영혼 낫",
+              "amount": 51,
+              "tick": 118,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 20.799999999999997,
+              "tick": 321,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 20.799999999999997,
+              "tick": 339,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 20.799999999999997,
+              "tick": 357,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 20.799999999999997,
+              "tick": 375,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "부활 의식",
+              "amount": 51,
+              "tick": 668,
+              "fatal": false
+            },
+            {
+              "source": "리치의 해골 호위",
+              "attack": "뼈칼 베기",
+              "amount": 28.25,
+              "tick": 1089,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "영혼 낫",
+              "amount": 51,
+              "tick": 1152,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 0,
+            "readyAt": 0
+          },
+          "randomCalls": 633,
+          "seed": 2470686644
+        },
+        "rewards": {
+          "gold": 1000,
+          "exp": 1746,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": []
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "zombie",
+        "mode": "hard",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99656.21500000001,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 400,
+              "y": 420,
+              "hp": 249603.26524704002,
+              "state": "encounter_recovery",
+              "stateTimer": 44,
+              "category": "zombie",
+              "isBoss": true,
+              "slime": null,
+              "wolf": null,
+              "encounter": {
+                "key": "scythe",
+                "phase": "recovery",
+                "left": 43,
+                "duration": 76,
+                "angle": 0.3217505543966422,
+                "x": 505,
+                "y": 455,
+                "fromX": 400,
+                "fromY": 420,
+                "elapsed": 16
+              }
+            },
+            {
+              "x": 356.992229150334,
+              "y": 496.3044941906039,
+              "hp": 208.4775,
+              "state": "encounter_windup",
+              "stateTimer": 30,
+              "category": "zombie",
+              "isBoss": false,
+              "slime": null,
+              "wolf": null,
+              "encounter": {
+                "key": "slash",
+                "phase": "windup",
+                "left": 29,
+                "duration": 52,
+                "angle": -0.27214589053118393,
+                "x": 505,
+                "y": 455,
+                "fromX": 356.992229150334,
+                "fromY": 496.3044941906039,
+                "elapsed": 0
+              }
+            },
+            {
+              "x": 510,
+              "y": 515,
+              "hp": 208.4775,
+              "state": "idle",
+              "stateTimer": 1,
+              "category": "zombie",
+              "isBoss": false,
+              "slime": null,
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "리치 로드",
+              "attack": "영혼 낫",
+              "amount": 66.3,
+              "tick": 118,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 27.039999999999996,
+              "tick": 321,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 27.039999999999996,
+              "tick": 339,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 27.039999999999996,
+              "tick": 357,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "생명력 흡수 (주기 피해)",
+              "amount": 27.039999999999996,
+              "tick": 375,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "부활 의식",
+              "amount": 66.3,
+              "tick": 668,
+              "fatal": false
+            },
+            {
+              "source": "리치의 해골 호위",
+              "attack": "뼈칼 베기",
+              "amount": 36.725,
+              "tick": 1089,
+              "fatal": false
+            },
+            {
+              "source": "리치 로드",
+              "attack": "영혼 낫",
+              "amount": 66.3,
+              "tick": 1152,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 0,
+            "readyAt": 0
+          },
+          "randomCalls": 633,
+          "seed": 2470686644
+        },
+        "rewards": {
+          "gold": 1000,
+          "exp": 1746,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": []
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "ghost",
+        "mode": "easy",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99922,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 343.72383933141265,
+              "y": 401.24127977713755,
+              "hp": 249368.51674988779,
+              "state": "encounter_recovery",
+              "stateTimer": 101,
+              "category": "ghost",
+              "isBoss": true,
+              "slime": null,
+              "wolf": null,
+              "encounter": {
+                "key": "corridor",
+                "phase": "recovery",
+                "left": 100,
+                "duration": 155,
+                "angle": 0,
+                "x": 505,
+                "y": 455,
+                "fromX": 343.72383933141265,
+                "fromY": 401.24127977713755,
+                "elapsed": 1
+              }
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "사령왕",
+              "attack": "영혼 산개",
+              "amount": 39,
+              "tick": 360,
+              "fatal": false
+            },
+            {
+              "source": "사령왕",
+              "attack": "어둠의 손",
+              "amount": 39,
+              "tick": 810,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 10,
+            "readyAt": 1209
+          },
+          "randomCalls": 21,
+          "seed": 613872800
+        },
+        "rewards": {
+          "gold": 1300,
+          "exp": 2346,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            "drop_ghost_king_helm",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": [
+              "drop_ghost_king_helm",
+              "drop_ghost_king_bow"
+            ]
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "ghost",
+        "mode": "normal",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99880,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 343.72383933141265,
+              "y": 401.24127977713755,
+              "hp": 249368.51674988779,
+              "state": "idle",
+              "stateTimer": 1,
+              "category": "ghost",
+              "isBoss": true,
+              "slime": null,
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "사령왕",
+              "attack": "영혼 산개",
+              "amount": 60,
+              "tick": 317,
+              "fatal": false
+            },
+            {
+              "source": "사령왕",
+              "attack": "어둠의 손",
+              "amount": 60,
+              "tick": 722,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 10,
+            "readyAt": 1209
+          },
+          "randomCalls": 21,
+          "seed": 613872800
+        },
+        "rewards": {
+          "gold": 1300,
+          "exp": 2346,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            "drop_ghost_king_helm",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": [
+              "drop_ghost_king_helm",
+              "drop_ghost_king_bow"
+            ]
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "ghost",
+        "mode": "hard",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99844,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 343.72383933141265,
+              "y": 401.24127977713755,
+              "hp": 249368.51674988779,
+              "state": "idle",
+              "stateTimer": 1,
+              "category": "ghost",
+              "isBoss": true,
+              "slime": null,
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [],
+          "damageLog": [
+            {
+              "source": "사령왕",
+              "attack": "영혼 산개",
+              "amount": 78,
+              "tick": 317,
+              "fatal": false
+            },
+            {
+              "source": "사령왕",
+              "attack": "어둠의 손",
+              "amount": 78,
+              "tick": 722,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 10,
+            "readyAt": 1209
+          },
+          "randomCalls": 21,
+          "seed": 613872800
+        },
+        "rewards": {
+          "gold": 1300,
+          "exp": 2346,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            "drop_ghost_king_helm",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": [
+              "drop_ghost_king_helm",
+              "drop_ghost_king_bow"
+            ]
+          },
+          "demonDefeated": false
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "demon",
+        "mode": "easy",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99715.29999999997,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 400,
+              "y": 420,
+              "hp": 249391.78130320003,
+              "state": "encounter_recovery",
+              "stateTimer": 111,
+              "category": "demon",
+              "isBoss": true,
+              "slime": null,
+              "wolf": null,
+              "encounter": {
+                "key": "tempest",
+                "phase": "recovery",
+                "left": 110,
+                "duration": 120,
+                "angle": 0.3217505543966422,
+                "x": 505,
+                "y": 455,
+                "fromX": 400,
+                "fromY": 420,
+                "elapsed": 1
+              }
+            }
+          ],
+          "shots": [
+            {
+              "x": 488.7665956302012,
+              "y": 362.0647646054287,
+              "vx": 2.344777997778893,
+              "vy": -1.530364708535846,
+              "life": 170
+            },
+            {
+              "x": 501.9230005577656,
+              "y": 390.88467830674506,
+              "vx": 2.6923056751107897,
+              "vy": -0.7690839692557863,
+              "life": 170
+            },
+            {
+              "x": 505.9749273978051,
+              "y": 422.3053769821782,
+              "vx": 2.7993377048476793,
+              "vy": 0.0608967504726295,
+              "life": 170
+            },
+            {
+              "x": 486.16316810755086,
+              "y": 481.7406548529403,
+              "vx": 2.2760082141617213,
+              "vy": 1.6308852225305042,
+              "life": 170
+            },
+            {
+              "x": 464.0692074302594,
+              "y": 504.44605768926306,
+              "vx": 1.6923941585351598,
+              "vy": 2.2306505804711025,
+              "life": 170
+            },
+            {
+              "x": 436.252135267418,
+              "y": 519.6081456937777,
+              "vx": 0.9576035731016064,
+              "vy": 2.631158565496013,
+              "life": 170
+            }
+          ],
+          "damageLog": [
+            {
+              "source": "대마왕",
+              "attack": "왕검 연격",
+              "amount": 44.85,
+              "tick": 154,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "왕검 연격",
+              "amount": 50.050000000000004,
+              "tick": 201,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "지옥의 낙인",
+              "amount": 44.85,
+              "tick": 512,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "대지 균열",
+              "amount": 50.050000000000004,
+              "tick": 815,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "대지 균열",
+              "amount": 50.050000000000004,
+              "tick": 833,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "날개 폭풍",
+              "amount": 44.85,
+              "tick": 1193,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 3,
+            "readyAt": 1231
+          },
+          "randomCalls": 621,
+          "seed": 828553688
+        },
+        "rewards": {
+          "gold": 1600,
+          "exp": 2946,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            "drop_demon_lord_staff",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": [
+              "drop_demon_lord_staff"
+            ]
+          },
+          "demonDefeated": true
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "demon",
+        "mode": "normal",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99562,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 400,
+              "y": 420,
+              "hp": 249391.78130320003,
+              "state": "idle",
+              "stateTimer": 1,
+              "category": "demon",
+              "isBoss": true,
+              "slime": null,
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [
+            {
+              "x": 754.7321373786339,
+              "y": 674.1851111115426,
+              "vx": 2.2760082141617213,
+              "vy": 1.6308852225305042,
+              "life": 52
+            },
+            {
+              "x": 663.7717181374106,
+              "y": 767.662826184852,
+              "vx": 1.6923941585351598,
+              "vy": 2.2306505804711025,
+              "life": 52
+            }
+          ],
+          "damageLog": [
+            {
+              "source": "대마왕",
+              "attack": "왕검 연격",
+              "amount": 69,
+              "tick": 130,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "왕검 연격",
+              "amount": 77,
+              "tick": 166,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "지옥의 낙인",
+              "amount": 69,
+              "tick": 451,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "대지 균열",
+              "amount": 77,
+              "tick": 726,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "대지 균열",
+              "amount": 77,
+              "tick": 744,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "날개 폭풍",
+              "amount": 69,
+              "tick": 1075,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 3,
+            "readyAt": 1231
+          },
+          "randomCalls": 621,
+          "seed": 828553688
+        },
+        "rewards": {
+          "gold": 1600,
+          "exp": 2946,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            "drop_demon_lord_staff",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": [
+              "drop_demon_lord_staff"
+            ]
+          },
+          "demonDefeated": true
+        }
+      }
+    },
+    {
+      "input": {
+        "category": "demon",
+        "mode": "hard",
+        "ticks": 1200
+      },
+      "expected": {
+        "fight": {
+          "hp": 99430.59999999999,
+          "mp": 500,
+          "frameCount": 1200,
+          "player": {
+            "x": 505,
+            "y": 455
+          },
+          "enemies": [
+            {
+              "x": 400,
+              "y": 420,
+              "hp": 249391.78130320003,
+              "state": "idle",
+              "stateTimer": 1,
+              "category": "demon",
+              "isBoss": true,
+              "slime": null,
+              "wolf": null,
+              "encounter": null
+            }
+          ],
+          "shots": [
+            {
+              "x": 754.7321373786339,
+              "y": 674.1851111115426,
+              "vx": 2.2760082141617213,
+              "vy": 1.6308852225305042,
+              "life": 52
+            },
+            {
+              "x": 663.7717181374106,
+              "y": 767.662826184852,
+              "vx": 1.6923941585351598,
+              "vy": 2.2306505804711025,
+              "life": 52
+            }
+          ],
+          "damageLog": [
+            {
+              "source": "대마왕",
+              "attack": "왕검 연격",
+              "amount": 89.7,
+              "tick": 130,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "왕검 연격",
+              "amount": 100.10000000000001,
+              "tick": 166,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "지옥의 낙인",
+              "amount": 89.7,
+              "tick": 451,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "대지 균열",
+              "amount": 100.10000000000001,
+              "tick": 726,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "대지 균열",
+              "amount": 100.10000000000001,
+              "tick": 744,
+              "fatal": false
+            },
+            {
+              "source": "대마왕",
+              "attack": "날개 폭풍",
+              "amount": 89.7,
+              "tick": 1075,
+              "fatal": false
+            }
+          ],
+          "trait": {
+            "count": 0,
+            "procs": 3,
+            "readyAt": 1231
+          },
+          "randomCalls": 621,
+          "seed": 828553688
+        },
+        "rewards": {
+          "gold": 1600,
+          "exp": 2946,
+          "progress": {
+            "slime": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "wolf": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "zombie": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "ghost": {
+              "progress": [
+                0,
+                0,
+                0
+              ],
+              "bossDefeated": false,
+              "eliteTimer": 0
+            },
+            "demon": {
+              "progress": [
+                25,
+                3,
+                5400
+              ],
+              "bossDefeated": true,
+              "eliteTimer": 0
+            }
+          },
+          "inventory": [
+            "drop_demon_lord_staff",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "archive": {
+            "first": {
+              "slime": "locked",
+              "wolf": "locked",
+              "zombie": "locked",
+              "ghost": "locked",
+              "demon": "locked"
+            },
+            "inbox": [],
+            "discovered": [
+              "drop_demon_lord_staff"
+            ]
+          },
+          "demonDefeated": true
+        }
+      }
+    }
+  ]
+}
