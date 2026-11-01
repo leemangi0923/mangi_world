@@ -42,9 +42,9 @@ for(const mode of ['easy','normal','hard'])test(`${mode}: four simulated minutes
     if(TOWER_CATS.includes(kind))enterDungeonStage(kind,2,true,false);else ({sword:startMinjeDuel,bow:startElfQueenDuel,staff:startMageDuel})[kind](true);
     portalCooldown=999999;let peakProjectiles=0,peakZones=0,peakEnemies=0,finite=true;const began=frameCount;
     for(let frame=0;frame<1800;frame++){
-     stepGame(false);peakProjectiles=Math.max(peakProjectiles,projectiles.length);peakEnemies=Math.max(peakEnemies,enemies.length);
-     peakZones=Math.max(peakZones,[slimeZones,ghostZones,demonZones,minjeZones,elfZones,archmageZones].reduce((n,a)=>n+a.length,0));
-     if(![hp,mp,player.x,player.y,...enemies.flatMap(en=>[en.x,en.y,en.hp]),...projectiles.flatMap(p=>[p.x,p.y,p.life])].every(Number.isFinite)){finite=false;break;}
+     stepGame(false);peakProjectiles=Math.max(peakProjectiles,projectiles.length+encounterShots.length);peakEnemies=Math.max(peakEnemies,enemies.length);
+     peakZones=Math.max(peakZones,[slimeZones,ghostZones,demonZones,encounterHazards,minjeZones,elfZones,archmageZones].reduce((n,a)=>n+a.length,0));
+     if(![hp,mp,player.x,player.y,...enemies.flatMap(en=>[en.x,en.y,en.hp]),...projectiles.flatMap(p=>[p.x,p.y,p.life]),...encounterShots.flatMap(p=>[p.x,p.y,p.life])].every(Number.isFinite)){finite=false;break;}
     }
     reports.push({kind,steps:frameCount-began,peakProjectiles,peakZones,peakEnemies,finite});
    }

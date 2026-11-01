@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v5.2.0</title>
+  <title>만기 월드 (Mangi World) - v5.3.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -299,6 +299,10 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
+        <h4>📌 v5.3.0 패치 노트</h4>
+        • 👻 사령왕의 왕관·가면·겹망토·떠 있는 손·본체 핵과 유령 3종 개편<br>
+        • 🔮 그림자 이동·환영·영혼 산개·순차 손·안전 회랑, 체력 3단계 추가<br>
+        • 🛠️ 본체는 왕관·핵·마름모 표식, 무해한 환영은 열린 점선 표식으로 구분<br><br>
         <h4>📌 v5.2.0 패치 노트</h4>
         • 💀 <b>리치 로드</b>의 해골 왕관·로브·영혼 핵과 낫·흡수·해골 호위·중단 가능한 의식 개편<br>
         • 🧟 좀비·스켈레톤·기사의 구조와 준비/공격/후딜, 방패 자세 개편<br>
@@ -638,7 +642,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v5.2.0</div>
+      <div id="version-badge">v5.3.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -702,7 +706,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v5.2.0 : 망자의 묘지 · 리치 로드 · 부활 의식</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v5.3.0 : 저주받은 폐허 · 사령왕 · 영혼 회랑</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -726,7 +730,7 @@
       <div id="battle-summary" class="hidden" aria-label="현재 전투 상황" style="position:absolute;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:360px;padding:5px 8px;border:1px solid #64748b;border-radius:6px;background:rgba(10,15,26,.9);font-size:12px;text-align:center;pointer-events:none;z-index:22;"></div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v5.2.0</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v5.3.0</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
@@ -759,15 +763,15 @@
         </details>
         <details><summary>테스트 프리셋·전용 저장</summary><p>프리셋은 현재 테스트 상태를 교체합니다. 일반 저장은 변경하지 않습니다.</p><div class="admin-actions"><button class="btn" onclick="adminPreset('early')">초반 Lv.5</button><button class="btn" onclick="adminPreset('mid')">중반 Lv.40·늑대 보스</button><button class="btn" onclick="adminPreset('awakened')">각성 Lv.80</button><button class="btn" onclick="adminPreset('tower')">탑 Lv.100·30층</button><button class="btn" onclick="adminSaveTest()">관리자 전용 저장</button><button class="btn" onclick="adminLoadTest()">관리자 전용 불러오기</button></div></details>
         <details><summary>슬라임 킹 패턴·판정 실험실</summary><label>패턴<select id="slime-pattern"><option value="leap">왕의 낙하</option><option value="sweep">젤리 휩쓸기</option><option value="acid">산성 비</option><option value="split">분열·핵 노출</option><option value="dash">돌진 (일반 학습용)</option></select></label><label>체력 단계<select id="slime-phase"><option value="1">1단계</option><option value="2">2단계</option></select></label><label><input type="checkbox" onchange="if(adminOnly())slimeDebugHitboxes=this.checked;">활성 판정 표시</label><div class="admin-actions"><button class="btn" onclick="adminSlimePattern()">패턴 새로 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button></div><p id="slime-inspection"></p></details>
-        <details><summary>보스 패턴·판정 실험실 — 리치 로드</summary>
-          <label>던전<select id="encounter-family" onchange="updateEncounterPatternOptions()"><option value="zombie">망자의 묘지 · 리치 로드</option></select></label>
+        <details><summary>보스 패턴·판정 실험실 — 리치·사령왕</summary>
+          <label>던전<select id="encounter-family" onchange="updateEncounterPatternOptions()"><option value="zombie">망자의 묘지 · 리치 로드</option><option value="ghost">저주받은 폐허 · 사령왕</option></select></label>
           <div class="admin-grid"><label>패턴<select id="encounter-pattern"><option value="scythe">영혼 낫</option><option value="drain">생명력 흡수</option><option value="summon">망자의 호위</option><option value="ritual">부활 의식</option></select></label><label>체력 단계<select id="encounter-phase"><option value="1">1단계</option><option value="2">2단계</option><option value="3">3단계</option></select></label></div>
           <label><input type="checkbox" id="encounter-hitboxes" onchange="if(adminOnly())encounterDebugHitboxes=this.checked"> 공격 판정 표시</label>
           <button class="btn" onclick="adminEncounterPattern()">선택 패턴 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button>
           <p id="encounter-inspection" aria-live="polite">보스 전투를 준비하세요.</p>
         </details>
         <details><summary>페릴 패턴·판정 실험실</summary><label>패턴<select id="wolf-pattern"><option value="rush">사냥 돌진</option><option value="claw">쌍발톱</option><option value="leap">달빛 도약</option><option value="howl">왕의 포효</option><option value="bite">물어뜯기 (일반 학습용)</option></select></label><label>체력 단계<select id="wolf-phase"><option value="1">1단계</option><option value="2">2단계</option></select></label><label><input type="checkbox" onchange="if(adminOnly())wolfDebugHitboxes=this.checked;">활성 판정 표시</label><div class="admin-actions"><button class="btn" onclick="adminWolfPattern()">페릴 패턴 새로 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button></div><p id="wolf-inspection"></p></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v5.2.0: 페릴의 사족 모션·네 패턴·2단계 연계와 무리 사냥, 페릴 패턴 실험실. 다음은 망자의 묘지·리치 로드입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v5.3.0: 페릴의 사족 모션·네 패턴·2단계 연계와 무리 사냥, 페릴 패턴 실험실. 다음은 망자의 묘지·리치 로드입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
       <div id="pause-menu" class="hidden" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,15,26,0.92); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:80; gap:10px;">
         <h2 style="color:#fde047; margin-bottom:10px; font-family:'Cinzel';">일시정지</h2>
@@ -1287,7 +1291,7 @@
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v5.2.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
+      document.getElementById('admin-metrics').textContent=`v5.3.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
       const quests=document.getElementById('admin-quest');if(!quests.options.length)for(const quest of questDefs){const option=document.createElement('option');option.value=quest.id;option.textContent=quest.title||quest.name||quest.id;quests.appendChild(option);}
       const preview=document.getElementById('admin-preview'),target=preview.getContext('2d');target.clearRect(0,0,preview.width,preview.height);
@@ -3433,8 +3437,7 @@
     function drawBossExtras(en, t) {
       if (en.category === 'slime') drawSlimeGround();
       else if (en.category === 'ghost') {
-        drawZoneArray(ghostZones, '#7c3aed', 'rgba(124,58,237,0.18)');
-        ghostDecoys.forEach(d => { ctx.save(); ctx.globalAlpha = 0.4; drawDungeonMob(d, t); ctx.restore(); });
+        ghostDecoys.forEach(d=>drawGhostMob(d,t));
       } else if (en.category === 'demon') {
         drawZoneArray(demonZones, '#dc2626', 'rgba(220,38,38,0.2)');
       }
@@ -3658,6 +3661,14 @@
     // ===== 리치 로드: 생명 흡수 / 해골 소환 =====
     // Fixed-tick encounters: immutable warnings, bounded owned objects, render-only drawing.
     const ENCOUNTER_ATTACKS = {
+      ghost: {
+        touch:{name:'차가운 손길',wind:50,active:10,recover:60,shape:'cone',radius:90,arc:1.05},
+        blink:{name:'그림자 이동',wind:64,active:1,recover:65,shape:'blink'},
+        mirror:{name:'환영 거울',wind:80,active:1,recover:95,shape:'summon'},
+        fan:{name:'영혼 산개',wind:76,active:1,recover:90,shape:'fan'},
+        hands:{name:'어둠의 손',wind:70,active:60,recover:100,shape:'sequence',radius:56},
+        corridor:{name:'영혼 회랑',wind:126,active:1,recover:155,shape:'corridor',safeR:100}
+      },
       zombie: {
         grab: {name:'썩은 손 붙잡기',wind:48,active:10,recover:58,shape:'cone',radius:90,arc:1.0},
         slash: {name:'뼈칼 베기',wind:52,active:12,recover:62,shape:'cone',radius:112,arc:1.15},
@@ -3672,7 +3683,7 @@
     let encounterHazards=[], encounterShots=[], encounterEffects=[], encounterDebugHitboxes=false;
     function clearEncounterRuntime(){encounterHazards=[];encounterShots=[];encounterEffects=[];ghostDecoys=[];ghostZones=[];demonZones=[];}
     const encounterCurrent=en=>!!en && en.hp>0 && enemies.includes(en) && COMBAT_STATES.includes(gameState) && combatReportMode!=='death';
-    const encounterStage=en=>!en.isBoss?1:en.hp/en.maxHp<=(en.category==='demon'?.35:.35)?3:en.hp/en.maxHp<=(en.category==='demon'?.7:.65)?2:1;
+    const encounterStage=en=>!en.isBoss?1:en.hp/en.maxHp<=.35?3:en.hp/en.maxHp<=(en.category==='demon'?.7:.65)?2:1;
     function encounterEffect(en,kind,x=en.x,y=en.y,r=en.r){
       encounterEffects.push({x,y,r,color:en.colors.hi,kind,left:kind==='death'?48:28,max:kind==='death'?48:28});
       if(encounterEffects.length>48)encounterEffects.shift();
@@ -3692,6 +3703,14 @@
         spawnPoints:[{x:slimeClamp(en.x-110,85,715),y:slimeClamp(en.y+95,160,765)},{x:slimeClamp(en.x+110,85,715),y:slimeClamp(en.y+95,160,765)}]};
       // Melee slams cannot remotely strike the whole arena.
       if(def.shape==='circle'){const reach=en.isBoss?240:125,d=Math.hypot(a.x-en.x,a.y-en.y);if(d>reach){a.x=en.x+Math.cos(angle)*reach;a.y=en.y+Math.sin(angle)*reach;}}
+      if(en.category==='ghost'){
+        a.points=Array.from({length:en.isBoss?3:1},(_,i)=>({x:slimeClamp(a.x+(i-1)*115,80,720),y:slimeClamp(a.y+(i%2)*70,155,775)}));
+        if(key==='blink'){
+          const reach=en.isBoss?250:160,tx=slimeClamp(player.x-Math.cos(angle)*170,90,710),ty=slimeClamp(player.y-Math.sin(angle)*170,165,755),d=Math.hypot(tx-en.x,ty-en.y);
+          a.x=en.x+(tx-en.x)*Math.min(1,reach/Math.max(1,d));a.y=en.y+(ty-en.y)*Math.min(1,reach/Math.max(1,d));
+        }
+        if(key==='corridor'){a.angle=(en.encounterSequence||0)%2?0:Math.PI/2;a.safeX=slimeClamp(player.x+(player.x<400?60:-60),100,700);a.safeY=slimeClamp(player.y+(player.y<450?60:-60),180,740);a.width=100;}
+      }
       en.encounterAttack=a;en.encounterFacing=angle;en.encounterStage=encounterStage(en);
       enterAttackPhase(en,a,'windup',wind,'encounter');en.damageReduction=0;
       if(key==='ritual'){
@@ -3706,6 +3725,7 @@
       const along=dx*Math.cos(angle)+dy*Math.sin(angle),side=-dx*Math.sin(angle)+dy*Math.cos(angle);
       if(shape.shape==='cone'){const delta=Math.atan2(Math.sin(Math.atan2(dy,dx)-angle),Math.cos(Math.atan2(dy,dx)-angle));return Math.hypot(dx,dy)<=shape.radius+16&&Math.abs(delta)<=shape.arc;}
       if(shape.shape==='beam')return along>=0&&along<=shape.length&&Math.abs(side)<=shape.width+16;
+      if(shape.shape==='corridor')return Math.abs(-(x-shape.safeX)*Math.sin(angle)+(y-shape.safeY)*Math.cos(angle))>shape.width-16;
       if(shape.shape==='safe')return Math.hypot(x-shape.safeX,y-shape.safeY)>shape.safeR-16;
       if(shape.shape==='line'){const d=slimeClamp(along,0,shape.length);return Math.hypot(along-d,side)<=shape.width+16;}
       return Math.hypot(x-shape.x,y-shape.y)<=shape.radius+16;
@@ -3725,6 +3745,7 @@
     function encounterShape(en,a){return {...a,shape:ENCOUNTER_ATTACKS[en.category][a.key].shape};}
     function encounterChoices(en){
       if(en.category==='zombie')return en.isBoss?(en.encounterStage===3?['scythe','drain','ritual','summon']:en.encounterStage===2?['scythe','summon','drain']:['scythe','drain']):en.stageIndex===0?['grab']:en.stageIndex===1?['slash']:['crush','guard','slash'];
+      if(en.category==='ghost')return en.isBoss?(en.encounterStage===3?['blink','fan','mirror','hands','corridor']:en.encounterStage===2?['blink','fan','mirror','hands']:['blink','fan','hands']):en.stageIndex===0?['touch']:en.stageIndex===1?['blink','fan']:['hands','fan'];
       return [];
     }
     function tickEncounterActor(en){
@@ -3760,6 +3781,7 @@
     }
     function tickEncounterAttack(en,a){
       const def=ENCOUNTER_ATTACKS[en.category][a.key],base=en.isBoss?24+en.level*.45:8+en.level*.45;
+      if(en.category==='ghost'){tickGhostAttack(en,a,base);return;}
       if(en.category!=='zombie')return;
       if(a.key==='drain'){
         if(a.elapsed%18===0){const dealt=encounterStrike(en,a,'drain'+a.elapsed,encounterShape(en,a),10+en.level*.18,'생명력 흡수 (주기 피해)');if(encounterCurrent(en))en.hp=Math.min(en.maxHp,en.hp+dealt*.5);}
@@ -3771,6 +3793,12 @@
       else if(a.elapsed===0){
         encounterEffect(en,'strike',def.shape==='circle'?a.x:en.x,def.shape==='circle'?a.y:en.y,a.radius||en.r);
         encounterStrike(en,a,0,encounterShape(en,a),base);
+        if(def.shape==='fan')for(const offset of (en.isBoss?[-.56,-.28,0,.28,.56]:[-.4,0,.4])){ctx.beginPath();ctx.moveTo(a.fromX,a.fromY);ctx.lineTo(a.fromX+Math.cos(a.angle+offset)*600,a.fromY+Math.sin(a.angle+offset)*600);ctx.stroke();}
+        if(def.shape==='blink'){ctx.setLineDash([6,5]);ctx.beginPath();ctx.arc(a.x,a.y,en.r+18,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.lineTo(a.x,a.y);ctx.stroke();}
+        if(def.shape==='sequence')for(let i=0;i<a.points.length;i++){
+          if(a.phase==='active'&&a.elapsed>i*24)continue;const point=a.points[i];traceEncounterShape({shape:'circle',...point,radius:a.radius});ctx.fill();ctx.stroke();ctx.fillStyle='#fef3c7';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText(String(i+1),point.x,point.y);
+        }
+        if(def.shape==='corridor'){ctx.strokeStyle='#6ee7b7';const vertical=Math.abs(Math.sin(a.angle))>.5;ctx.beginPath();if(vertical){ctx.moveTo(a.safeX,130);ctx.lineTo(a.safeX,815);}else{ctx.moveTo(50,a.safeY);ctx.lineTo(750,a.safeY);}ctx.stroke();ctx.fillStyle='#a7f3d0';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('안전 통로 · 초록 선으로',a.safeX,a.safeY);}
         if(a.key==='scythe'&&en.isBoss)emitEncounterFan(en,a,[0],3.2,base,12);
       }
     }
@@ -3787,6 +3815,7 @@
     function tickEncounterRuntime(){
       if((adminMode.active&&adminMode.freezeAI)||!COMBAT_STATES.includes(gameState)||combatReportMode==='death')return;
       encounterEffects=encounterEffects.filter(f=>--f.left>0);
+      ghostDecoys=ghostDecoys.filter(d=>--d.life>0&&encounterCurrent(d.encounterOwner));
       encounterHazards=encounterHazards.filter(z=>encounterCurrent(z.owner));
       for(const shot of encounterShots.slice()){
         if(!encounterCurrent(shot.owner)){shot.life=0;continue;}
@@ -3799,7 +3828,9 @@
     }
     function traceEncounterShape(s){
       ctx.beginPath();
-      if(s.shape==='cone'){ctx.moveTo(s.fromX,s.fromY);ctx.arc(s.fromX,s.fromY,s.radius+16,s.angle-s.arc,s.angle+s.arc);ctx.closePath();}
+      if(s.shape==='corridor'){
+        ctx.rect(0,100,800,800);const w=s.width-16;if(Math.abs(Math.sin(s.angle))>.5)ctx.rect(s.safeX-w,100,w*2,800);else ctx.rect(0,s.safeY-w,800,w*2);
+      }else if(s.shape==='cone'){ctx.moveTo(s.fromX,s.fromY);ctx.arc(s.fromX,s.fromY,s.radius+16,s.angle-s.arc,s.angle+s.arc);ctx.closePath();}
       else if(s.shape==='beam'||s.shape==='line'){
         ctx.save();ctx.translate(s.fromX,s.fromY);ctx.rotate(s.angle);const w=s.width+16;
         if(s.shape==='beam')ctx.rect(0,-w,s.length,w*2);else ctx.roundRect(-w,-w,s.length+2*w,2*w,w);ctx.restore();
@@ -3812,7 +3843,13 @@
       ctx.save();ctx.strokeStyle=a.phase==='windup'?'#fde68a':'#fb7185';ctx.fillStyle='rgba(251,191,36,.12)';ctx.lineWidth=2;
       if(a.phase==='windup'||a.phase==='active'){
         const shape=encounterShape(en,a);
-        if(!['summon','guard'].includes(def.shape)){traceEncounterShape(shape);ctx.fill('evenodd');ctx.stroke();}
+        if(!['summon','guard','blink','fan','sequence'].includes(def.shape)){traceEncounterShape(shape);ctx.fill('evenodd');ctx.stroke();}
+        if(def.shape==='fan')for(const offset of (en.isBoss?[-.56,-.28,0,.28,.56]:[-.4,0,.4])){ctx.beginPath();ctx.moveTo(a.fromX,a.fromY);ctx.lineTo(a.fromX+Math.cos(a.angle+offset)*600,a.fromY+Math.sin(a.angle+offset)*600);ctx.stroke();}
+        if(def.shape==='blink'){ctx.setLineDash([6,5]);ctx.beginPath();ctx.arc(a.x,a.y,en.r+18,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.lineTo(a.x,a.y);ctx.stroke();}
+        if(def.shape==='sequence')for(let i=0;i<a.points.length;i++){
+          if(a.phase==='active'&&a.elapsed>i*24)continue;const point=a.points[i];traceEncounterShape({shape:'circle',...point,radius:a.radius});ctx.fill();ctx.stroke();ctx.fillStyle='#fef3c7';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText(String(i+1),point.x,point.y);
+        }
+        if(def.shape==='corridor'){ctx.strokeStyle='#6ee7b7';const vertical=Math.abs(Math.sin(a.angle))>.5;ctx.beginPath();if(vertical){ctx.moveTo(a.safeX,130);ctx.lineTo(a.safeX,815);}else{ctx.moveTo(50,a.safeY);ctx.lineTo(750,a.safeY);}ctx.stroke();ctx.fillStyle='#a7f3d0';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('안전 통로 · 초록 선으로',a.safeX,a.safeY);}
         if(a.key==='scythe'&&en.isBoss){traceEncounterShape({...a,shape:'beam',length:620,width:12});ctx.stroke();}
         if(def.shape==='summon')for(const p of a.spawnPoints){ctx.beginPath();ctx.arc(p.x,p.y,30,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#fef3c7';ctx.fillText('소환',p.x-12,p.y+4);}
         if(def.shape==='safe'){ctx.strokeStyle='#6ee7b7';ctx.beginPath();ctx.arc(a.safeX,a.safeY,a.safeR-16,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#a7f3d0';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('안전 · 또는 봉인석 파괴',a.safeX,a.safeY+a.safeR+16);}
@@ -3820,13 +3857,14 @@
       }
       ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillStyle=a.phase==='recovery'?'#a7f3d0':'#fef3c7';
       ctx.fillText(`${a.interrupted?'의식 중단':def.name} · ${{windup:'준비',active:'공격',recovery:'빈틈'}[a.phase]} ${(a.left/60).toFixed(1)}초`,en.x,en.y+en.r+32);
-      if(encounterDebugHitboxes&&adminMode.active&&a.phase==='active'){ctx.strokeStyle='#f472b6';traceEncounterShape(encounterShape(en,a));ctx.stroke();}
+      if(encounterDebugHitboxes&&adminMode.active&&a.phase==='active'&&!['summon','guard','blink','fan','sequence'].includes(def.shape)){ctx.strokeStyle='#f472b6';traceEncounterShape(encounterShape(en,a));ctx.stroke();}
       ctx.restore();
     }
     function drawEncounterRuntime(){
       ctx.save();for(const shot of encounterShots){ctx.fillStyle=shot.color;ctx.strokeStyle='#f5f3ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(shot.x,shot.y,shot.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(shot.x,shot.y);ctx.lineTo(shot.x-shot.vx*5,shot.y-shot.vy*5);ctx.stroke();}ctx.restore();
       ctx.save();for(const f of encounterEffects){const p=1-f.left/f.max;ctx.globalAlpha=(1-p)*accessibility.effects;ctx.strokeStyle=f.color;ctx.fillStyle=f.color;ctx.lineWidth=3;
         if(f.kind==='death'){for(let i=0;i<9;i++){const angle=i*Math.PI*2/9;ctx.save();ctx.translate(f.x+Math.cos(angle)*f.r*p,f.y+Math.sin(angle)*f.r*p+40*p*p);ctx.rotate(angle+p*4);ctx.fillRect(-4,-3,8*(1-p),6);ctx.restore();}}
+        else if(f.kind==='hand'){ctx.save();ctx.translate(f.x,f.y);ctx.fillStyle='#7872b0';ctx.fillRect(-f.r*.3,-f.r*(1-p),f.r*.6,f.r*(1-p));ctx.strokeStyle='#e9d5ff';ctx.lineWidth=5;for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo((i-2)*f.r*.12,-f.r*(1-p));ctx.lineTo((i-2)*f.r*.2,-f.r*(1.5-p));ctx.stroke();}ctx.restore();}
         else{ctx.beginPath();ctx.ellipse(f.x,f.y,f.r*(.4+p),Math.max(2,f.r*.45*(.4+p)),0,0,Math.PI*2);ctx.stroke();}
       }ctx.restore();
     }
@@ -3835,82 +3873,29 @@
       if(!ENCOUNTER_ATTACKS[cat]?.[key])return;prepareAdminArena();enterDungeonStage(cat,2,true,false);const en=enemies[0],stage=Number(document.getElementById('encounter-phase').value);
       en.hp=en.maxHp*({1:1,2:.55,3:.25}[stage]||1);beginEncounterAttack(en,key);openAdminPanel();adminMessage('패턴 준비: '+en.name+' · '+ENCOUNTER_ATTACKS[cat][key].name);
     };
-    window.updateEncounterPatternOptions=function(){const select=document.getElementById('encounter-pattern');select.replaceChildren();for(const [key,def] of Object.entries(ENCOUNTER_ATTACKS[document.getElementById('encounter-family').value]||{})){if(['grab','slash','crush','guard'].includes(key))continue;const opt=document.createElement('option');opt.value=key;opt.textContent=def.name;select.appendChild(opt);}};
+    window.updateEncounterPatternOptions=function(){const select=document.getElementById('encounter-pattern');select.replaceChildren();for(const [key,def] of Object.entries(ENCOUNTER_ATTACKS[document.getElementById('encounter-family').value]||{})){if(['grab','slash','crush','guard','touch'].includes(key))continue;const opt=document.createElement('option');opt.value=key;opt.textContent=def.name;select.appendChild(opt);}};
     function updateZombieBossAI(en){tickEncounterActor(en);}
 
     // ===== 사령왕: 환영 분신 / 그림자 손아귀 =====
-    function updateGhostBossAI(en) {
-      armDifficultyWarning(en);
-      if(adminMode.active && adminMode.freezeAI)return;
-      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
-      if (en.suspended > 0) { en.suspended--; return; }
-      if (en.frozenTimer > 0) { en.frozenTimer--; return; }
-      const distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
-
-      if (en.state === 'idle') {
-        if (distToPlayer > 130) {
-          const ang = Math.atan2(player.y - en.y, player.x - en.x);
-          en.x += Math.cos(ang) * en.speed * 0.55; en.y += Math.sin(ang) * en.speed * 0.55;
-        }
-        en.stateTimer--;
-        if (en.stateTimer <= 0) { en.state = 'telegraph'; en.stateTimer = 42; }
-      } else if (en.state === 'telegraph') {
-        en.stateTimer--;
-        if (en.stateTimer <= 0) {
-          en.attackIndex = (en.attackIndex + 1) % 2;
-          if (en.attackIndex === 0) { en.state = 'phantom_clones'; en.stateTimer = 25; }
-          else { en.state = 'shadow_grasp'; en.stateTimer = 20; }
-        }
-      } else if (en.state === 'phantom_clones') {
-        en.stateTimer--;
-        if (en.stateTimer <= 0) {
-          for (let i = 0; i < 2; i++) {
-            const clone = createDungeonMob('ghost', 2, en.x + (Math.random() - 0.5) * 100, en.y + (Math.random() - 0.5) * 100);
-            clone.life = 200; clone.vx = (Math.random() - 0.5) * 1.5; clone.vy = (Math.random() - 0.5) * 1.5;
-            ghostDecoys.push(clone);
-          }
-          showTopNotification('👻 사령왕이(가) 환영을 만들어냈다!', 2000);
-          en.state = 'cooldown'; en.stateTimer = 90;
-        }
-      } else if (en.state === 'shadow_grasp') {
-        en.stateTimer--;
-        if (en.stateTimer <= 0) {
-          for (let i = 0; i < 2; i++) {
-            ghostZones.push({ x: player.x + (Math.random() - 0.5) * 140, y: player.y + (Math.random() - 0.5) * 140, r: 65, timer: 60, totalTimer: 60, dmg: 18 + en.level * 0.45, freeze: 55 });
-          }
-          en.state = 'cooldown'; en.stateTimer = 85;
-        }
-      } else if (en.state === 'cooldown') {
-        en.stateTimer--;
-        if (en.stateTimer <= 0) { en.state = 'idle'; en.stateTimer = 110; }
+    function tickGhostAttack(en,a,base){
+      if(a.elapsed!==0&&a.key!=='hands')return;
+      if(a.key==='blink'){
+        encounterEffect(en,'vanish');en.x=a.x;en.y=a.y;encounterEffect(en,'appear');
+      }else if(a.key==='mirror'){
+        ghostDecoys=ghostDecoys.filter(d=>d.encounterOwner!==en);
+        for(const p of a.spawnPoints)ghostDecoys.push({...en,x:p.x,y:p.y,r:en.r*.85,isBoss:false,ghostIllusion:true,encounterAttack:null,encounterOwner:en,life:420,floatSeed:p.x*.03});
+        encounterEffect(en,'summon');
+      }else if(a.key==='fan'){
+        emitEncounterFan(en,a,en.isBoss?[-.56,-.28,0,.28,.56]:[-.4,0,.4],en.isBoss?2.6:2.2,base,9);encounterEffect(en,'release');
+      }else if(a.key==='hands'){
+        const index=a.elapsed/24;if(Number.isInteger(index)&&a.points[index]){const point=a.points[index];encounterStrike(en,a,index,{shape:'circle',...point,radius:a.radius},base);encounterEffect(en,'hand',point.x,point.y,a.radius);}
+      }else if(a.key==='corridor'){
+        encounterStrike(en,a,0,encounterShape(en,a),base+10);encounterEffect(en,'corridor',a.safeX,a.safeY,150);
+      }else{
+        encounterStrike(en,a,0,encounterShape(en,a),base);encounterEffect(en,'strike');
       }
-
-      if (en.state !== 'telegraph') {
-        if (distToPlayer < en.r + 20 && (en.hitTimer || 0) <= 0 && player.knockbackTimer <= 0) {
-          const dmgTaken = mitigateDamage(8 + en.level * 0.5);
-          if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
-          createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
-          en.hitTimer = 50;
-          const kbAngle = Math.atan2(player.y - en.y, player.x - en.x);
-          player.knockbackVx = Math.cos(kbAngle) * 9; player.knockbackVy = Math.sin(kbAngle) * 9; player.knockbackTimer = 12;
-          if (hp <= 0) { respawnPlayerAtInn(); return; }
-        }
-      }
-      if (en.hitTimer > 0) en.hitTimer--;
-
-      // 분신 이동/수명 관리 (enemies[] 밖의 순수 비주얼 배열 — 처치 보상/피해와 무관)
-      for (let i = ghostDecoys.length - 1; i >= 0; i--) {
-        const d = ghostDecoys[i];
-        d.x += d.vx; d.y += d.vy; d.life--;
-        if (Math.random() < 0.02) { d.vx = (Math.random() - 0.5) * 1.5; d.vy = (Math.random() - 0.5) * 1.5; }
-        d.x = Math.max(40, Math.min(760, d.x)); d.y = Math.max(130, Math.min(850, d.y));
-        if (d.life <= 0) ghostDecoys.splice(i, 1);
-      }
-      tickZoneArray(ghostZones);
-
-      en.x = Math.max(en.r, Math.min(800 - en.r, en.x));
-      en.y = Math.max(en.r, Math.min(900 - en.r, en.y));
     }
+    function updateGhostBossAI(en){tickEncounterActor(en);}
 
     // ===== 대마왕: 9패턴 연속 로테이션 + 9번 직후 10초 경직 딜타임 =====
     // 1~8번 패턴은 끝나자마자 다음 패턴이 바로 이어짐(유휴 프레임 없음), 이 구간은 en.damageReduction=0.95.
@@ -4891,15 +4876,16 @@
         }
         ctx.restore();
       }
+      const labelTop=en.isBoss&&ENCOUNTER_ATTACKS[en.category]?en.r*1.55:en.r;
       // 체력바 (슬라임은 자체 렌더에 포함되므로 제외)
       if (en.category !== 'slime') {
-        ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(en.x - 24, en.y - en.r - 18, 48, 6);
+        ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(en.x - 24, en.y - labelTop - 18, 48, 6);
         ctx.fillStyle = en.hp/en.maxHp > 0.4 ? '#4ade80' : '#ef4444';
-        ctx.fillRect(en.x - 24, en.y - en.r - 18, 48 * (en.hp/en.maxHp), 6);
+        ctx.fillRect(en.x - 24, en.y - labelTop - 18, 48 * (en.hp/en.maxHp), 6);
       }
       if (en.isBoss) {
         ctx.fillStyle = '#fde047'; ctx.font = 'bold 13px Noto Sans KR'; ctx.textAlign = 'center';
-        ctx.fillText(`👑 ${en.name} Lv.${en.level}`, en.x, en.y - en.r - 26);
+        ctx.fillText(`👑 ${en.name} Lv.${en.level}`, en.x, en.y - labelTop - 26);
         ctx.textAlign = 'left';
         if (en.state === 'telegraph') {
           ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 3;
@@ -5041,39 +5027,40 @@
       ctx.restore();
     }
 
-    function drawGhostMob(en, t) {
-      const c = en.colors;
-      const bob = Math.sin(t*2 + en.floatSeed) * 8;
-      const alpha = en.state === 'vanish' ? Math.max(0.08, (en.stateTimer||0)/26) : en.state === 'reappear' ? 1 - (en.stateTimer||0)/16 : 0.72;
-      ctx.save();
-      ctx.globalAlpha = alpha;
-      const grad = ctx.createRadialGradient(en.x, en.y+bob-8, 4, en.x, en.y+bob, en.r);
-      grad.addColorStop(0, c.hi); grad.addColorStop(1, c.base);
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.moveTo(en.x - en.r*0.7, en.y + bob);
-      ctx.quadraticCurveTo(en.x - en.r*0.9, en.y + bob - en.r*1.3, en.x, en.y + bob - en.r*1.4);
-      ctx.quadraticCurveTo(en.x + en.r*0.9, en.y + bob - en.r*1.3, en.x + en.r*0.7, en.y + bob);
-      for (let i=0;i<4;i++) {
-        const wx = en.x + en.r*0.7 - i*(en.r*1.4/3);
-        ctx.quadraticCurveTo(wx - en.r*0.18, en.y + bob + en.r*0.3, wx - en.r*0.35, en.y + bob);
+    function drawGhostMob(en,t){
+      if(!en.ghostIllusion)drawEncounterGuide(en);
+      const r=en.r,boss=en.isBoss,illusion=!!en.ghostIllusion,c=en.colors,a=en.encounterAttack;
+      const p=a?slimeClamp(1-a.left/a.duration,0,1):0,cast=a?.phase==='windup',active=a?.phase==='active';
+      const blink=a?.key==='blink',fade=blink?(cast?1-p*.75:active?.28:Math.min(1,.3+p)):1;
+      ctx.save();ctx.translate(en.x,en.y-8+Math.sin(t*2.5+en.floatSeed)*6);
+      ctx.globalAlpha=(illusion?.4:.92)*fade;
+      const layers=boss?3:en.stageIndex===2?2:1;
+      for(let layer=layers-1;layer>=0;layer--){
+        const spread=1+layer*.17,wave=Math.sin(t*2+layer+en.floatSeed)*r*.09;
+        ctx.fillStyle=layer===0?c.base:layer===1?'#31215c':'#171d40';ctx.strokeStyle=layer===0?'#b9b9ee':'#7265b0';ctx.lineWidth=1.5;
+        ctx.beginPath();ctx.moveTo(-r*.45*spread,-r*.65);ctx.quadraticCurveTo(-r*.9*spread+wave,-r*.1,-r*.75*spread,r*.82);
+        for(let i=0;i<7;i++)ctx.lineTo((-r*.75+i*r*.25)*spread+wave*(i%2),r*(i%2?.46:.9));
+        ctx.quadraticCurveTo(r*.88*spread-wave,-r*.2,r*.43*spread,-r*.65);ctx.closePath();ctx.fill();ctx.stroke();
+        ctx.strokeStyle='rgba(206,206,255,.3)';for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(side*r*.3,-r*.4);ctx.quadraticCurveTo(side*r*.4+wave,r*.1,side*r*.5,r*.56);ctx.stroke();}
       }
-      ctx.closePath(); ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = en.state==='pulse' ? '#ef4444' : en.state==='windup' ? '#a78bfa' : c.dark;
-      ctx.beginPath(); ctx.arc(en.x - en.r*0.25, en.y+bob-en.r*0.5, en.r*0.1, 0, Math.PI*2); ctx.arc(en.x + en.r*0.25, en.y+bob-en.r*0.5, en.r*0.1, 0, Math.PI*2); ctx.fill();
+      // Split hovering hands signal gathering, release and recovery independently of the mantle.
+      for(const side of [-1,1]){
+        const hx=side*r*(cast?.65:active?1.0:.9),hy=cast?-r*.65:active?-r*.05:r*.08;
+        ctx.save();ctx.translate(hx,hy);ctx.rotate(side*(cast?-.3:.25));ctx.fillStyle=illusion?'#9d9bb6':'#ccd5fb';ctx.beginPath();ctx.ellipse(0,0,r*.14,r*.2,0,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='#dde6ff';ctx.lineWidth=Math.max(2,r*.045);for(let i=0;i<4;i++){ctx.beginPath();ctx.moveTo((i-1.5)*r*.065,-r*.1);ctx.lineTo((i-1.5)*r*.09,-r*(cast?.36:.29));ctx.stroke();}ctx.restore();
+      }
+      ctx.fillStyle=illusion?'#55516f':'#161b39';ctx.beginPath();ctx.ellipse(0,-r*.6,r*.37,r*.44,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=illusion?'#bcbcd1':'#e4e6f5';ctx.strokeStyle='#8278ad';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.25,-r*.86);ctx.quadraticCurveTo(0,-r*1.02,r*.25,-r*.86);ctx.lineTo(r*.21,-r*.46);ctx.lineTo(0,-r*.3);ctx.lineTo(-r*.21,-r*.46);ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.fillStyle='#272044';for(const side of [-1,1]){ctx.beginPath();ctx.ellipse(side*r*.12,-r*.67,r*.075,r*.11,side*.3,0,Math.PI*2);ctx.fill();}ctx.beginPath();ctx.ellipse(0,-r*.44,r*.06,r*.075,0,0,Math.PI*2);ctx.fill();
+      if(!illusion){ctx.fillStyle=boss&&en.encounterStage===3?'#fde68a':'#ddd6fe';ctx.beginPath();ctx.arc(0,-r*.01,r*(boss?.14:.08),0,Math.PI*2);ctx.fill();ctx.strokeStyle='#e9d5ff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,-r*.24);ctx.lineTo(r*.2,0);ctx.lineTo(0,r*.25);ctx.lineTo(-r*.2,0);ctx.closePath();ctx.stroke();}
+      if(boss&&!illusion){
+        ctx.fillStyle='#b7a276';ctx.strokeStyle='#f4e0a1';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.35,-r*.9);ctx.lineTo(-r*.42,-r*1.22);ctx.lineTo(-r*.14,-r*1.06);ctx.lineTo(0,-r*1.4);ctx.lineTo(r*.14,-r*1.06);ctx.lineTo(r*.42,-r*1.22);ctx.lineTo(r*.35,-r*.9);ctx.closePath();ctx.fill();ctx.stroke();
+        if(en.encounterStage>=2){ctx.strokeStyle='#eddbff';ctx.beginPath();ctx.moveTo(r*.12,-r*.85);ctx.lineTo(0,-r*.67);ctx.lineTo(r*.15,-r*.56);ctx.stroke();}
+      }
+      ctx.globalAlpha=1;ctx.strokeStyle=illusion?'#aaa6b9':'#e9d5ff';ctx.lineWidth=2;ctx.setLineDash(illusion?[5,5]:[]);ctx.beginPath();
+      if(illusion){ctx.moveTo(-r*.65,r);ctx.lineTo(0,r*.65);ctx.lineTo(r*.65,r);}else{ctx.moveTo(0,r*.7);ctx.lineTo(r*.7,r*.95);ctx.lineTo(0,r*1.2);ctx.lineTo(-r*.7,r*.95);ctx.closePath();}ctx.stroke();ctx.setLineDash([]);
+      if(illusion||boss){ctx.fillStyle=illusion?'#c4c1d3':'#f5e6ad';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillText(illusion?'환영 · 공격 없음':'◆ 본체',0,r*1.5);}
       ctx.restore();
-      if (en.state === 'pulse') {
-        ctx.strokeStyle = 'rgba(168,85,247,0.6)'; ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.arc(en.x, en.y+bob, en.r*1.6, 0, Math.PI*2); ctx.stroke();
-      } else if (en.state === 'vanish') {
-        ctx.fillStyle = 'rgba(168,85,247,0.5)';
-        ctx.beginPath(); ctx.arc(en.x, en.y+bob, en.r*0.6, 0, Math.PI*2); ctx.fill();
-      } else if (en.state === 'windup') {
-        const p = 1 - (en.stateTimer||0)/40;
-        ctx.strokeStyle = `rgba(167,139,250,${0.4 + p*0.5})`; ctx.lineWidth = 2 + p*3;
-        ctx.beginPath(); ctx.arc(en.x, en.y+bob, en.r*0.5 + p*20, 0, Math.PI*2); ctx.stroke();
-      }
     }
 
     function drawDemonMob(en, t) {
