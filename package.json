@@ -1,6 +1,6 @@
 {
   "name": "mangi-world",
-  "version": "3.4.7",
+  "version": "3.4.8",
   "private": true,
   "description": "Standalone HTML canvas RPG with browser regression tests",
   "scripts": {
@@ -11,7 +11,8 @@
     "test:input": "node --test tests/input-regression.test.cjs",
     "test:timing": "node --test tests/timing-regression.test.cjs",
     "test:layout": "node --test tests/layout-regression.test.cjs",
-    "test:objectives": "node --test tests/objective-regression.test.cjs"
+    "test:objectives": "node --test tests/objective-regression.test.cjs",
+    "test:equipment": "node --test tests/equipment-regression.test.cjs"
   },
   "engines": {
     "node": ">=20"

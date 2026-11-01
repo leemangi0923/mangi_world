@@ -76,7 +76,7 @@ test('navigation gives only the current-map exit or unlocked local destination',
   }),{village:'오른쪽 파란 길',entrance:'왕성 문',master:'전설의 용사 민제',exit:850,wrongBoss:850,duel:null});
 }));
 
-test('tracking persists in schema 4 and schema 3 loads in auto mode without changing progress',()=>run(async page=>{
+test('tracking persists in current schema and schema 3 loads in auto mode without changing progress',()=>run(async page=>{
   await startNewAdventure(page);
   assert.deepEqual(await page.evaluate(()=>{
     selectObjective('dungeon:wolf');saveToSlot(1,false);selectObjective(null);doLoadSlot(1);
@@ -85,7 +85,7 @@ test('tracking persists in schema 4 and schema 3 loads in auto mode without chan
     applySaveData(old);const migrated={tracking:trackedObjective,gold};
     const invalid=getSaveData();invalid.trackedObjective='unknown';let rejected=false;try{applySaveData(invalid);}catch{rejected=true;}
     return {restored,version,migrated,rejected,gold};
-  }),{restored:'dungeon:wolf',version:4,migrated:{tracking:null,gold:777},rejected:true,gold:777});
+  }),{restored:'dungeon:wolf',version:5,migrated:{tracking:null,gold:777},rejected:true,gold:777});
 }));
 
 test('objective chooser freezes gameplay, shows locked goals and returns through the right pause layer',()=>run(async page=>{
@@ -173,7 +173,7 @@ test('completed or newly locked tracked goals fall back without pointing to inac
   }),{locked:{tracking:null,id:'quest:q_slime_novice'},done:{tracking:null,id:'skill:sword'}});
 }));
 
-test('schema 4 rejects malformed tracking metadata atomically',()=>run(async page=>{
+test('current schema rejects malformed tracking metadata atomically',()=>run(async page=>{
   await startNewAdventure(page);
   assert.equal(await page.evaluate(()=>{
     selectObjective('dungeon:wolf');const original=getSaveData(),bad=[{},42,'no-such-goal',undefined];
