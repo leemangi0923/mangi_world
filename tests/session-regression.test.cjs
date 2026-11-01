@@ -115,7 +115,7 @@ test('movement, pause/resume, weapon switching and three normal attacks work thr
   });
   async function attackAndExpectDamage() {
     const hits=await page.evaluate(()=>trainingStats.hits);
-    await page.evaluate(()=>{player.lastAttackTime=0;});
+    await page.evaluate(()=>{player.lastAttackTime=null;});
     const rect=await page.locator('#gameCanvas').boundingBox();
     await page.mouse.click(rect.x+rect.width*0.5,rect.y+rect.height/3);
     await page.waitForFunction(value=>trainingStats.hits>value,hits);

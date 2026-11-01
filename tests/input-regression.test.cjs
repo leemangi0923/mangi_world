@@ -98,7 +98,7 @@ for(const overlay of ['npc-modal','guild-ui','blacksmith-ui','potion-ui','alert-
     await page.waitForTimeout(80);await page.keyboard.up('d');
     assert.deepEqual(await page.evaluate(()=>({frame:frameCount,weapon:activeWeaponSlot,homing:bowState.homingActive,
       count:hotbar[0].count,hp,statPoints,attack:player.lastAttackTime,keys})),
-      {frame,weapon:'bow',homing:false,count:5,hp:50,statPoints:2,attack:0,keys:{}});
+      {frame,weapon:'bow',homing:false,count:5,hp:50,statPoints:2,attack:null,keys:{}});
     await page.keyboard.press('Escape');
     assert.equal(await page.evaluate(id=>overlayVisible(id),overlay),false);
     await page.waitForFunction(value=>frameCount>value,frame);
