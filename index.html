@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v3.4.5</title>
+  <title>만기 월드 (Mangi World) - v3.4.6</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -124,14 +124,77 @@
     .btn { background: linear-gradient(135deg, #ca8a04, #eab308); color: #000; border: none; padding: 10px 22px; font-size: 14px; font-weight: 800; border-radius: 20px; cursor: pointer; z-index: 65; }
     .btn:hover { filter: brightness(1.1); }
     .hidden { display: none !important; }
+    /* Canvas 좌표계는 800×900을 유지하고 표시 크기만 비율대로 맞춘다. */
+    html, body { display:block; font-family:'Noto Sans KR',Arial,sans-serif; }
+    #main-wrapper { width:100%; height:100vh; height:100dvh; padding:12px; gap:12px; }
+    #game-stage { position:relative; flex:none; isolation:isolate; width:804px; height:904px; }
+    #game-container { position:absolute; inset:0 auto auto 0; width:800px; height:900px; max-height:none; box-sizing:content-box; transform-origin:top left; }
+    #left-ui-panel, #right-ui-panel { flex:none; height:min(900px,100%); max-height:100%; overflow-y:auto; overscroll-behavior:contain; }
+    #left-ui-panel { width:280px; }
+    #right-ui-panel { width:396px; }
+    #left-ui-panel > *, #right-ui-panel > * { flex-shrink:0; }
+    .inv-grid-main, .inv-grid-hotbar { grid-template-columns:repeat(9,minmax(0,1fr)); }
+    .inv-grid-main .inv-slot, .inv-grid-hotbar .inv-slot { width:100%; min-width:0; aspect-ratio:1; height:auto; }
+    .inv-slot > canvas { max-width:100%; max-height:100%; }
+    #game-stage .modal-box h2 { padding-right:36px; }
+    #previewCanvas { object-fit:contain; }
+    #panel-controls, .panel-close { display:none; }
+    #panel-backdrop { position:fixed; inset:48px 0 0; z-index:350; background:rgba(0,0,0,.7); border:0; }
+    #game-stage > :is(#start-screen,#save-screen,#help-screen,#clear-screen,#pause-menu,#settings-modal,#story-screen) {
+      overflow-y:auto; overscroll-behavior:contain; padding:clamp(12px,3vw,30px); gap:8px;
+    }
+    #game-stage > :is(#start-screen,#save-screen,#help-screen,#clear-screen) { justify-content:flex-start; }
+    #start-screen { padding-top:clamp(24px,12vh,150px)!important; }
+    #game-stage > :is(#start-screen,#save-screen,#help-screen,#clear-screen,#pause-menu,#settings-modal) > * { flex-shrink:0; max-width:100%; }
+    #game-stage .modal-box { max-height:calc(100% - 16px); padding:clamp(12px,3vw,25px); }
+    #game-stage :is(#guild-ui,#blacksmith-ui,#potion-ui,#npc-modal) { padding:8px; overflow:auto; }
+    #game-stage .shop-list { max-height:none!important; }
+    #game-stage .shop-item-card { gap:8px; flex-wrap:wrap; padding:10px; }
+    #game-stage .shop-item-card > * { max-width:100%; min-width:0; }
+    .potion-buy-buttons { display:grid!important; grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .potion-buy-buttons .btn { min-width:0; overflow-wrap:anywhere; }
+    #game-stage.small-game .potion-buy-buttons { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    #game-stage .alert-card { max-width:calc(100% - 16px); max-height:calc(100% - 16px); overflow:auto; padding:16px; }
+    #game-stage .main-title { font-size:clamp(26px,5vw,48px); }
+    #game-stage #story-screen { padding-bottom:16px; }
+    #game-stage .story-dialog-box { width:100%; padding:14px; }
+    #item-tooltip { max-width:min(240px,calc(100vw - 16px))!important; max-height:calc(100dvh - 16px); overflow:auto; z-index:600!important; }
+    #compact-progress .quest-hud { position:static; max-width:none; margin-top:8px; font-size:11px; }
+    #game-stage.small-game #status-hud { top:6px; left:6px; width:128px; padding:6px; gap:3px; }
+    #game-stage.small-game #status-hud > div:first-child { font-size:10px!important; }
+    #game-stage.small-game .bar-wrapper { height:13px; }
+    #game-stage.small-game .bar-label { font-size:9px; line-height:13px; }
+    #game-stage.small-game .skill-hud { bottom:38px; gap:5px; }
+    #game-stage.small-game .skill-slot { width:40px; height:40px; font-size:16px; }
+    #game-stage.small-game #version-badge { right:6px; bottom:6px; font-size:10px; padding:3px 6px; }
+    #game-stage.small-game #top-notification { top:6px; font-size:11px; padding:6px 10px; max-width:94%; }
+    #game-stage.small-game .boss-hud { top:86px; width:85%; }
+    #game-stage.small-game #autosave-indicator { font-size:10px!important; padding:5px!important; }
+    @media (max-width:1279px) {
+      #panel-controls { display:flex; position:fixed; top:0; left:0; width:100%; height:48px; gap:8px; align-items:center; justify-content:center; padding:4px 8px; background:#0f172a; z-index:450; }
+      #panel-controls button { flex:1; max-width:220px; min-width:0; min-height:36px; padding:6px; }
+      #main-wrapper { margin-top:48px; height:calc(100vh - 48px); height:calc(100dvh - 48px); padding:8px; }
+      #left-ui-panel, #right-ui-panel { display:none; position:fixed; top:48px; bottom:0; width:min(396px,calc(100vw - 16px)); height:calc(100vh - 48px); height:calc(100dvh - 48px); max-height:none; margin:0; z-index:400; padding:12px; border-radius:0; }
+      #left-ui-panel { left:0; }
+      #right-ui-panel { right:0; }
+      #left-ui-panel.panel-open, #right-ui-panel.panel-open { display:flex; }
+      .panel-close { display:block; align-self:flex-end; min-height:36px; padding:6px 12px; }
+    }
   </style>
-  <link rel="icon" href="favicon.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
 
+  <nav id="panel-controls" aria-label="게임 보조 패널">
+    <button class="btn" aria-controls="left-ui-panel" aria-expanded="false">캐릭터 정보</button>
+    <button class="btn" aria-controls="right-ui-panel" aria-expanded="false">가방·장비</button>
+  </nav>
+  <button id="panel-backdrop" class="hidden" aria-label="패널 닫기" tabindex="-1"></button>
   <div id="main-wrapper">
     <!-- Left Side Panel -->
-    <div id="left-ui-panel">
+    <div id="left-ui-panel" aria-label="캐릭터 정보">
+      <button class="btn panel-close" data-close-panel aria-label="캐릭터 정보 닫기">닫기</button>
+      <div id="compact-progress"></div>
       <div style="font-size:15px; font-weight:900; color:#fde047; border-bottom:2px solid #eab308; padding-bottom:6px; font-family:'Cinzel';">만기 월드 정보</div>
       
       <div class="stat-panel-box">
@@ -162,6 +225,12 @@
       </div>
 
       <div class="changelog-box">
+        <h4>📌 v3.4.6 패치 노트</h4>
+        • 🖥️ <b>화면 크기에 맞춰 게임 비율을 유지</b>합니다. 창 크기를 바꾼 뒤에도 마우스 조준이 맞도록 정리했습니다<br>
+        • 🎒 좁은 화면에서는 위쪽 버튼으로 <b>캐릭터 정보와 가방·장비</b>를 엽니다. 열려 있는 동안 전투가 멈추며, Escape로 닫을 수 있습니다<br>
+        • 📜 메뉴·상점·저장 화면을 스크롤할 수 있고, <b>작은 화면에서도 글자를 읽을 수 있게</b> 구성했습니다. 의뢰 진행은 정보 패널에서 확인할 수 있습니다<br>
+        • 🛠️ 툴팁 위치·도움말 강조와 던전 설명·파비콘 경로를 수정했습니다<br>
+        <br>
         <h4>📌 v3.4.5 패치 노트</h4>
         • ⏱️ <b>30·60·고주사율 화면에서도 게임 진행 시간을 맞췄습니다.</b> 이동·생존·쿨타임이 화면 속도에 따라 느려지던 문제를 수정했습니다<br>
         • ⚔️ 평타 대기시간도 <b>전투 시간 기준</b>으로 통일했습니다. 메뉴나 창 전환으로 대기시간을 건너뛰지 않습니다<br>
@@ -441,9 +510,10 @@
     </div>
 
     <!-- Center Game Container -->
+    <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v3.4.5</div>
+      <div id="version-badge">v3.4.6</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -506,7 +576,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.5 : 프레임 속도별 시간 통일 · 바닥 그리기 최적화</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.6 : 화면 크기 자동 대응 · 접이식 정보와 가방</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
       </div>
@@ -550,16 +620,17 @@
       <div id="help-screen" class="hidden">
         <h2 style="color:#fde047;">도움말</h2>
         <p style="text-align:left; margin:20px 0; color:#cbd5e1; font-size:13px; line-height:1.6;">
-          • 🔵 **오른쪽 파란색 길**: '왕성 앞 입구 맵'으로 이동합니다.<br>
-          • 🔴 **왼쪽 빨간색 길**: '마왕성 앞 입구 맵'으로 이동합니다.<br>
-          • **왕성 내부 진입**: Lv.30 이상이 필요합니다. (전설의 용사 민제를 만날 수 있습니다)<br>
-          • **마왕성 내부 진입**: Lv.80 이상이 필요합니다.<br>
-          • **대마법사의 탑**: 사령왕 처치 후 진입 가능. (대마법사 에녹을 만날 수 있습니다)<br>
+          • 🔵 <strong>오른쪽 파란색 길</strong>: '왕성 앞 입구 맵'으로 이동합니다.<br>
+          • 🔴 <strong>왼쪽 빨간색 길</strong>: '마왕성 앞 입구 맵'으로 이동합니다.<br>
+          • <strong>왕성 내부 진입</strong>: Lv.30 이상이 필요합니다. (전설의 용사 민제를 만날 수 있습니다)<br>
+          • <strong>마왕성 내부 진입</strong>: Lv.80 이상이 필요합니다.<br>
+          • <strong>대마법사의 탑</strong>: 사령왕 처치 후 진입 가능. (대마법사 에녹을 만날 수 있습니다)<br>
           • 레벨 부족 시 안내 팝업 메시지와 함께 입장이 거부되며 입구 맵에 유지됩니다.<br>
-          • **사냥터 포탈**: 슬라임/늑대/좀비·해골/유령 던전 입구로 이동합니다. 각 던전은 몹을 일정 마리 처치하면 다음 구역 포탈이 열립니다.<br>
-          • **Q/E/F/R 스킬**: 민제(검)·엘프 여왕(활)·대마법사(지팡이)를 이기면 무기별로 배웁니다.<br>
-          • **G 각성 궁극기**: 대마왕을 물리친 뒤 스승에게 각성 시련을 받고, 재료를 모아 과제를 깬 다음 재대결에서 이기면 열립니다.
+          • <strong>사냥터 포탈</strong>: 슬라임/늑대/좀비·해골/유령 던전 입구로 이동합니다. 각 던전은 일반 적 25마리 처치 → 정예 3마리 처치 → 90초 생존 → 보스 순서로 진행합니다.<br>
+          • <strong>Q/E/F/R 스킬</strong>: 민제(검)·엘프 여왕(활)·대마법사(지팡이)를 이기면 무기별로 배웁니다.<br>
+          • <strong>G 각성 궁극기</strong>: 대마왕을 물리친 뒤 스승에게 각성 시련을 받고, 재료를 모아 과제를 깬 다음 재대결에서 이기면 열립니다.
         </p>
+        <p style="font-size:12px; margin-bottom:12px;">작은 화면에서는 위쪽 캐릭터 정보·가방 버튼을 사용하세요. 게임 조작은 키보드와 마우스를 사용합니다.</p>
         <button class="btn" onclick="backToMain()">확인</button>
       </div>
 
@@ -621,8 +692,11 @@
       <canvas id="gameCanvas" width="800" height="900"></canvas>
     </div>
 
+    </div>
+
     <!-- Right Side Panel -->
-    <div id="right-ui-panel">
+    <div id="right-ui-panel" aria-label="가방과 장비">
+      <button class="btn panel-close" data-close-panel aria-label="가방·장비 닫기">닫기</button>
       <div class="inv-title">인벤토리 & 장비</div>
       <div class="inv-upper">
         <!-- 캐릭터를 가운데 두고 왼쪽에 방어구 3칸(투구·상의·하의), 오른쪽에 무기 3칸(검·활·지팡이) -->
@@ -1249,6 +1323,7 @@
       if (Math.abs(c) > 0.2) player.faceDir = c > 0 ? 1 : -1;
     }
     let enemies = [], floatingTexts = [], keys = {}, mouseX = 400, mouseY = 450;
+    let lastPointerClient = null;
     let guildCooldown = false, blacksmithCooldown = false, potionCooldown = false, portalCooldown = 0;
     let respawnTimer = 0, periodicSpawnTimer = 0;
     let notifTimeout = null;
@@ -4272,7 +4347,7 @@
             <div style="font-weight:bold; color:#fde047; font-size:13px;">${item.icon} ${item.name}</div>
             <div style="font-size:11px; color:#94a3b8;">${item.desc} | 개당: <b>${item.price.toLocaleString()}G</b></div>
           </div>
-          <div style="display:flex; gap:6px;">${buyBtns}</div>
+          <div class="potion-buy-buttons" style="display:flex; gap:6px;">${buyBtns}</div>
         `;
         listEl.appendChild(div);
       });
@@ -4583,15 +4658,13 @@
       positionItemTooltip(e);
     }
     function positionItemTooltip(e) {
-      const tip = document.getElementById('item-tooltip');
-      const margin = 16;
-      const width = tip.offsetWidth || 240;
-      let left = e.clientX + margin;
-      if (left + width > window.innerWidth) {
-        left = e.clientX - margin - width;
-      }
-      tip.style.left = Math.max(4, left) + 'px';
-      tip.style.top = (e.clientY + 10) + 'px';
+      const tip = document.getElementById('item-tooltip'), margin=8;
+      const width=tip.offsetWidth, height=tip.offsetHeight;
+      let left=e.clientX+16, top=e.clientY+10;
+      if (left+width>window.innerWidth-margin) left=e.clientX-16-width;
+      if (top+height>window.innerHeight-margin) top=e.clientY-10-height;
+      tip.style.left=Math.max(margin,Math.min(left,window.innerWidth-width-margin))+'px';
+      tip.style.top=Math.max(margin,Math.min(top,window.innerHeight-height-margin))+'px';
     }
     function hideItemTooltip() {
       document.getElementById('item-tooltip').classList.add('hidden');
@@ -5294,9 +5367,10 @@
 
     window.addEventListener('keydown', e => {
       if (e.code === 'Escape') {
-        if (isPlaying) { e.preventDefault(); if (!e.repeat) handleEscape(); }
+        if (isPlaying || openSidePanel!==null) { e.preventDefault(); if (!e.repeat) handleEscape(); }
         return;
       }
+      if (openSidePanel!==null && e.code==='Tab') { handlePanelTab(e); return; }
       if (!canUseGameplayInput(e)) return;
       if (e.ctrlKey || e.altKey || e.metaKey) return;
       if (e.repeat || keys[e.code]) { if (isGameKey(e.code)) e.preventDefault(); return; }
@@ -8837,16 +8911,20 @@
 
     document.getElementById('npc-close').onclick = (e) => { e.stopPropagation(); closeNpcModal(); };
 
-    canvas.addEventListener('mousemove', e => {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
-      mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
-    });
+    function updateCanvasAim(event) {
+      const rect=canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      lastPointerClient={clientX:event.clientX,clientY:event.clientY};
+      mouseX=Math.max(0,Math.min(canvas.width,(event.clientX-rect.left)*canvas.width/rect.width));
+      mouseY=Math.max(0,Math.min(canvas.height,(event.clientY-rect.top)*canvas.height/rect.height));
+    }
+    canvas.addEventListener('mousemove',updateCanvasAim);
 
     let bowState = { homingActive: false, rapidFireTimer: 0 };
 
     canvas.addEventListener('mousedown', e => {
       if(e.button === 0 && canUseGameplayInput(e) && player.frozenTimer <= 0) {
+        updateCanvasAim(e);
         const now = frameCount * FRAME_MS;
         const isBow = equipped.weapon && equipped.weapon.weaponKind === 'bow';
         let cooldown = Math.max(isBow ? 220 : 150, (isBow ? 620 : 500) - (statAtk - 10) * 15);
@@ -10242,7 +10320,7 @@
       currentScript = null; onStoryComplete = null; storyIndex = 0; storySceneStart = 0;
       equipBonusHp = 0;
       player = {...INITIAL_PLAYER_STATE, swing:{...INITIAL_PLAYER_STATE.swing}};
-      keys = {}; mouseX = 400; mouseY = 450;
+      keys = {}; mouseX = 400; mouseY = 450; lastPointerClient = null;
       enemies = []; projectiles = []; floatingTexts = []; pendingSpawns = [];
       slimeZones = []; ghostZones = []; ghostDecoys = []; demonZones = [];
       minjeZones = []; elfZones = []; archmageZones = [];
@@ -10272,6 +10350,7 @@
       blacksmithTab = 'shop'; autoSaveTimer = 0; saveScreenReturnTo = 'start'; saveManagerMode = 'load';
     }
     function resetSessionPresentation() {
+      closeSidePanel(false);
       for (const id of ['start-screen','save-screen','help-screen','story-screen','clear-screen','pause-menu','settings-modal',
         'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal',
         'status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator','item-tooltip']) {
@@ -10309,6 +10388,7 @@
       restoreSessionState(prepared);
       portalCooldown = 30;
       document.getElementById('status-hud').classList.remove('hidden');
+      document.getElementById('quest-hud').classList.remove('hidden');
       isPlaying = true; isPaused = false;
       ensureGameLoopStarted();
     }
@@ -10527,7 +10607,7 @@
       'alert-modal','tower-choice-modal','guild-ui','blacksmith-ui','potion-ui','start-screen','clear-screen','story-screen'];
     function overlayVisible(id) { return !document.getElementById(id).classList.contains('hidden'); }
     function hasGameplayOverlay() { return GAMEPLAY_OVERLAYS.some(overlayVisible); }
-    function gameplayPaused() { return isPaused || document.hidden || hasGameplayOverlay(); }
+    function gameplayPaused() { return isPaused || document.hidden || openSidePanel!==null || hasGameplayOverlay(); }
     function releaseGameplayInput() {
       keys = {}; player.vx = 0; player.vy = 0; trainingLatch = {};
     }
@@ -10550,7 +10630,7 @@
     document.addEventListener('visibilitychange', () => { if (document.hidden) pauseForFocusLoss(); });
     window.addEventListener('pointercancel', releaseGameplayInput);
     for (const type of ['click','contextmenu']) document.addEventListener(type, event => {
-      if (event.target instanceof Element && event.target.closest('#left-ui-panel,#right-ui-panel') && (!isPlaying || gameplayPaused())) {
+      if (event.target instanceof Element && event.target.closest('#left-ui-panel,#right-ui-panel') && !sidePanelActionAllowed(event)) {
         event.preventDefault(); event.stopImmediatePropagation();
       }
     }, true);
@@ -10560,6 +10640,7 @@
     }
     function handleEscape() {
       releaseGameplayInput();
+      if (openSidePanel!==null) { closeSidePanel(); return; }
       if (overlayVisible('tower-choice-modal')) {
         document.getElementById('tower-choice-modal').classList.add('hidden');
         player.y = Math.min(875,player.y+60); portalCooldown = 60; return;
@@ -10573,6 +10654,71 @@
         if (overlayVisible(id)) { document.getElementById(close).click(); return; }
       }
       togglePauseMenu();
+    }
+
+    // ---------- 화면 배치와 보조 패널 ----------
+    let openSidePanel = null;
+    function sidePanelActionAllowed(event) {
+      if (event.target.closest('[data-close-panel]')) return true;
+      if (!isPlaying || isPaused || document.hidden || GAMEPLAY_OVERLAYS.some(overlayVisible)) return false;
+      return openSidePanel === null || !!event.target.closest('#' + openSidePanel);
+    }
+    function closeSidePanel(restoreFocus = true) {
+      const previous = openSidePanel; openSidePanel = null;
+      for (const id of ['left-ui-panel','right-ui-panel']) {
+        const panel = document.getElementById(id);
+        panel.classList.remove('panel-open'); panel.removeAttribute('role'); panel.removeAttribute('aria-modal');
+        document.querySelector(`[aria-controls="${id}"]`).setAttribute('aria-expanded','false');
+      }
+      document.getElementById('panel-backdrop').classList.add('hidden');
+      releaseGameplayInput(); hideItemTooltip();
+      if (restoreFocus && previous) document.querySelector(`[aria-controls="${previous}"]`).focus({preventScroll:true});
+    }
+    function toggleSidePanel(id) {
+      if (!['left-ui-panel','right-ui-panel'].includes(id) || window.innerWidth >= 1280) return;
+      if (openSidePanel === id) { closeSidePanel(); return; }
+      closeSidePanel(false); openSidePanel = id;
+      const panel = document.getElementById(id);
+      panel.classList.add('panel-open'); panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true');
+      document.querySelector(`[aria-controls="${id}"]`).setAttribute('aria-expanded','true');
+      document.getElementById('panel-backdrop').classList.remove('hidden');
+      panel.querySelector('[data-close-panel]').focus({preventScroll:true});
+    }
+    function handlePanelTab(event) {
+      const controls = [...document.getElementById(openSidePanel).querySelectorAll('button:not([disabled]),a[href],input,[tabindex="0"]')].filter(el=>el.getClientRects().length);
+      if (!controls.length) return;
+      const first=controls[0],last=controls[controls.length-1];
+      if (event.shiftKey && document.activeElement===first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement===last) { event.preventDefault(); first.focus(); }
+    }
+    function fitGameLayout() {
+      const wrapper=document.getElementById('main-wrapper'), stage=document.getElementById('game-stage');
+      const compact=window.innerWidth<1280;
+      if (!compact && openSidePanel!==null) closeSidePanel(false);
+      const style=getComputedStyle(wrapper), gap=parseFloat(style.gap)||0;
+      let width=wrapper.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
+      const height=wrapper.clientHeight-parseFloat(style.paddingTop)-parseFloat(style.paddingBottom);
+      if (!compact) width-=document.getElementById('left-ui-panel').offsetWidth+document.getElementById('right-ui-panel').offsetWidth+2*gap;
+      const scale=Math.max(.01,Math.min(1,width/804,height/904));
+      stage.style.width=804*scale+'px'; stage.style.height=904*scale+'px';
+      document.getElementById('game-container').style.transform=`scale(${scale})`;
+      const small=804*scale<520; stage.classList.toggle('small-game',small);
+      const progress=small?document.getElementById('compact-progress'):stage;
+      for (const id of ['quest-hud','dungeon-hud']) if (document.getElementById(id).parentElement!==progress) progress.appendChild(document.getElementById(id));
+      hideItemTooltip();
+      if (lastPointerClient) updateCanvasAim(lastPointerClient);
+    }
+    function initializeResponsiveLayout() {
+      const stage=document.getElementById('game-stage');
+      for (const id of [...GAMEPLAY_OVERLAYS,'status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','top-notification','autosave-indicator','sfx-toggle-btn','version-badge']) stage.appendChild(document.getElementById(id));
+      document.body.appendChild(document.getElementById('item-tooltip'));
+      for (const button of document.querySelectorAll('[data-close-panel]')) button.addEventListener('click',()=>closeSidePanel());
+      for (const button of document.querySelectorAll('#panel-controls button')) button.addEventListener('click',()=>toggleSidePanel(button.getAttribute('aria-controls')));
+      document.getElementById('panel-backdrop').addEventListener('click',()=>closeSidePanel());
+      window.addEventListener('resize',fitGameLayout);
+      if (window.visualViewport) window.visualViewport.addEventListener('resize',fitGameLayout);
+      new ResizeObserver(fitGameLayout).observe(document.getElementById('main-wrapper'));
+      fitGameLayout();
     }
 
     // ---------- ESC 일시정지 메뉴 ----------
@@ -12235,6 +12381,8 @@
     // 유저 입력 전의 실제 시작값을 한 번 보관한다. 이후 변환은 항상 독립된 객체를 만든다.
     const INITIAL_PLAYER_STATE = Object.freeze({...player,swing:Object.freeze({...player.swing})});
     const INITIAL_GAME_SAVE = Object.freeze({...getSaveData(),gameState:'village',savedAt:0});
+    initializeResponsiveLayout();
+    setupInventory();
   </script>
 </body>
 </html>

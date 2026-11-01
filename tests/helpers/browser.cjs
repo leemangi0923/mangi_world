@@ -11,6 +11,8 @@ function createBrowserHarness({before, after}) {
       if (req.url === '/' || req.url === '/index.html') {
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
         res.end(fs.readFileSync(path.join(__dirname, '../../index.html')));
+      } else if (req.url === '/favicon.ico') {
+        res.setHeader('Content-Type','image/x-icon');res.end(fs.readFileSync(path.join(__dirname,'../../favicon.ico')));
       } else { res.writeHead(404); res.end(); }
     });
     await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -22,8 +24,8 @@ function createBrowserHarness({before, after}) {
     if (server) await new Promise(resolve => server.close(resolve));
   });
   return {
-    async run(fn, {init, scene} = {}) {
-      const context = await browser.newContext({viewport:{width:1600,height:1000}, acceptDownloads:true});
+    async run(fn, {init, scene, viewport = {width:1600,height:1000}} = {}) {
+      const context = await browser.newContext({viewport, acceptDownloads:true});
       try {
         if (init) await context.addInitScript(init);
         const page = await context.newPage();
