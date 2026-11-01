@@ -143,10 +143,10 @@ test('life drain is attributed as periodic damage and stops outside its beam',()
   await startNewAdventure(page);
   const result=await page.evaluate(()=>{
     enterDungeonStage('zombie',2,true,false);const boss=enemies[0];
-    boss.x=300;boss.y=500;boss.state='life_drain';boss.stateTimer=51;boss.drainAngle=0;
-    player.x=450;player.y=500;updateZombieBossAI(boss);const hit=damageLog.at(-1),inside=inDrainBeam(boss);
-    boss.stateTimer=41;player.y=600;updateZombieBossAI(boss);
-    return {inside,outside:inDrainBeam(boss),hit,count:damageLog.length};
+    boss.x=300;boss.y=500;player.x=450;player.y=500;beginEncounterAttack(boss,'drain');boss.encounterAttack.left=1;
+    updateZombieBossAI(boss);const hit=damageLog.at(-1),shape=encounterShape(boss,boss.encounterAttack),inside=encounterContains(shape,player.x,player.y);
+    player.y=600;for(let i=0;i<18;i++)updateZombieBossAI(boss);
+    return {inside,outside:encounterContains(shape,player.x,player.y),hit,count:damageLog.length};
   });
   assert.equal(result.inside,true);assert.equal(result.outside,false);assert.equal(result.hit.attack,'생명력 흡수 (주기 피해)');assert.equal(result.count,1);
 },options));
