@@ -4112,6 +4112,7 @@
     }
 
     function startMinjeDuel(awakened) {
+      clearWeaponTraits();
       awakened = awakened === true;
       closeNpcModal();
       gameState = 'minje_duel';
@@ -4126,6 +4127,7 @@
     }
 
     function handleMinjeDefeated(awakened) {
+      clearWeaponTraits();
       retryTicket = null;
       npcFlags.metMinje = true;
       minjeDefeated = true;
@@ -4328,6 +4330,7 @@
     }
 
     function startElfQueenDuel(awakened) {
+      clearWeaponTraits();
       awakened = awakened === true;
       closeNpcModal();
       gameState = 'elf_duel';
@@ -4342,6 +4345,7 @@
     }
 
     function handleElfQueenDefeated(awakened) {
+      clearWeaponTraits();
       retryTicket = null;
       npcFlags.metElfQueen = true;
       elfQueenDefeated = true;
@@ -4544,6 +4548,7 @@
     }
 
     function startMageDuel(awakened) {
+      clearWeaponTraits();
       awakened = awakened === true;
       closeNpcModal();
       gameState = 'mage_duel';
@@ -4558,6 +4563,7 @@
     }
 
     function handleArchmageDefeated(awakened) {
+      clearWeaponTraits();
       retryTicket = null;
       npcFlags.metArchmage = true;
       archmageDefeated = true;
@@ -5253,7 +5259,7 @@
       projectiles.push({x:job.fromX+Math.cos(angle)*24,y:job.fromY+Math.sin(angle)*24,vx:Math.cos(angle)*8,vy:Math.sin(angle)*8,r:6,dmg:job.damage,isCrit:false,color,life:75,owner:'player',traitProc:true,traitEpoch:job.epoch});
     }
     function tickWeaponTraits(){
-      syncWeaponTrait();const state=weaponTraitState;if(!COMBAT_STATES.includes(gameState)||combatReportMode==='death'){if(state.pending.length||state.effects.length)clearWeaponTraits();return;}
+      syncWeaponTrait();const state=weaponTraitState;if(!COMBAT_STATES.includes(gameState)||combatReportMode==='death'){if(state.count||state.target||state.readyAt||state.pending.length||state.effects.length||Object.keys(traitCooldowns).length)clearWeaponTraits();return;}
       if(state.target&&!enemies.includes(state.target)){state.target=null;state.count=0;}
       state.effects=state.effects.filter(e=>--e.left>0);
       const jobs=state.pending;state.pending=[];
@@ -6903,6 +6909,7 @@
     }
 
     function setupTraining() {
+      clearWeaponTraits();
       trainingDummy = {
         x: 400, y: 300, r: 34, hp: 1e12, maxHp: 1e12,
         category: 'dummy', isDummy: true, level: 1,
@@ -12180,6 +12187,7 @@
     // ---------- 서브맵 진입/복귀 스택 (포탈 위치 기억) ----------
     let returnStack = [];
     function enterSubMap(newState, entryX, entryY, msg) {
+      clearWeaponTraits();
       returnStack.push({ state: gameState, x: player.x, y: player.y });
       gameState = newState;
       player.x = entryX; player.y = entryY;
@@ -12187,6 +12195,7 @@
       if (msg) showTopNotification(msg);
     }
     function exitSubMap(fallbackState, fx, fy) {
+      clearWeaponTraits();
       const prev = returnStack.pop();
       if (prev) {
         gameState = prev.state; player.x = prev.x; player.y = prev.y;

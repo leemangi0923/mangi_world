@@ -53,3 +53,8 @@ test('30, 60 and 144Hz keep real basic charging, proc damage and cooldown ticks 
  try{lastFrameTime=null;frameAccum=0;ensureGameLoopStarted();advanceAnimationFrame(0);for(let i=1;i<=rate*200/60;i++)advanceAnimationFrame(i*1000/rate);}finally{stepGame=step;}
  return {ticks:frameCount,damage:hpBefore-en.hp,procs:weaponTraitState.procs,count:weaponTraitState.count,cooldown:weaponTraitState.readyAt-frameCount};}));for(const sample of samples)assert.deepEqual(sample,samples[0]);assert.equal(samples[0].ticks,200);assert.equal(samples[0].procs,1);assert.equal(samples[0].count,0);
 },options));
+test('teacher endings, immediate rematches and training exits clear charge even without a map simulation tick',()=>run(async page=>{
+ await arena(page,'drop_demon_lord_sword');const r=await page.evaluate(()=>{const reports=[];const dirty=()=>{weaponTraitState.count=3;weaponTraitState.readyAt=frameCount+100;weaponTraitState.target=enemies[0];traitCooldowns[weaponTraitState.weapon]=frameCount+100;};const clean=()=>weaponTraitState.count===0&&weaponTraitState.readyAt===0&&weaponTraitState.target===null&&Object.keys(traitCooldowns).length===0;
+ for(const [start,end] of [[startMinjeDuel,handleMinjeDefeated],[startElfQueenDuel,handleElfQueenDefeated],[startMageDuel,handleArchmageDefeated]]){dirty();start(false);const entry=clean();dirty();end(false);const exit=clean();closeAlertModal();dirty();start(false);reports.push(entry&&exit&&clean());}
+ enterSubMap('training',400,500);setupTraining();dirty();exitSubMap('village',400,500);reports.push(clean());dirty();gameState='training';setupTraining();reports.push(clean());dirty();gameState='village';tickWeaponTraits();reports.push(clean());return reports;});assert.deepEqual(r,[true,true,true,true,true,true]);
+},options));
