@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v4.0.0</title>
+  <title>만기 월드 (Mangi World) - v4.1.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -234,6 +234,23 @@
     body[data-large-ui] .bar-wrapper { height:calc(16px * var(--ui-scale))!important; }
     body[data-large-ui] .btn { white-space:normal;overflow-wrap:anywhere; }
     @media(max-width:520px) { #key-bindings { grid-template-columns:1fr; } }
+    #admin-panel > * { flex-shrink:0;min-width:0; }
+    #admin-panel details { border:1px solid #475569;border-radius:8px;padding:10px; }
+    #admin-panel summary { cursor:pointer;color:#fde047;font-weight:bold;padding:5px 0; }
+    #admin-panel label { display:flex;align-items:center;justify-content:space-between;gap:8px;margin:7px 0;min-width:0; }
+    #admin-panel :is(input,select) { max-width:65%;min-width:0;background:#1e293b;color:white;border:1px solid #94a3b8;border-radius:5px;padding:6px; }
+    #admin-panel label:has(input[type="checkbox"]) { justify-content:flex-start; }
+    #admin-panel input[type="number"] { width:110px; }
+    #admin-panel input[type="checkbox"] { width:20px;height:20px; }
+    .admin-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px; }
+    .admin-actions { display:flex;gap:8px;flex-wrap:wrap;margin:8px 0; }
+    #admin-panel .btn { padding:8px 12px;white-space:normal; }
+    #admin-status { color:#fef08a;white-space:pre-line; }
+    #admin-metrics { font-size:12px;color:#bae6fd;margin:10px 0; }
+    #admin-unlock-form { border:1px solid #fbbf24;border-radius:8px;padding:10px; }
+    [data-normal-save]:disabled { opacity:.45;cursor:not-allowed; }
+    body[data-large-ui] #admin-panel { font-size:calc(14px * var(--ui-scale)); }
+    @media(max-width:520px) { .admin-grid { grid-template-columns:1fr; } #admin-panel { font-size:13px; } }
   </style>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -280,6 +297,11 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
+        <h4>📌 v4.1.0 패치 노트</h4>
+        • 🛠️ 설정의 관리자 코드로 <b>캐릭터·아이템·스킬·맵·보스·탑을 테스트</b>합니다<br>
+        • 🛡️ <b>일반 슬롯과 관리자 저장을 분리</b>하고 종료·새로고침 시 원래 진행을 복구합니다<br>
+        • 🔍 <b>NPC 외형 미리보기·피해 측정·초반/중반/각성/탑 프리셋</b>을 제공합니다<br>
+        <br>
         <h4>📌 v4.0.0 패치 노트</h4>
         • ⌨️ <b>이동·달리기·스킬·무기 전환·퀵슬롯·훈련 키</b>를 변경합니다. 중복 키를 막고 현재 키를 안내합니다<br>
         • ⚙️ <b>UI 글자 크기·효과음 볼륨·히트스톱·화면 효과 강도</b>를 설정합니다. 시작 화면에서도 설정을 열 수 있습니다<br>
@@ -590,7 +612,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v4.0.0</div>
+      <div id="version-badge">v4.1.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -654,7 +676,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v4.0.0 : 키 설정 · 접근성 · 통합 개선</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v4.1.0 : 관리자 테스트 모드 · 일반 저장 보호</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -675,11 +697,46 @@
         <button id="combat-retry" class="btn hidden" style="flex-shrink:0;" onclick="retryCombat()">보스 즉시 재도전</button>
         <button id="combat-report-close" class="btn" style="flex-shrink:0;" onclick="closeCombatReport()">닫기</button>
       </div>
+      <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
+      <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
+        <h2 id="admin-title">관리자 테스트 도구 · v4.1.0</h2>
+        <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
+        <p id="admin-status" role="status" aria-live="polite"></p>
+        <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
+        <details open><summary>테스트 옵션·측정</summary><div class="admin-grid">
+          <label><input id="admin-flag-invincible" type="checkbox" onchange="setAdminFlag('invincible',this.checked)">무적 (피해 차단)</label>
+          <label><input id="admin-flag-infiniteMana" type="checkbox" onchange="setAdminFlag('infiniteMana',this.checked)">무한 마나</label>
+          <label><input id="admin-flag-noCooldown" type="checkbox" onchange="setAdminFlag('noCooldown',this.checked)">스킬 쿨타임 제거</label>
+          <label><input id="admin-flag-freezeAI" type="checkbox" onchange="setAdminFlag('freezeAI',this.checked)">적·적 투사체·위험지대 정지</label></div>
+          <p id="admin-metrics" style="white-space:pre-line;"></p><div class="admin-actions"><button class="btn" onclick="refreshAdminPanel()">측정 새로고침</button><button class="btn" onclick="if(adminOnly()){resetAdminMetrics();refreshAdminPanel();}">피해 측정 초기화</button><button class="btn" onclick="adminHeal()">회복·빙결 해제</button></div>
+        </details>
+        <details><summary>캐릭터 수치</summary><div class="admin-grid">
+          <label>레벨<input id="admin-level" aria-label="레벨" type="number" min="1" max="200"></label><label>골드<input id="admin-gold" aria-label="골드" type="number" min="0" max="999999999"></label><label>스탯 포인트<input id="admin-points" aria-label="스탯 포인트" type="number" min="0" max="10000"></label>
+          <label>힘<input id="admin-stat-Str" aria-label="힘" type="number" min="10" max="300"></label><label>체력<input id="admin-stat-Vit" aria-label="체력" type="number" min="10" max="300"></label><label>민첩<input id="admin-stat-Agi" aria-label="민첩" type="number" min="10" max="50"></label><label>공격 속도<input id="admin-stat-Atk" aria-label="공격 속도" type="number" min="10" max="300"></label><label>치명타<input id="admin-stat-Crit" aria-label="치명타" type="number" min="0" max="19"></label><label>치명타 피해<input id="admin-stat-CritDmg" aria-label="치명타 피해" type="number" min="0" max="70"></label><label>마나<input id="admin-stat-Mp" aria-label="마나" type="number" min="10" max="37"></label>
+        </div><button class="btn" onclick="adminApplyCharacter()">수치 적용·회복</button></details>
+        <details><summary>아이템 검색·지급·장착</summary>
+          <label>검색<input id="admin-item-search" type="search" oninput="filterAdminItems()" placeholder="이름 또는 아이템 ID"></label>
+          <label>아이템<select id="admin-item"></select></label><label>수량<input id="admin-item-count" type="number" min="1" max="64" value="1"></label>
+          <div class="admin-actions"><button class="btn" onclick="adminGrantItem()">가방에 지급</button><button class="btn" onclick="adminEquipItem()">선택 장비 바로 장착 (기존 장비 교체)</button></div>
+        </details>
+        <details><summary>스킬·각성·의뢰 단계</summary>
+          <div class="admin-grid"><label>무기<select id="admin-skill-weapon"><option value="sword">검</option><option value="bow">활</option><option value="staff">지팡이</option></select></label><label>단계<select id="admin-skill-stage"><option value="locked">미습득</option><option value="learned">일반 스킬 습득</option><option value="quest">각성 시련 진행</option><option value="ready">각성 재대결 준비</option><option value="awakened">각성 완료</option></select></label></div><button class="btn" onclick="adminSetProgress()">스킬 단계 적용·전투 초기화</button>
+          <label>의뢰<select id="admin-quest"></select></label><label>상태<select id="admin-quest-stage"><option value="none">미수락</option><option value="accepted">진행 중</option><option value="completed">완료·보상 대기</option><option value="done">보상 수령 상태</option></select></label><button class="btn" onclick="adminSetQuest()">의뢰 단계 적용 (보상 지급 없음)</button>
+        </details>
+        <details><summary>맵·던전·보스·스승·탑 테스트</summary>
+          <label>맵<select id="admin-map"><option value="village">마을</option><option value="training">훈련장</option><option value="guild_map">길드</option><option value="blacksmith_map">대장간</option><option value="potion_map">잡화점</option><option value="inn">여관</option><option value="portal_room">포탈 방</option><option value="castle_entrance">왕성 입구</option><option value="castle_inner">왕성 내부·민제</option><option value="demon_entrance">마왕성 입구</option><option value="elf_village">엘프 마을</option><option value="mage_tower">마법사의 탑</option></select></label><button class="btn" onclick="adminTravel()">맵 이동·전투 정리</button>
+          <label>전투 종류<select id="admin-encounter"><option value="dungeon">던전</option><option value="sword">민제 결투</option><option value="bow">엘프 여왕 결투</option><option value="staff">대마법사 결투</option><option value="tower">무한의 탑</option></select></label>
+          <div class="admin-grid"><label>던전<select id="admin-dungeon"><option value="slime">슬라임</option><option value="wolf">늑대</option><option value="zombie">망자</option><option value="ghost">유령</option><option value="demon">마왕성</option></select></label><label>구역<select id="admin-dungeon-stage"><option value="0">일반</option><option value="1">정예</option><option value="2">생존</option><option value="boss">보스</option></select></label><label>탑 층<input id="admin-floor" type="number" aria-label="탑 층" min="1" max="500" value="1"></label><label><input id="admin-awakened-duel" type="checkbox">스승 각성 재대결</label></div>
+          <div class="admin-actions"><button class="btn" onclick="adminStartEncounter()">선택 전투 새로 준비</button><button class="btn" onclick="adminResetBattle()">전투 초기화·마을로</button></div>
+        </details>
+        <details><summary>테스트 프리셋·전용 저장</summary><p>프리셋은 현재 테스트 상태를 교체합니다. 일반 저장은 변경하지 않습니다.</p><div class="admin-actions"><button class="btn" onclick="adminPreset('early')">초반 Lv.5</button><button class="btn" onclick="adminPreset('mid')">중반 Lv.40·늑대 보스</button><button class="btn" onclick="adminPreset('awakened')">각성 Lv.80</button><button class="btn" onclick="adminPreset('tower')">탑 Lv.100·30층</button><button class="btn" onclick="adminSaveTest()">관리자 전용 저장</button><button class="btn" onclick="adminLoadTest()">관리자 전용 불러오기</button></div></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v4.1.0: 관리자 테스트 도구와 일반 저장 보호. 다음 2차는 스토리·캐릭터·NPC·맵 그래픽 개편입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+      </section>
       <div id="pause-menu" class="hidden" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,15,26,0.92); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:80; gap:10px;">
         <h2 style="color:#fde047; margin-bottom:10px; font-family:'Cinzel';">일시정지</h2>
         <button class="btn" style="width:220px;" onclick="togglePauseMenu()">계속하기</button>
-        <button class="btn" style="width:220px;" onclick="openSaveManager('save')">저장하기</button>
-        <button class="btn" style="width:220px;" onclick="openSaveManager('load')">불러오기</button>
+        <button class="btn" style="width:220px;" data-normal-save onclick="openSaveManager('save')">저장하기</button>
+        <button class="btn" style="width:220px;" data-normal-save onclick="openSaveManager('load')">불러오기</button>
         <button class="btn" style="width:220px;" onclick="openObjectiveScreen()">목표와 진행</button>
         <button class="btn" style="width:220px;" onclick="openSettingsModal()">설정</button>
         <button class="btn" style="width:220px;" onclick="openCombatHistory()">피격 기록</button>
@@ -698,6 +755,9 @@
         <label>타격 시 잠깐 멈춤 (히트스톱)<input type="checkbox" id="hitstop-toggle"></label>
         <label>흔들림·화면 섬광 강도 <output id="effects-value">100%</output><input aria-label="흔들림·화면 섬광 강도" id="effects-setting" type="range" min="0" max="100" step="10" oninput="document.getElementById('effects-value').value=this.value+'%'"></label>
         <p>강도 0%는 흔들림과 화면 전체 섬광을 끕니다. 공격 범위와 위험 예고는 계속 표시됩니다. UI 글자 크기는 메뉴·정보 패널·HUD에 적용됩니다.</p>
+        <form id="admin-unlock-form" onsubmit="event.preventDefault();enterAdminMode();"><h3>관리자 테스트 모드</h3><p>일반 진행은 복구 지점으로 보관하며 테스트 저장은 별도로 사용합니다.</p><label>관리자 코드<input id="admin-code" type="password" inputmode="numeric" maxlength="16" autocomplete="off" aria-describedby="admin-auth-status"></label><button class="btn" type="submit">관리자 모드 열기</button></form>
+        <p id="admin-auth-status" role="status" aria-live="polite"></p>
+        <button id="admin-settings-tools" class="btn hidden" onclick="closeSettingsModal();openAdminPanel();">관리자 도구 열기</button>
         <details id="key-settings"><summary>키 설정 (펼치기)</summary><p>중복 키는 사용할 수 없습니다. Escape는 메뉴 닫기, Shift+퀵슬롯 키는 물약 등록으로 유지합니다. 마우스 조준·클릭 공격은 고정입니다.</p><div id="key-bindings"></div></details>
         <p id="settings-status" role="status" aria-live="polite"></p>
         <button class="btn" onclick="resetAccessibilitySettings()">기본 설정 복원</button>
@@ -921,6 +981,238 @@
       table: [0,0], chair: [2,2], counter: [4,4], counter2: [6,4],
       shelfOrange: [8,0], shelfTeal: [8,2], rugOrange: [0,9], rugTeal: [7,9], wardrobe: [0,12]
     };
+
+    // 관리자 테스트는 일반 저장과 별개이며 권한 인증이 아닌 로컬 개발 도구다.
+    const ADMIN_RETURN_KEY='mangiworld_admin_return', ADMIN_SAVE_KEY='mangiworld_admin_save';
+    const ADMIN_FLAG_NAMES=['invincible','infiniteMana','noCooldown','freezeAI'];
+    const freshAdminState=()=>({active:false,invincible:false,infiniteMana:false,noCooldown:false,freezeAI:false,damageTotal:0,damageHits:0,damageStart:null});
+    let adminMode=freshAdminState(), adminReturn=null;
+    function adminMessage(message) { document.getElementById('admin-status').textContent=message; }
+    function adminOnly() { return adminMode.active && isPlaying; }
+    function resetAdminMetrics() {adminMode.damageTotal=0;adminMode.damageHits=0;adminMode.damageStart=null;}
+    function adminFreeMana(){return adminOnly() && adminMode.infiniteMana;}
+    function applyAdminAssist() {
+      if(!adminOnly())return;
+      if(adminMode.infiniteMana)mp=maxMp;
+      if(adminMode.noCooldown){skills.cooldowns={q:0,e:0,r:0,f:0};ultCooldown={sword:0,bow:0,staff:0};}
+    }
+    function updateAdminBadge() {
+      document.getElementById('admin-badge').classList.toggle('hidden',!adminMode.active);
+      document.getElementById('admin-unlock-form').classList.toggle('hidden',adminMode.active);
+      document.getElementById('admin-settings-tools').classList.toggle('hidden',!adminMode.active);
+      for(const button of document.querySelectorAll('[data-normal-save]'))button.disabled=adminMode.active;
+    }
+    function validateAdminReturn(record) {
+      if(!record || record.version!==1 || !Number.isInteger(record.slot) || record.slot<1 || record.slot>3 || typeof record.playing!=='boolean')throw new Error('복구 지점 형식 오류');
+      return {version:1,slot:record.slot,playing:record.playing,data:normalizeSaveData(record.data)};
+    }
+    window.enterAdminMode=function() {
+      const field=document.getElementById('admin-code'),status=document.getElementById('admin-auth-status');
+      if(adminMode.active)return;
+      const code=field.value.trim();field.value='';
+      if(code!=='6974'){status.textContent='관리자 코드가 올바르지 않습니다.';field.focus();return;}
+      try {
+        if(localStorage.getItem(ADMIN_RETURN_KEY)!==null)throw new Error('남아 있는 복구 지점이 있습니다. 새로고침하여 먼저 복구하세요.');
+        const record=validateAdminReturn({version:1,slot:currentSaveSlot,playing:isPlaying,data:isPlaying?getSaveData():INITIAL_GAME_SAVE});
+        const raw=JSON.stringify(record);localStorage.setItem(ADMIN_RETURN_KEY,raw);
+        if(localStorage.getItem(ADMIN_RETURN_KEY)!==raw)throw new Error('복구 지점 저장을 확인할 수 없습니다.');
+        adminReturn=record;closeSettingsModal();adminMode={...freshAdminState(),active:true};
+        applySaveData(record.data,true);openAdminPanel();
+        adminMessage('관리자 모드가 켜졌습니다. 테스트 도구를 선택한 뒤 「이 상태로 플레이」를 누르세요.');
+      } catch(error) {status.textContent='관리자 모드를 열지 못했습니다. '+error.message;}
+      updateAdminBadge();
+    };
+    window.openAdminPanel=function() {
+      if(!adminMode.active)return;
+      if(overlayVisible('settings-modal'))closeSettingsModal();
+      if(!isPlaying){stopStoryPlayback();currentScript=null;onStoryComplete=null;gameState='village';isPlaying=true;clearBattleRuntime();player.x=400;player.y=500;ensureGameLoopStarted();}
+      releaseGameplayInput();closeSidePanel(false);hideItemTooltip();
+      for(const id of GAMEPLAY_OVERLAYS)if(id!=='admin-panel')document.getElementById(id).classList.add('hidden');
+      combatReportMode=null;isPaused=true;
+      document.getElementById('admin-panel').classList.remove('hidden');
+      document.getElementById('top-notification').classList.remove('show');
+      refreshAdminPanel();document.getElementById('admin-resume').focus();
+    };
+    window.closeAdminPanel=function() {
+      if(!adminOnly())return;
+      document.getElementById('admin-panel').classList.add('hidden');
+      releaseGameplayInput();isPaused=true;document.getElementById('pause-menu').classList.remove('hidden');
+    };
+    window.resumeAdminPlay=function() {
+      if(!adminOnly())return;
+      document.getElementById('admin-panel').classList.add('hidden');document.getElementById('pause-menu').classList.add('hidden');
+      releaseGameplayInput();isPaused=false;ensureGameLoopStarted();
+    };
+    window.exitAdminMode=function() {
+      if(!adminMode.active || !adminReturn)return false;
+      try {
+        const record=validateAdminReturn(adminReturn);prepareSavedSession(record.data);
+        localStorage.removeItem(ADMIN_RETURN_KEY);
+        if(localStorage.getItem(ADMIN_RETURN_KEY)!==null)throw new Error('복구 지점 정리를 확인할 수 없습니다.');
+        applySaveData(record.data,true);currentSaveSlot=record.slot;
+        adminMode=freshAdminState();adminReturn=null;updateAdminBadge();
+        if(record.playing){isPaused=true;document.getElementById('pause-menu').classList.remove('hidden');}
+        else{restoreSessionState(prepareSavedSession(INITIAL_GAME_SAVE));gameState='menu';document.getElementById('start-screen').classList.remove('hidden');}
+        showTopNotification('관리자 모드를 종료하고 진입 전 일반 진행으로 복귀했습니다.',4000);return true;
+      } catch(error) {
+        // 복구가 끝나기 전까지 일반 저장 차단을 유지한다.
+        try {localStorage.setItem(ADMIN_RETURN_KEY,JSON.stringify(adminReturn));}catch{}
+        if(!isPlaying)applySaveData(adminReturn.data,true);
+        openAdminPanel();adminMessage('복귀하지 못했습니다. 일반 저장은 계속 보호됩니다. 다시 종료해 주세요. '+error.message);return false;
+      }
+    };
+    function recoverAdminCheckpoint() {
+      let raw;
+      try {raw=localStorage.getItem(ADMIN_RETURN_KEY);}catch{return;}
+      if(raw===null)return;
+      try {
+        adminReturn=validateAdminReturn(JSON.parse(raw));adminMode={...freshAdminState(),active:true};
+        exitAdminMode();
+      } catch {
+        // 손상 원본은 별도로 보존한 뒤 정리한다. 일반 슬롯은 전혀 건드리지 않는다.
+        try{localStorage.setItem(ADMIN_RETURN_KEY+'_corrupt',raw);localStorage.removeItem(ADMIN_RETURN_KEY);}catch{}
+        adminMode=freshAdminState();adminReturn=null;updateAdminBadge();
+        showTopNotification('관리자 복구 기록을 읽지 못했습니다. 일반 슬롯은 유지되어 있으니 저장을 불러오세요.',6000);
+      }
+    }
+    function adminNumber(id,min,max) {
+      const field=document.getElementById(id),value=Number(field.value);
+      if(field.value.trim()==='' || !Number.isSafeInteger(value) || value<min || value>max)throw new Error(`${field.getAttribute('aria-label')||id}: ${min}~${max} 범위의 정수를 입력하세요.`);
+      return value;
+    }
+    window.setAdminFlag=function(name,value) {
+      if(!adminOnly() || !ADMIN_FLAG_NAMES.includes(name) || typeof value!=='boolean')return;
+      adminMode[name]=value;applyAdminAssist();updateHUD();refreshAdminPanel();
+    };
+    window.adminApplyCharacter=function() {
+      if(!adminOnly())return;
+      try {
+        const values={level:adminNumber('admin-level',1,200),gold:adminNumber('admin-gold',0,999999999),points:adminNumber('admin-points',0,10000)};
+        const stats={};for(const [name,max] of Object.entries({Str:300,Vit:300,Agi:50,Atk:300,Crit:19,CritDmg:70,Mp:37}))stats[name]=adminNumber('admin-stat-'+name,['Crit','CritDmg'].includes(name)?0:10,max);
+        level=values.level;exp=0;nextExp=expForLevel(level);gold=values.gold;statPoints=values.points;
+        ({Str:statStr,Vit:statVit,Agi:statAgi,Atk:statAtk,Crit:statCrit,CritDmg:statCritDmg,Mp:statMp}=stats);
+        recalcAllStats();hp=maxHp;mp=maxMp;updateHUD();refreshAdminPanel();adminMessage('캐릭터 수치를 적용하고 체력·마나를 회복했습니다.');
+      } catch(error){adminMessage(error.message);}
+    };
+    window.adminHeal=function(){if(!adminOnly())return;hp=maxHp;mp=maxMp;player.frozenTimer=0;player.knockbackTimer=0;updateHUD();refreshAdminPanel();adminMessage('체력·마나와 이동 상태를 회복했습니다.');};
+    function adminCatalog(){return [...new Map([...blacksmithItems,...potionItems,...Object.values(dropItems)].map(item=>[item.id,item])).values()];}
+    window.filterAdminItems=function(){
+      const select=document.getElementById('admin-item'),query=document.getElementById('admin-item-search').value.trim().toLowerCase();select.replaceChildren();
+      for(const item of adminCatalog().filter(item=>(item.name+' '+item.id).toLowerCase().includes(query))){const option=document.createElement('option');option.value=item.id;option.textContent=item.name+' · '+item.id;select.appendChild(option);}
+    };
+    window.adminGrantItem=function(){
+      if(!adminOnly())return;
+      try {
+        const item=findItemById(document.getElementById('admin-item').value);if(!item)throw new Error('지급할 아이템을 선택하세요.');
+        let left=adminNumber('admin-item-count',1,64);const next=inventory.map(item=>item?{...item}:null),assigned=[];
+        if(item.type==='consumable')for(let i=0;i<next.length && left;i++)if(next[i]?.id===item.id && !lockedSlots[i]){const count=Math.min(left,Math.max(0,64-(next[i].count||1)));next[i].count=(next[i].count||1)+count;left-=count;}
+        for(let i=0;i<next.length && left;i++)if(!next[i]){const count=item.type==='consumable'?Math.min(left,64):1;next[i]={...item,...(item.type==='consumable'?{count}:{})};assigned.push(i);left-=count;}
+        if(left)throw new Error('가방 공간이 부족합니다. 지급하지 않았습니다.');
+        inventory=next;for(const i of assigned)delete lockedSlots[i];setupInventory();adminMessage(item.name+' 지급 완료.');
+      } catch(error){adminMessage(error.message);}
+    };
+    window.adminEquipItem=function(){
+      if(!adminOnly())return;const item=findItemById(document.getElementById('admin-item').value),slot=equipmentSlotFor(item);
+      if(!slot){adminMessage('장비 아이템을 선택하세요.');return;}
+      equipped[slot]={...item};lockedEquipment[slot]=false;if(item.type==='weapon')activeWeaponSlot=slot;
+      syncActiveWeapon();recalcAllStats();hp=maxHp;mp=maxMp;setupInventory();updateHUD();adminMessage(item.name+' 장착 완료. 기존 장비를 교체했습니다.');
+    };
+    window.adminSetProgress=function(){
+      if(!adminOnly())return;
+      const slot=document.getElementById('admin-skill-weapon').value,stage=document.getElementById('admin-skill-stage').value;
+      if(!['sword','bow','staff'].includes(slot) || !['locked','learned','quest','ready','awakened'].includes(stage))return;
+      const learned=stage!=='locked';skills[OBJECTIVE_SKILLS[slot].learned]=learned;
+      if(slot==='sword')minjeDefeated=learned;else if(slot==='bow')elfQueenDefeated=learned;else archmageDefeated=learned;
+      skills.learned=skills.learnedSword;awakenState[slot]=makeAwakenSlot();
+      if(['quest','ready','awakened'].includes(stage)){
+        level=Math.max(level,80);nextExp=expForLevel(level);exp=0;demonDefeated=true;dungeonProgress.wolf.bossDefeated=true;dungeonProgress.ghost.bossDefeated=true;
+        awakenState[slot].stage=stage;
+        if(stage!=='quest'){awakenState[slot].mats=AWAKEN_DEFS[slot].matNeed;awakenState[slot].demonKills=AWAKEN_DEMON_KILLS;awakenState[slot].bosses={slime:true,wolf:true,zombie:true,ghost:true};towerBestFloor=Math.max(towerBestFloor,AWAKEN_TOWER_FLOOR);}
+      }
+      clearBattleRuntime();gameState='village';player.x=400;player.y=500;retryTicket=null;updateHUD();setupInventory();updateQuestHUD();refreshAdminPanel();adminMessage('선택 무기의 습득·각성 단계와 필요한 선행 조건을 적용했습니다. 전투는 초기화되었습니다.');
+    };
+    window.adminSetQuest=function(){
+      if(!adminOnly())return;const quest=questDefs.find(q=>q.id===document.getElementById('admin-quest').value),stage=document.getElementById('admin-quest-stage').value;
+      if(!quest || !['none','accepted','completed','done'].includes(stage))return;
+      if(stage==='none')delete activeQuests[quest.id];else activeQuests[quest.id]={status:stage,progress:stage==='accepted'?0:quest.target};
+      updateQuestHUD();adminMessage('의뢰 단계를 적용했습니다. 보상은 자동 지급하지 않습니다.');
+    };
+    function prepareAdminArena(){
+      clearBattleRuntime();activeBuffs={};recalcAllStats();hp=maxHp;mp=maxMp;updateBuffHUD();
+      retryTicket=null;combatReportMode=null;returnStack=[];portalCooldown=90;isPaused=true;
+      for(const id of ['combat-report-screen','alert-modal','npc-modal','tower-choice-modal'])document.getElementById(id).classList.add('hidden');
+    }
+    window.adminTravel=function(){
+      if(!adminOnly())return;const map=document.getElementById('admin-map').value;
+      if(!Object.hasOwn(mapLabels,map) || ['story','dungeon'].includes(map))return;
+      prepareAdminArena();gameState=map;player.x=400;player.y=map==='training'?500:700;
+      if(map==='training')setupTraining();updateHUD();refreshAdminPanel();adminMessage(mapLabel(map)+' 이동 준비 완료. 아래 플레이 버튼으로 시작하세요.');
+    };
+    window.adminStartEncounter=function(){
+      if(!adminOnly())return;
+      const kind=document.getElementById('admin-encounter').value;
+      if(!['dungeon','sword','bow','staff','tower'].includes(kind))return;
+      let floor;try{if(kind==='tower')floor=adminNumber('admin-floor',1,500);}catch(error){adminMessage(error.message);return;}
+      const cat=document.getElementById('admin-dungeon').value,stage=document.getElementById('admin-dungeon-stage').value;
+      if(!TOWER_CATS.includes(cat) || !['0','1','2','boss'].includes(stage))return;
+      prepareAdminArena();
+      if(kind==='dungeon'){
+        if(stage==='boss')dungeonProgress[cat].progress=dungeonDefs[cat].tiers.map(t=>t.target);
+        bossRespawnCooldown[cat]=0;enterDungeonStage(cat,stage==='boss'?2:Number(stage),stage==='boss',false);
+      }else if(kind==='tower'){demonDefeated=true;enterTowerAt(floor);}
+      else {
+        const awakened=document.getElementById('admin-awakened-duel').checked;
+        level=Math.max(level,awakened?80:30);exp=0;nextExp=expForLevel(level);dungeonProgress.wolf.bossDefeated=true;dungeonProgress.ghost.bossDefeated=true;
+        if(awakened){demonDefeated=true;skills[OBJECTIVE_SKILLS[kind].learned]=true;if(kind==='sword')minjeDefeated=true;else if(kind==='bow')elfQueenDefeated=true;else archmageDefeated=true;awakenState[kind]={...makeAwakenSlot(),stage:'ready',mats:AWAKEN_DEFS[kind].matNeed,demonKills:AWAKEN_DEMON_KILLS,bosses:{slime:true,wolf:true,zombie:true,ghost:true}};towerBestFloor=Math.max(towerBestFloor,AWAKEN_TOWER_FLOOR);}
+        ({sword:startMinjeDuel,bow:startElfQueenDuel,staff:startMageDuel})[kind](awakened);
+      }
+      updateHUD();refreshAdminPanel();adminMessage('전투를 새로 준비했습니다. 아래 플레이 버튼으로 시작하세요.');
+    };
+    window.adminResetBattle=function(){if(!adminOnly())return;prepareAdminArena();gameState='village';player.x=400;player.y=500;resetAdminMetrics();refreshAdminPanel();adminMessage('전투·잔여 효과·측정값을 정리하고 마을로 이동했습니다.');};
+    window.adminPreset=function(name){
+      if(!adminOnly() || !['early','mid','awakened','tower'].includes(name))return;
+      applySaveData(INITIAL_GAME_SAVE,true);
+      const target={early:5,mid:40,awakened:80,tower:100}[name];level=target;nextExp=expForLevel(level);exp=0;gold=100000;statPoints=target*2;
+      statStr=statVit=target===5?12:target===40?30:60;statMp=name==='early'?10:37;
+      for(const slot of ['sword','bow','staff']){
+        const id={sword:name==='early'?'sword_iron':'sword_legend',bow:name==='early'?'bow_wood':'bow_hunter',staff:name==='early'?'staff_apprentice':'staff_arcane'}[slot];
+        const item=findItemById(id);if(item)equipped[slot]={...item};skills[OBJECTIVE_SKILLS[slot].learned]=true;
+        if(name==='awakened'||name==='tower')awakenState[slot]={...makeAwakenSlot(),stage:'awakened'};
+      }
+      minjeDefeated=elfQueenDefeated=archmageDefeated=true;
+      if(name==='awakened'||name==='tower'){demonDefeated=true;towerBestFloor=30;for(const cat of TOWER_CATS){dungeonProgress[cat].bossDefeated=true;dungeonProgress[cat].progress=dungeonDefs[cat].tiers.map(t=>t.target);}}
+      activeWeaponSlot='sword';syncActiveWeapon();recalcAllStats();hp=maxHp;mp=maxMp;
+      if(name==='tower')enterTowerAt(30);else if(name==='mid')enterDungeonStage('wolf',2,true,false);else if(name==='early')enterDungeonStage('slime',0,false,false);
+      isPaused=true;openAdminPanel();setupInventory();updateHUD();adminMessage('테스트 프리셋 적용 완료. 기존 테스트 상태를 교체했습니다.');
+    };
+    window.adminSaveTest=function(){
+      if(!adminOnly())return;
+      try{const data=normalizeSaveData(getSaveData());localStorage.setItem(ADMIN_SAVE_KEY,JSON.stringify({kind:'mangiworld-admin',version:1,data,flags:Object.fromEntries(ADMIN_FLAG_NAMES.map(k=>[k,adminMode[k]]))}));adminMessage('관리자 전용 테스트 저장 완료. 전투는 마을 상태로 저장됩니다.');}catch(error){adminMessage('테스트 저장 실패: '+error.message);}
+    };
+    window.adminLoadTest=function(){
+      if(!adminOnly())return;
+      try{const record=JSON.parse(localStorage.getItem(ADMIN_SAVE_KEY));if(!record || record.kind!=='mangiworld-admin' || record.version!==1 || !record.flags || ADMIN_FLAG_NAMES.some(k=>typeof record.flags[k]!=='boolean'))throw new Error('정상 테스트 저장이 없습니다.');
+        const prepared=normalizeSaveData(record.data);applySaveData(prepared,true);for(const k of ADMIN_FLAG_NAMES)adminMode[k]=record.flags[k];isPaused=true;openAdminPanel();adminMessage('관리자 테스트 저장을 불러왔습니다.');
+      }catch(error){adminMessage('테스트 불러오기 실패: '+error.message);}
+    };
+    function refreshAdminPanel(){
+      if(!adminMode.active)return;updateAdminBadge();
+      const values={'admin-level':level,'admin-gold':gold,'admin-points':statPoints};
+      for(const [name,value] of Object.entries({Str:statStr,Vit:statVit,Agi:statAgi,Atk:statAtk,Crit:statCrit,CritDmg:statCritDmg,Mp:statMp}))values['admin-stat-'+name]=value;
+      for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
+      for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
+      const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
+      document.getElementById('admin-metrics').textContent=`v4.1.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱`;
+      if(!document.getElementById('admin-item').options.length)filterAdminItems();
+      const quests=document.getElementById('admin-quest');if(!quests.options.length)for(const quest of questDefs){const option=document.createElement('option');option.value=quest.id;option.textContent=quest.title||quest.name||quest.id;quests.appendChild(option);}
+      const preview=document.getElementById('admin-preview'),target=preview.getContext('2d');target.clearRect(0,0,preview.width,preview.height);
+      const actors=[['만기',null],['송건',{outfitColor:'#f472b6',skirt:true,hairLong:true}],['민제',{outfitColor:'#7c2d12'}],['엘프 여왕',{outfitColor:'#15803d',skirt:true,hairLong:true,hairColor:'#fde68a'}],['에녹',{outfitColor:'#4c1d95',hairLong:true,hairColor:'#e2e8f0'}],['경비병',{outfitColor:'#64748b'}]];
+      actors.forEach(([name,opts],i)=>{const x=45+i*80;if(opts)drawStoryFigure(x,65,opts,target);else drawPlayer(x,55,0,0,false,0,false,target);target.fillStyle='#fff';target.font='12px sans-serif';target.textAlign='center';target.fillText(name,x,108);});
+    }
+    function drawAdminMetrics(){
+      if(!adminOnly())return;const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
+      ctx.save();ctx.fillStyle='rgba(15,23,42,.85)';ctx.fillRect(8,822,480,26);ctx.fillStyle='#fef08a';ctx.font='bold 12px sans-serif';ctx.textAlign='left';ctx.fillText(`ADMIN · 피해 ${adminMode.damageTotal.toFixed(1)} · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'} · 적 ${enemies.length} · 도구: ADMIN 버튼`,16,840,464);ctx.restore();
+    }
 
     const KEY_ACTIONS = [
       ['KeyW','위로 이동'],['KeyA','왼쪽 이동'],['KeyS','아래로 이동'],['KeyD','오른쪽 이동'],['ShiftLeft','달리기'],
@@ -2261,6 +2553,7 @@
     }
     function applyPlayerDamage(amount, source = combatSource(), attack = '근접 공격') {
       if (!isPlaying || !COMBAT_STATES.includes(gameState) || combatReportMode === 'death' || !Number.isFinite(amount) || amount < 0) return false;
+      if(adminMode.active && adminMode.invincible)return false;
       hp = Math.max(0, hp - amount);
       damageLog.push({source, attack, amount, tick:frameCount, fatal:hp === 0});
       if (damageLog.length > 8) damageLog.shift();
@@ -2620,6 +2913,7 @@
         createFloatingText(en.x, en.y - (en.r||20) - 46, "🧊 깨짐!", '#7dd3fc');
         impact(9, 2, 0);
       }
+      if(adminMode.active){if(adminMode.damageStart===null)adminMode.damageStart=frameCount;adminMode.damageTotal+=Math.min(Math.max(0,en.hp),finalDmg);adminMode.damageHits++;}
       en.hp -= finalDmg;
       playSfx('hit');
       if (reduction > 0) {
@@ -2771,6 +3065,7 @@
     let pendingSpawns = [];
 
     function updateDungeonMobAI(en) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
@@ -3008,6 +3303,7 @@
     let demonZones = [];
 
     function tickZoneArray(zones, source = combatSource()) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       for (let i = zones.length - 1; i >= 0; i--) {
         const z = zones[i];
@@ -3066,6 +3362,7 @@
 
     // ===== 슬라임 킹: 분열 소환 / 산성 웅덩이 =====
     function updateSlimeBossAI(en) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
@@ -3128,6 +3425,7 @@
 
     // ===== 늑대왕 페릴: 표식 도약 / 발톱 연격 =====
     function updateWolfBossAI(en) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
@@ -3211,6 +3509,7 @@
 
     // ===== 리치 로드: 생명 흡수 / 해골 소환 =====
     function updateZombieBossAI(en) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
@@ -3280,6 +3579,7 @@
 
     // ===== 사령왕: 환영 분신 / 그림자 손아귀 =====
     function updateGhostBossAI(en) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
@@ -3393,6 +3693,7 @@
     }
 
     function updateDemonBossAI(en) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
@@ -3506,6 +3807,10 @@
     function updateAndDrawProjectiles() {
       for (let i = projectiles.length - 1; i >= 0; i--) {
         const p = projectiles[i];
+        if(adminMode.active && adminMode.freezeAI && p.owner!=='player'){
+          ctx.save();ctx.shadowColor=p.color;ctx.shadowBlur=10;ctx.fillStyle=p.color;
+          ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();ctx.restore();continue;
+        }
 
         // 히트 쿨다운 감소 (관통 후 같은 적을 다시 조준할 수 있도록)
         if (p.hitCd) {
@@ -3666,6 +3971,7 @@
     const minjePatternPoolAwakened = ['triple', 'spin', 'iai', 'flurry', 'skyfall'];
 
     function updateMinjeAI(en) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
@@ -3895,6 +4201,7 @@
     const elfPatternPoolAwakened = ['volley', 'snipe', 'nature', 'flurry', 'thornfield'];
 
     function updateElfQueenAI(en) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
@@ -4120,6 +4427,7 @@
     const archmagePatternPoolAwakened = ['firebolt', 'meteorzone', 'icenova', 'blink', 'starfall'];
 
     function updateArchmageAI(en) {
+      if(adminMode.active && adminMode.freezeAI)return;
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
@@ -5537,7 +5845,8 @@
     }
 
     // Simple blocky figure in the same visual style as the in-game player sprite
-    function drawStoryFigure(x, y, opts) {
+    function drawStoryFigure(x, y, opts, target) {
+      const ctx=target || canvas.getContext('2d');
       opts = opts || {};
       const walk = opts.walk || 0;
       const skirt = !!opts.skirt;
@@ -5886,6 +6195,7 @@
         if (isPlaying || openSidePanel!==null || overlayVisible('settings-modal')) { e.preventDefault(); if (!e.repeat) handleEscape(); }
         return;
       }
+      if (overlayVisible('admin-panel') && e.code==='Tab') { trapFocus(document.getElementById('admin-panel'),e);return; }
       if (overlayVisible('combat-report-screen') && e.code==='Tab') { trapFocus(document.getElementById('combat-report-screen'),e); return; }
       if (overlayVisible('objective-screen') && e.code==='Tab') { trapFocus(document.getElementById('objective-screen'),e); return; }
       if (openSidePanel!==null && e.code==='Tab') { handlePanelTab(e); return; }
@@ -6343,12 +6653,13 @@
     function isAwakened(slot) { return awakenState[slot] && awakenState[slot].stage === 'awakened'; }
 
     function castAwakenUltimate() {
+      applyAdminAssist();
       const slot = activeWeaponSlot;
       if (!isAwakened(slot)) return;
       const def = awakenUltDefs[slot];
       if (ultCooldown[slot] > 0) return;
-      if (mp < def.mp) { showTopNotification("마나가 부족합니다!"); return; }
-      mp -= def.mp;
+      if (!adminFreeMana() && mp < def.mp) { showTopNotification("마나가 부족합니다!"); return; }
+      if(!adminFreeMana())mp -= def.mp;
       ultCooldown[slot] = def.cooldown;
       playSfx('skill');
       const ang = Math.atan2(mouseY - player.y, mouseX - player.x);
@@ -7411,6 +7722,7 @@
     }
 
     function castSkill(key) {
+      applyAdminAssist();
       if (player.frozenTimer > 0) { showTopNotification("🥶 빙결 상태에서는 스킬을 사용할 수 없습니다!"); return; }
       if (!equipped[activeWeaponSlot]) {
         showTopNotification(`⚠️ ${weaponSlotLabels[activeWeaponSlot]}이(가) 장착되어 있지 않습니다.`);
@@ -7432,12 +7744,12 @@
       const chaining = awk && key === 'f' && swordChain.left > 0 && swordChain.timer > 0;
       if (!chaining && skills.cooldowns[key] > 0) return;
       const def = skillDefsFor('sword')[key];
-      if (!chaining && mp < def.mp) {
+      if (!chaining && !adminFreeMana() && mp < def.mp) {
         showTopNotification("마나가 부족합니다!");
         return;
       }
       if (!chaining) {
-        mp -= def.mp;
+        if(!adminFreeMana())mp -= def.mp;
         skills.cooldowns[key] = def.cooldown;
       }
       const ang = Math.atan2(mouseY - player.y, mouseX - player.x);
@@ -7613,8 +7925,8 @@
       }
 
       if (skills.cooldowns[key] > 0) return;
-      if (mp < def.mp) { showTopNotification("마나가 부족합니다!"); return; }
-      mp -= def.mp;
+      if (!adminFreeMana() && mp < def.mp) { showTopNotification("마나가 부족합니다!"); return; }
+      if(!adminFreeMana())mp -= def.mp;
       skills.cooldowns[key] = def.cooldown;
       const ang = Math.atan2(mouseY - player.y, mouseX - player.x);
       // 스킬마다 서 있는 모양이 다르다 (각성 전에는 전부 기본 사격 자세)
@@ -7749,9 +8061,9 @@
       const chaining = awk && key === 'f' && voidChain.left > 0 && voidChain.timer > 0;
       if (!chaining && skills.cooldowns[key] > 0) return;
       const def = skillDefsFor('staff')[key];
-      if (!chaining && mp < def.mp) { showTopNotification("마나가 부족합니다!"); return; }
+      if (!chaining && !adminFreeMana() && mp < def.mp) { showTopNotification("마나가 부족합니다!"); return; }
       if (!chaining) {
-        mp -= def.mp;
+        if(!adminFreeMana())mp -= def.mp;
         skills.cooldowns[key] = def.cooldown;
       }
       const ang = Math.atan2(mouseY - player.y, mouseX - player.x);
@@ -9470,7 +9782,7 @@
           const { dmg, isCrit } = rollPlayerDamage(1.3);
           let useHoming = false;
           if (bowState.homingActive && skills.learnedBow) {
-            if (mp >= 3) { mp -= 3; useHoming = true; updateHUD(); }
+            if (adminFreeMana() || mp >= 3) { if(!adminFreeMana())mp -= 3; useHoming = true; updateHUD(); }
             else { bowState.homingActive = false; showTopNotification("마나가 부족하여 유도 화살이 꺼졌습니다."); }
           }
           // [각성 · 정령의 눈] 유도 화살이 적중 시 소폭 폭발한다
@@ -10850,6 +11162,7 @@
       clearTimeout(timer); sessionTimers.delete(timer);
     }
     function resetSessionRuntime() {
+      resetAdminMetrics();
       damageLog = []; lastDeath = null; retryTicket = null; combatReportMode = null;
       isPlaying = false; isPaused = true;
       stopGameLoop(); stopStoryPlayback();
@@ -10891,7 +11204,7 @@
     function resetSessionPresentation() {
       closeSidePanel(false);
       for (const id of ['start-screen','save-screen','help-screen','story-screen','clear-screen','pause-menu','settings-modal',
-        'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal','combat-report-screen','objective-screen',
+        'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal','admin-panel','combat-report-screen','objective-screen',
         'status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator','item-tooltip']) {
         document.getElementById(id).classList.add('hidden');
       }
@@ -10922,7 +11235,8 @@
       for(const slot of ['sword','bow','staff'])if(awakenState[slot].stage==='quest'&&awakenState[slot].mats>=AWAKEN_DEFS[slot].matNeed&&awakenTaskDone(slot))awakenState[slot].stage='ready';
       syncActiveWeapon(); recalcEquipmentStats(); setupInventory(); updateQuestHUD(); updateBuffHUD();
     }
-    function applySaveData(input) {
+    function applySaveData(input, adminOperation = false) {
+      if(adminMode.active && !adminOperation)return false;
       // 검증과 아이템 준비를 모두 마친 뒤 현재 세션을 교체한다.
       const prepared = prepareSavedSession(input);
       restoreSessionState(prepared);
@@ -10954,6 +11268,7 @@
       return record.status === 'valid' ? record.data : null;
     }
     function writeSaveRecord(slot, source, input, preserveBackup = false) {
+      if(adminMode.active)throw new Error('관리자 테스트는 일반 슬롯에 저장할 수 없습니다.');
       const data = normalizeSaveData(input);
       if (!['manual','auto'].includes(source)) throw new Error('백업은 직접 덮어쓸 수 없습니다.');
       const current = readSaveRecord(slot, source);
@@ -10967,6 +11282,7 @@
       return data;
     }
     function saveToSlot(slot, silent) {
+      if(adminMode.active){if(!silent)showTopNotification('일반 저장은 보호 중입니다. 관리자 전용 저장을 사용하세요.');return false;}
       try {
         writeSaveRecord(slot, silent ? 'auto' : 'manual', getSaveData());
         if (silent) showAutosaveIndicator();
@@ -10978,6 +11294,7 @@
       }
     }
     function deleteSlotData(slot) {
+      if(adminMode.active)throw new Error('관리자 모드에서 일반 슬롯을 삭제할 수 없습니다.');
       for (const source of SAVE_SOURCES) localStorage.removeItem(saveKey(slot, source));
     }
     function showAutosaveIndicator() {
@@ -10992,6 +11309,7 @@
       openSaveManager('load');
     };
     window.openSaveManager = function(mode) {
+      if(adminMode.active){showTopNotification('일반 저장은 보호 중입니다. 관리자 도구를 사용하세요.');return;}
       releaseGameplayInput();
       saveScreenReturnTo = isPlaying ? 'pause' : 'start';
       if (isPlaying) isPaused = true;
@@ -11052,6 +11370,7 @@
       }
     }
     window.doExportSlot = function(slot, source = 'manual') {
+      if(adminMode.active){showTopNotification('관리자 모드를 먼저 종료하세요.');return;}
       const data = loadSlotData(slot, source);
       if (!data) { showTopNotification('⚠️ 내보낼 정상 저장을 읽을 수 없습니다.'); return; }
       const blob = new Blob([JSON.stringify(data)], {type:'application/json'});
@@ -11062,6 +11381,7 @@
       showTopNotification('📤 저장 파일 다운로드를 요청했습니다. 다운로드 폴더를 확인해주세요.', 4500);
     };
     function importSaveText(slot, text, filename) {
+      if(adminMode.active)throw new Error('관리자 모드를 먼저 종료하세요.');
       const data = normalizeSaveData(JSON.parse(text));
       const target = readSaveRecord(slot);
       if (target.status === 'unavailable') throw new Error('브라우저 저장 공간에 접근할 수 없습니다.');
@@ -11073,6 +11393,7 @@
       return true;
     }
     window.doImportToSlot = function(slot) {
+      if(adminMode.active){showTopNotification('관리자 모드를 먼저 종료하세요.');return;}
       const input = document.createElement('input'); input.type = 'file'; input.accept = 'application/json,.json';
       input.onchange = () => {
         const file = input.files[0]; if (!file) return;
@@ -11088,6 +11409,7 @@
       input.click();
     };
     window.doRestoreBackup = function(slot, source = 'backup') {
+      if(adminMode.active){showTopNotification('관리자 모드를 먼저 종료하세요.');return;}
       if (!['backup','autoBackup'].includes(source)) return;
       const record = readSaveRecord(slot, source), target = source === 'backup' ? 'manual' : 'auto';
       if (record.status !== 'valid') { showTopNotification('⚠️ 정상 백업을 읽을 수 없습니다.'); return; }
@@ -11099,6 +11421,7 @@
       } catch (e) { showTopNotification('⚠️ 복구에 실패했습니다. 저장 공간을 확인해주세요.'); }
     };
     window.doNewGame = function(slot) {
+      if(adminMode.active){showTopNotification('관리자 모드를 먼저 종료하세요.');return;}
       if (SAVE_SOURCES.some(source => readSaveRecord(slot, source).status === 'unavailable')) {
         showTopNotification('⚠️ 저장 공간에 접근할 수 없습니다. 브라우저의 사이트 저장 권한을 확인해주세요.'); return;
       }
@@ -11110,6 +11433,7 @@
       startNewGame();
     };
     window.doLoadSlot = function(slot, source = 'manual') {
+      if(adminMode.active){showTopNotification('관리자 모드를 먼저 종료하세요.');return;}
       const record = readSaveRecord(slot, source);
       if (record.status !== 'valid') { showTopNotification('⚠️ 저장을 불러올 수 없습니다. 정상 백업 또는 다른 저장을 선택해주세요.'); return; }
       // 검증은 applySaveData 내부에서도 수행하며, 성공한 뒤에만 활성 슬롯을 바꾼다.
@@ -11125,6 +11449,7 @@
       renderSaveSlots('save');
     };
     window.doDeleteSlot = function(slot, mode) {
+      if(adminMode.active){showTopNotification('관리자 모드를 먼저 종료하세요.');return;}
       if (isPlaying && slot === currentSaveSlot) {
         showTopNotification('⚠️ 현재 플레이 중인 슬롯은 삭제할 수 없습니다. 메인 메뉴로 돌아간 뒤 삭제해주세요.'); return;
       }
@@ -11144,7 +11469,7 @@
 
     // 입력은 현재 가장 위의 메뉴에만 전달한다. 모달이 열려 있으면 게임 시간도 멈춘다.
     const GAMEPLAY_OVERLAYS = ['pause-menu','settings-modal','save-screen','help-screen','npc-modal',
-      'alert-modal','tower-choice-modal','combat-report-screen','objective-screen','guild-ui','blacksmith-ui','potion-ui','start-screen','clear-screen','story-screen'];
+      'alert-modal','tower-choice-modal','admin-panel','combat-report-screen','objective-screen','guild-ui','blacksmith-ui','potion-ui','start-screen','clear-screen','story-screen'];
     function overlayVisible(id) { return !document.getElementById(id).classList.contains('hidden'); }
     function hasGameplayOverlay() { return GAMEPLAY_OVERLAYS.some(overlayVisible); }
     function gameplayPaused() { return isPaused || document.hidden || openSidePanel!==null || hasGameplayOverlay(); }
@@ -11162,7 +11487,7 @@
       if (!isPlaying) return;
       isPaused = true;
       // 저장/설정 화면을 덮지 않는다. 닫으면 기존 일시정지 메뉴로 돌아간다.
-      if (!overlayVisible('save-screen') && !overlayVisible('settings-modal') && !overlayVisible('objective-screen') && !overlayVisible('combat-report-screen')) {
+      if (!overlayVisible('save-screen') && !overlayVisible('settings-modal') && !overlayVisible('objective-screen') && !overlayVisible('combat-report-screen') && !overlayVisible('admin-panel')) {
         document.getElementById('pause-menu').classList.remove('hidden');
       }
     }
@@ -11185,6 +11510,7 @@
         document.getElementById('tower-choice-modal').classList.add('hidden');
         player.y = Math.min(875,player.y+60); portalCooldown = 60; return;
       }
+      if (overlayVisible('admin-panel')) { closeAdminPanel(); return; }
       if (overlayVisible('combat-report-screen')) { closeCombatReport(); return; }
       if (overlayVisible('alert-modal')) { closeAlertModal(); return; }
       if (overlayVisible('settings-modal')) { closeSettingsModal(); return; }
@@ -11253,7 +11579,7 @@
     }
     function initializeResponsiveLayout() {
       const stage=document.getElementById('game-stage');
-      for (const id of [...GAMEPLAY_OVERLAYS,'status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','top-notification','autosave-indicator','sfx-toggle-btn','version-badge']) stage.appendChild(document.getElementById(id));
+      for (const id of [...GAMEPLAY_OVERLAYS,'admin-badge','status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','top-notification','autosave-indicator','sfx-toggle-btn','version-badge']) stage.appendChild(document.getElementById(id));
       document.body.appendChild(document.getElementById('item-tooltip'));
       for (const button of document.querySelectorAll('[data-close-panel]')) button.addEventListener('click',()=>closeSidePanel());
       for (const button of document.querySelectorAll('#panel-controls button')) button.addEventListener('click',()=>toggleSidePanel(button.getAttribute('aria-controls')));
@@ -11270,7 +11596,7 @@
       releaseGameplayInput();
       const menu = document.getElementById('pause-menu');
       if (menu.classList.contains('hidden')) {
-        if (overlayVisible('settings-modal') || overlayVisible('save-screen') || overlayVisible('objective-screen') || overlayVisible('combat-report-screen')) return;
+        if (overlayVisible('settings-modal') || overlayVisible('save-screen') || overlayVisible('objective-screen') || overlayVisible('combat-report-screen') || overlayVisible('admin-panel')) return;
         menu.classList.remove('hidden');
         isPaused = true;
       } else {
@@ -11286,7 +11612,7 @@
       closeSidePanel(false);hideItemTooltip();
       document.getElementById('pause-menu').classList.add('hidden');
       document.getElementById('start-screen').classList.add('hidden');
-      populateSettings();document.getElementById('settings-status').textContent='';
+      populateSettings();updateAdminBadge();document.getElementById('settings-status').textContent='';document.getElementById('admin-auth-status').textContent='';document.getElementById('admin-code').value='';
       document.getElementById('settings-modal').classList.remove('hidden');
       document.getElementById('autosave-toggle').focus();
     };
@@ -11309,6 +11635,7 @@
     };
 
     window.goToMainMenu = function() {
+      if(adminMode.active){exitAdminMode();return;}
       const msg = autoSaveEnabled
         ? `메인 메뉴로 돌아갑니다. 진행 상황은 슬롯 ${currentSaveSlot}에 자동 저장됩니다.`
         : '자동 저장이 꺼져 있어 저장하지 않은 진행 상황은 사라집니다. 메인 메뉴로 돌아가시겠습니까?';
@@ -11323,7 +11650,7 @@
     // 탭을 닫거나 새로고침해도 마지막 상태가 남도록 한 번 더 저장한다.
     // (자동 저장은 30초 간격이라, 그 사이에 산 포션 같은 게 통째로 날아갔다)
     window.addEventListener('beforeunload', () => {
-      if (isPlaying && autoSaveEnabled) {
+      if (isPlaying && autoSaveEnabled && !adminMode.active) {
         saveToSlot(currentSaveSlot, true);
       }
     });
@@ -11368,6 +11695,7 @@
       storyFrame = requestAnimationFrame(storyLoop);
     }
     window.startNewGame = function() {
+      if(adminMode.active)return;
       restoreSessionState(prepareSavedSession(INITIAL_GAME_SAVE));
       beginStory(storyScripts, goToVillage);
     };
@@ -11379,7 +11707,7 @@
         updateStory(); storySceneStart = performance.now();
       } else {
         const key=storyKey(currentScript);
-        if(key) try { localStorage.setItem('mangiworld_seen_stories',JSON.stringify([...new Set([...seenStories(),key])])); } catch {}
+        if(key && !adminMode.active) try { localStorage.setItem('mangiworld_seen_stories',JSON.stringify([...new Set([...seenStories(),key])])); } catch {}
         const complete = onStoryComplete;
         stopStoryPlayback(); currentScript = null; onStoryComplete = null;
         document.getElementById('story-screen').classList.add('hidden');
@@ -11575,8 +11903,9 @@
     }
     function stepGame(present) {
       loopStats.steps++;
+      applyAdminAssist();
       // 자동 저장은 활동 시간 기준: 히트스톱 중에도 진행하지만 메뉴/포커스 정지 중에는 멈춘다.
-      if (autoSaveEnabled && gameState !== 'story') {
+      if (autoSaveEnabled && !adminMode.active && gameState !== 'story') {
         autoSaveTimer++;
         if (autoSaveTimer >= 1800) { autoSaveTimer = 0; saveToSlot(currentSaveSlot, true); }
       }
@@ -12947,6 +13276,7 @@
       ctx.globalAlpha = 1;
       drawObjectiveGuide();
       refreshCombatFeedback();
+      drawAdminMetrics();
     }
 
     let isPlaying = false, isPaused = true;
@@ -12956,6 +13286,8 @@
     initializeResponsiveLayout();
     applyAccessibilityPresentation();
     setupInventory();
+    updateAdminBadge();
+    recoverAdminCheckpoint();
   </script>
 </body>
 </html>
