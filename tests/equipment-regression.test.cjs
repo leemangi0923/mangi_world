@@ -184,7 +184,7 @@ test('schema 5 preserves equipment locks and migrates version 4 without changing
     const old={...getSaveData(),version:4};delete old.lockedEquipment;applySaveData(old);
     const bad=getSaveData();bad.lockedEquipment={weapon:true};let rejected=false;try{applySaveData(bad);}catch{rejected=true;}
     return {version:data.version,restored,migrated:lockedEquipment,tracking:trackedObjective,rejected};
-  }),{version:6,restored:true,migrated:{},tracking:'dungeon:wolf',rejected:true});
+  }),{version:7,restored:true,migrated:{},tracking:'dungeon:wolf',rejected:true});
 }));
 
 test('visible comparison updates when a buff expires instead of showing stale capped values',()=>run(async page=>{

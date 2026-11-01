@@ -75,3 +75,7 @@ GitHub Actions 설정은 `.github/workflows/test.yml`에 있습니다. 로컬 �
 `npm run test:demon`: 대마왕6패턴·연격2회·질주/균열/낙인·탄막 통로·심판 안전/중단/추가 피해·3단계·탑25층·3난이도 상한을 검사합니다.
 
 `node --test tests/monster-integration.test.cjs`: 실제 평타 입력으로3무기×3보스×3난이도 후딜 공격, 의식/심판 중단, 기본 달리기 회피, 신규 공격30/60/144Hz 일치를 검사합니다. 조건·수치는 [DEMON_UPDATE.md](../DEMON_UPDATE.md)에 있습니다. `npm run test:monsters`로 다섯 종족과 이 통합 검사를 함께 실행할 수 있습니다.
+
+`npm run test:rewards`: 형식7/구 저장 보상 이전, 첫 선택/보관함 수량 보존, 다섯 보스 교환, 저장 실패 복구, 수집 발견/관리자/슬롯 분리, 작은 화면과 키보드를 검사합니다.
+
+`npm run test:traits`: 실제 평타 기반7무기, 재귀/관통 중복 방지, 교체·표적·쿨타임·이탈 정리, 수확 대상/상한, 결투·훈련·관리자, 30/60/144Hz 일치를 검사합니다. 수치 초안은 [REWARDS_UPDATE.md](../REWARDS_UPDATE.md)에 있습니다.

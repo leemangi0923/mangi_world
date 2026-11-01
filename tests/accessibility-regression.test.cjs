@@ -34,7 +34,7 @@ test('all accessibility controls persist across reload, new adventure and save l
       auto:autoSaveEnabled,shake:shakeEnabled,mute:sfxMuted,large:document.body.hasAttribute('data-large-ui'),version:save.version,
       inSave:'bindings' in save || 'accessibility' in save};
   });
-  assert.deepEqual(result,{volume:.25,scale:1.3,hitStop:false,effects:0,auto:false,shake:false,mute:true,large:true,version:6,inSave:false});
+  assert.deepEqual(result,{volume:.25,scale:1.3,hitStop:false,effects:0,auto:false,shake:false,mute:true,large:true,version:7,inSave:false});
 },options));
 
 test('rebound movement uses real browser keys; previous key stops working and keyup releases motion',()=>run(async page=>{
@@ -184,5 +184,5 @@ test('v4 integration preserves manual saves, locked gear and tracked objectives 
     saveToSlot(1,true);const manual=readSaveRecord(1,'manual').data;applySaveData(manual);
     return {retried,gold,trackedObjective,locked:lockedSlots[0],item:inventory[0].id,move:accessibility.bindings.KeyW,skill:accessibility.bindings.KeyQ,logs:damageLog.length,version:manual.version};
   });
-  assert.deepEqual(result,{retried:true,gold:700,trackedObjective:'dungeon:slime',locked:true,item:'sword_iron',move:'ArrowUp',skill:'KeyT',logs:0,version:6});
+  assert.deepEqual(result,{retried:true,gold:700,trackedObjective:'dungeon:slime',locked:true,item:'sword_iron',move:'ArrowUp',skill:'KeyT',logs:0,version:7});
 },options));
