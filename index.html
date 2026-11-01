@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v3.4.6</title>
+  <title>만기 월드 (Mangi World) - v3.4.7</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -180,6 +180,22 @@
       #left-ui-panel.panel-open, #right-ui-panel.panel-open { display:flex; }
       .panel-close { display:block; align-self:flex-end; min-height:36px; padding:6px 12px; }
     }
+    #game-stage.small-game :is(#pause-menu,#settings-modal) { justify-content:flex-start!important; }
+    #objective-screen { position:absolute; inset:0; z-index:50; background:#0f172a; padding:12px; overflow:auto; overscroll-behavior:contain; color:#fff; }
+    #objective-screen.hidden { display:none!important; }
+    #objective-screen header { position:sticky; top:-12px; display:flex; align-items:center; justify-content:space-between; gap:8px; background:#0f172a; padding:10px 0; z-index:1; }
+    #objective-screen h2 { font-size:20px; }
+    #objective-mode { font-size:12px; color:#cbd5e1; margin:8px 0; }
+    .objective-card { padding:12px; border:1px solid #64748b; border-radius:8px; margin:10px 0; overflow-wrap:anywhere; }
+    .objective-card strong { color:#fde047; font-size:14px; }
+    .objective-card p { font-size:12px; line-height:1.5; margin:6px 0; white-space:pre-line; }
+    .objective-card .btn { padding:6px 12px; }
+    .objective-card .btn:disabled { background:#475569; color:#cbd5e1; cursor:default; }
+    #quest-hud { max-height:240px; }
+    #quest-hud-text { max-height:170px; overflow:auto; pointer-events:auto; }
+    #dungeon-hud-text { white-space:pre-line; }
+    #game-stage > #dungeon-hud { top:390px; }
+    #compact-progress #quest-hud { max-height:none; }
   </style>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -225,6 +241,12 @@
       </div>
 
       <div class="changelog-box">
+        <h4>📌 v3.4.7 패치 노트</h4>
+        • 📌 <b>다음 목표를 안내</b>합니다. 목표 선택 또는 일시정지 메뉴의 목표와 진행에서 직접 추적할 대상을 고를 수 있습니다<br>
+        • 🧭 <b>현재 맵에서 가야 할 출구·포탈 방향</b>을 표시합니다. 아직 열리지 않은 구역과 완료한 목표는 구분합니다<br>
+        • 📜 의뢰·던전·스킬·각성의 <b>진행도와 해금 조건</b>을 함께 보여주고 추적 선택도 저장합니다. 기존 저장은 자동 안내로 불러옵니다<br>
+        • ⚔️ 각성 재료를 먼저 모은 뒤 <b>탑 30층을 클리어하면 재대결 준비가 갱신</b>되도록 수정했습니다<br>
+        <br>
         <h4>📌 v3.4.6 패치 노트</h4>
         • 🖥️ <b>화면 크기에 맞춰 게임 비율을 유지</b>합니다. 창 크기를 바꾼 뒤에도 마우스 조준이 맞도록 정리했습니다<br>
         • 🎒 좁은 화면에서는 위쪽 버튼으로 <b>캐릭터 정보와 가방·장비</b>를 엽니다. 열려 있는 동안 전투가 멈추며, Escape로 닫을 수 있습니다<br>
@@ -513,7 +535,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v3.4.6</div>
+      <div id="version-badge">v3.4.7</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -552,8 +574,9 @@
       </div>
 
       <div class="quest-hud hidden" id="quest-hud">
-        <div style="font-weight:bold; color:#fde047; margin-bottom:2px;">📌 진행중인 의뢰</div>
-        <div id="quest-hud-text">의뢰를 수락하세요.</div>
+        <div style="font-weight:bold; color:#fde047; margin-bottom:2px;">📌 다음 목표</div>
+        <div id="quest-hud-text" style="white-space:pre-line;"></div>
+        <button class="btn" id="objective-open" style="pointer-events:auto; padding:4px 8px; font-size:11px; margin-top:5px;" onclick="openObjectiveScreen()">목표 선택</button>
       </div>
 
       <div class="quest-hud hidden" id="dungeon-hud">
@@ -576,7 +599,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.6 : 화면 크기 자동 대응 · 접이식 정보와 가방</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.7 : 다음 목표 · 진행 추적 · 목적지 방향 안내</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
       </div>
@@ -592,6 +615,7 @@
         <button class="btn" style="width:220px;" onclick="togglePauseMenu()">계속하기</button>
         <button class="btn" style="width:220px;" onclick="openSaveManager('save')">저장하기</button>
         <button class="btn" style="width:220px;" onclick="openSaveManager('load')">불러오기</button>
+        <button class="btn" style="width:220px;" onclick="openObjectiveScreen()">목표와 진행</button>
         <button class="btn" style="width:220px;" onclick="openSettingsModal()">설정</button>
         <button class="btn" style="width:220px; background:#7f1d1d;" onclick="goToMainMenu()">메인 메뉴</button>
         <button class="btn" style="width:220px; background:#1e293b; border:2px solid #eab308;" onclick="quitGame()">게임 종료</button>
@@ -630,10 +654,15 @@
           • <strong>Q/E/F/R 스킬</strong>: 민제(검)·엘프 여왕(활)·대마법사(지팡이)를 이기면 무기별로 배웁니다.<br>
           • <strong>G 각성 궁극기</strong>: 대마왕을 물리친 뒤 스승에게 각성 시련을 받고, 재료를 모아 과제를 깬 다음 재대결에서 이기면 열립니다.
         </p>
-        <p style="font-size:12px; margin-bottom:12px;">작은 화면에서는 위쪽 캐릭터 정보·가방 버튼을 사용하세요. 게임 조작은 키보드와 마우스를 사용합니다.</p>
+        <p style="font-size:12px; margin-bottom:12px;">목표 선택 또는 일시정지 메뉴의 목표와 진행에서 추적 대상을 고를 수 있습니다. 노란 화살표는 현재 맵의 출구·목적지 방향이며 장애물은 직접 돌아가세요. 작은 화면에서는 위쪽 캐릭터 정보·가방 버튼을 사용하세요. 게임 조작은 키보드와 마우스를 사용합니다.</p>
         <button class="btn" onclick="backToMain()">확인</button>
       </div>
 
+      <section id="objective-screen" class="hidden" role="dialog" aria-modal="true" aria-labelledby="objective-title">
+        <header><h2 id="objective-title">목표와 진행</h2><button class="btn" id="objective-close" onclick="closeObjectiveScreen()">닫기</button></header>
+        <p id="objective-mode"></p><button class="btn" id="objective-auto" onclick="selectObjective(null)">자동 안내로 전환</button>
+        <div id="objective-list"></div>
+      </section>
       <div id="story-screen" class="hidden" onclick="advanceStory()">
         <div class="story-dialog-box">
           <div style="font-size:18px; font-weight:900; color:#fde047; margin-bottom:8px;" id="story-speaker">만기</div>
@@ -1405,7 +1434,7 @@
     let bossRespawnCooldown = { slime: 0, wolf: 0, zombie: 0, ghost: 0, demon: 0 };
 
     // ---------- 무한의 탑 ----------
-    const SAVE_SCHEMA_VERSION = 3; // 세이브 파일 구조 버전. 새 필드를 추가할 때마다 올리고 applySaveData에서 방어적으로 처리할 것.
+    const SAVE_SCHEMA_VERSION = 4; // 세이브 파일 구조 버전. 새 필드를 추가할 때마다 올리고 applySaveData에서 방어적으로 처리할 것.
     let towerFloor = 0;
     let towerBestFloor = 0;
     let towerMobsRemaining = 0;
@@ -1427,7 +1456,7 @@
       sword: {
         npc: 'minje', master: '전설의 용사 민제', label: '검술',
         matName: '용사의 증표', matIcon: '⚔️', matBoss: 'slime', matBossName: '슬라임 킹', matNeed: 3,
-        taskTitle: '탑을 오르는 시련', taskDesc: '무한의 탑 30층 도달'
+        taskTitle: '탑을 오르는 시련', taskDesc: '무한의 탑 30층 클리어'
       },
       bow: {
         npc: 'elfqueen', master: '엘프 여왕 민석', label: '궁술',
@@ -1441,7 +1470,7 @@
       }
     };
     const AWAKEN_MAT_CHANCE = 0.30;
-    const AWAKEN_TOWER_FLOOR = 30;   // 검: 무한의 탑 도달 층
+    const AWAKEN_TOWER_FLOOR = 30;   // 검: 무한의 탑 최고 클리어 층
     const AWAKEN_DEMON_KILLS = 40;   // 활: 마왕성 악마 처치 수
 
     function makeAwakenSlot() {
@@ -2232,6 +2261,7 @@
           showTopNotification(`✅ ${towerFloor}층 클리어! 위쪽 포탈로 다음 층에 도전하세요.`, 4000);
         }
       }
+      if(towerMobsRemaining===0){refreshAwakenReady('sword');updateQuestHUD();}
     }
 
     function exitTower() {
@@ -4471,8 +4501,9 @@
     }
 
     window.acceptQuest = function(id) {
-      activeQuests[id] = { status: 'accepted', progress: 0 };
       const q = questDefs.find(q => q.id === id);
+      if(!q||level<q.minLevel||activeQuests[id])return false;
+      activeQuests[id] = { status: 'accepted', progress: 0 };
       showTopNotification(`📜 [${q.title}] 의뢰를 수락했습니다!`);
       updateGuildUI();
       updateQuestHUD();
@@ -4495,34 +4526,188 @@
       updateQuestHUD();
     };
 
-    function updateQuestHUD() {
-      const qHud = document.getElementById('quest-hud');
-      const qText = document.getElementById('quest-hud-text');
-      const accepted = questDefs.filter(q => activeQuests[q.id] && activeQuests[q.id].status === 'accepted');
-      const completed = questDefs.filter(q => activeQuests[q.id] && activeQuests[q.id].status === 'completed');
-
-      // 각성 퀘스트도 같은 HUD에 표시한다
-      const awakenLines = [];
-      ['sword','bow','staff'].forEach(slot => {
-        const st = awakenState[slot], def = AWAKEN_DEFS[slot];
-        if (st.stage === 'quest') {
-          awakenLines.push(`✨ ${def.label} 각성 — ${def.matIcon}${st.mats}/${def.matNeed}, ${def.taskTitle} ${awakenTaskProgressText(slot)}`);
-        } else if (st.stage === 'ready') {
-          awakenLines.push(`✨ ${def.label} 각성 준비 완료! ${def.master}에게 재대결 신청`);
-        }
-      });
-
-      if (accepted.length === 0 && completed.length === 0 && awakenLines.length === 0) {
-        qHud.classList.add('hidden');
-        return;
-      }
-      qHud.classList.remove('hidden');
-      let lines = [];
-      completed.forEach(q => lines.push(`✅ ${q.title} (완료! 길드로 복귀)`));
-      accepted.forEach(q => lines.push(`${q.title}: ${activeQuests[q.id].progress}/${q.target}`));
-      lines = lines.concat(awakenLines);
-      qText.innerHTML = lines.join('<br>');
+    // ---------- 목표 모델: 진행 상태로부터 안내를 계산하며 보상/수락/이동은 실행하지 않는다 ----------
+    let trackedObjective = null;
+    let objectiveRefreshFrame = -Infinity, objectiveRefreshMap = null, objectiveGuide = null;
+    let objectiveReturnToPause = false;
+    const OBJECTIVE_SKILLS = {
+      sword:{learned:'learnedSword',defeated:()=>minjeDefeated,map:'castle_inner',label:'검술',master:'전설의 용사 민제'},
+      bow:{learned:'learnedBow',defeated:()=>elfQueenDefeated,map:'elf_village',label:'궁술',master:'엘프 여왕 민석'},
+      staff:{learned:'learnedStaff',defeated:()=>archmageDefeated,map:'mage_tower',label:'마법',master:'대마법사 에녹'}
+    };
+    function validObjectiveId(id) {
+      return id === 'tower' || questDefs.some(q=>'quest:'+q.id===id) || TOWER_CATS.some(c=>'dungeon:'+c===id) ||
+        ['sword','bow','staff'].some(s=>'skill:'+s===id || 'awaken:'+s===id);
     }
+    function tierProgressText(cat,stage) {
+      const tier=dungeonDefs[cat].tiers[stage],value=Math.min(tier.target,dungeonProgress[cat].progress[stage]);
+      if(tier.type==='survive') return `90초 생존 ${Math.floor(value/60)}/${tier.target/60}초`;
+      return `${tier.type==='elite'?'정예':'일반 적'} 처치 ${value}/${tier.target}마리`;
+    }
+    function dungeonTarget(cat,stage=null,boss=false) { return {map:'dungeon',category:cat,stage,boss}; }
+    function masterTarget(slot) { return {map:OBJECTIVE_SKILLS[slot].map,x:400,y:slot==='sword'?500:470,label:OBJECTIVE_SKILLS[slot].master}; }
+    function skillLock(slot) {
+      if(slot==='sword')return level>=30?'':'왕성 진입 Lv.30 필요';
+      if(slot==='bow')return dungeonProgress.wolf.bossDefeated?'':'늑대왕 페릴 처치 필요';
+      return dungeonProgress.ghost.bossDefeated?'':'사령왕 처치 필요';
+    }
+    function buildObjectives() {
+      const goals=[];
+      for(const q of questDefs){
+        const state=activeQuests[q.id],status=state?state.status:'none';
+        const locked=status==='none'&&level<q.minLevel?`Lv.${q.minLevel} 필요`:'';
+        const destination=status==='none'||status==='completed'?{map:'guild_map',x:400,y:300,label:'길드 의뢰 게시판'}:dungeonTarget(q.category,q.stageIndex===undefined?null:q.stageIndex,!!q.bossOnly);
+        goals.push({id:'quest:'+q.id,type:{main:'메인 의뢰',sub:'서브 의뢰',repeatable:'반복 의뢰'}[q.type],title:q.title,
+          detail:status==='none'?'길드에서 먼저 수락하세요. '+q.desc:status==='completed'?'목표 달성! 길드에서 보상을 받으세요.':status==='done'?'보상 수령 완료':q.desc,
+          progress:status==='none'?'수락 전':status==='done'?'완료':`${Math.min(state.progress,q.target)}/${q.target}마리${status==='completed'?' · 보상 대기':''}`,
+          locked,complete:status==='done',target:destination});
+      }
+      for(const cat of TOWER_CATS){
+        const def=dungeonDefs[cat],state=dungeonProgress[cat];let stage=def.tiers.findIndex((tier,i)=>state.progress[i]<tier.target);
+        const boss=stage===-1;if(boss)stage=2;
+        goals.push({id:'dungeon:'+cat,type:'던전',title:def.label+' 공략',detail:state.bossDefeated?'보스 정복 완료':boss?def.boss.name+' 처치':`${stage+1}구역 · ${def.tiers[stage].name} · 권장 Lv.${def.tiers[stage].level}`,
+          progress:def.tiers.map((_,i)=>`${i+1}구역 ${tierProgressText(cat,i)}`).join(' / ')+` / 보스 ${state.bossDefeated?'완료':'미완료'}`,
+          locked:cat==='demon'&&level<80?'마왕성 진입 Lv.80 필요':'',complete:state.bossDefeated,target:dungeonTarget(cat,stage,boss)});
+      }
+      for(const slot of ['sword','bow','staff']){
+        const skill=OBJECTIVE_SKILLS[slot],learned=skills[skill.learned]&&skill.defeated(),state=awakenState[slot],def=AWAKEN_DEFS[slot];
+        goals.push({id:'skill:'+slot,type:'스킬 습득',title:skill.label+' 배우기',detail:skill.master+'와의 일반 결투에서 승리하세요.',
+          progress:learned?'습득 완료':'스승 결투 승리 필요',locked:skillLock(slot),complete:learned,target:masterTarget(slot)});
+        let target=masterTarget(slot),detail='스승에게 각성 시련을 받으세요.';
+        if(state.stage==='quest'){
+          if(state.mats<def.matNeed){target=dungeonTarget(def.matBoss,null,true);detail=`${def.matBossName}을 반복 토벌해 ${def.matName}을 모으세요. 재료는 확률 드롭입니다.`;}
+          else if(!awakenTaskDone(slot)){
+            if(slot==='sword'){target={map:'tower'};detail='무한의 탑 30층을 클리어하세요. 최고 클리어 기록으로 판정합니다.';}
+            if(slot==='bow'){target=dungeonTarget('demon');detail='마왕성의 일반 악마를 40마리 처치하세요. 보스는 제외합니다.';}
+            if(slot==='staff'){const cat=['slime','wolf','zombie','ghost'].find(c=>!state.bosses[c]);target=dungeonTarget(cat,null,true);detail=dungeonDefs[cat].boss.name+'을 다시 처치하세요.';}
+          }else detail='조건 충족! 스승에게 돌아가 각성 시련을 확인하세요.';
+        }
+        if(state.stage==='ready')detail='재료와 과제 완료! 스승과 각성 재대결에서 승리하세요.';
+        if(state.stage==='awakened')detail='각성 완료 · 해당 무기로 G 궁극기를 사용할 수 있습니다.';
+        goals.push({id:'awaken:'+slot,type:'각성',title:skill.label+' 각성',detail,
+          progress:state.stage==='locked'?'시련 수락 전':state.stage==='awakened'?'완료':`${def.matName} ${Math.min(state.mats,def.matNeed)}/${def.matNeed} · ${slot==='sword'?'30층 클리어':def.taskTitle} ${awakenTaskProgressText(slot)}`,
+          locked:skillLock(slot)||(!learned?'먼저 '+skill.label+' 스승 결투 승리 필요':!demonDefeated?'대마왕 처치 후 개방':''),complete:state.stage==='awakened',target});
+      }
+      goals.push({id:'tower',type:'도전',title:'무한의 탑 도전',detail:'층을 클리어하고 위쪽 포탈로 올라가세요. 에녹의 귀환 이야기는 별도로 선택할 수 있습니다.',
+        progress:`${towerFloor>0?'진행 중 '+towerFloor+'층':'진행 중인 층 없음'} · 최고 클리어 ${towerBestFloor}층`,locked:demonDefeated?'':'대마왕 처치 후 개방',complete:false,target:{map:'tower'}});
+      return goals;
+    }
+    function automaticObjective(goals) {
+      const find=id=>goals.find(g=>g.id===id&&!g.complete&&!g.locked);
+      for(const status of ['completed','accepted'])for(const q of questDefs){
+        if(activeQuests[q.id]?.status===status && (status==='completed'||q.type!=='repeatable')){const g=find('quest:'+q.id);if(g)return g;}
+      }
+      if(level<=5&&!activeQuests.q_slime_novice&&!dungeonProgress.slime.bossDefeated)return find('quest:q_slime_novice');
+      for(const slot of ['sword','bow','staff']){const g=find('skill:'+slot);if(g)return g;}
+      if(demonDefeated){
+        for(const slot of ['sword','bow','staff'])if(['quest','ready'].includes(awakenState[slot].stage)){const g=find('awaken:'+slot);if(g)return g;}
+        for(const slot of ['sword','bow','staff']){const g=find('awaken:'+slot);if(g)return g;}
+      }
+      for(const cat of TOWER_CATS){const g=find('dungeon:'+cat);if(g)return g;}
+      // 마왕성 필수 레벨이 부족하면 열린 사냥터에서 성장하도록 안내한다.
+      if(!demonDefeated&&level>=80)return {id:'final-boss',type:'여정',title:'대마왕 토벌',detail:'마왕성의 대마왕을 처치하세요.',progress:'대마왕 미처치',target:dungeonTarget('demon',null,true),complete:false,locked:''};
+      if(!demonDefeated)return {id:'leveling',type:'성장',title:'Lv.80 달성',detail:'열린 사냥터나 반복 의뢰로 성장한 뒤 마왕성에 도전하세요.',progress:`Lv.${level}/80`,target:{map:'portal_room',x:150,y:190,label:'사냥터 포탈'},complete:false,locked:''};
+      return find('tower');
+    }
+    function currentObjective(goals=buildObjectives()) {
+      const selected=goals.find(g=>g.id===trackedObjective&&!g.complete&&!g.locked);
+      return selected||automaticObjective(goals);
+    }
+    function navigationEdges() {
+      const edges={};const add=(from,to,x,y,label,allowed=true)=>{if(allowed)(edges[from]||(edges[from]=[])).push({to,x,y,label});};
+      add('village','portal_room',400,60,'북쪽 사냥터 포탈');add('village','castle_entrance',780,450,'오른쪽 파란 길');add('village','demon_entrance',20,450,'왼쪽 빨간 길');
+      for(const b of VILLAGE_BUILDINGS){add('village',b.trigger,b.cx,b.topY+buildingSize(b).h-12,b.label+' 문');add(b.trigger,'village',400,850,'마을로 나가기');}
+      add('portal_room','village',400,830,'마을 포탈');add('castle_entrance','village',20,450,'왼쪽 마을 길');add('demon_entrance','village',780,450,'오른쪽 마을 길');
+      add('castle_entrance','castle_inner',400,160,'왕성 문',level>=30);add('castle_inner','castle_entrance',400,875,'왕성 입구로');
+      add('castle_entrance','training',745,470,'훈련장 포탈');add('training','castle_entrance',400,875,'훈련장 아래 출구');
+      add('portal_room','elf_village',700,380,'엘프 마을 포탈',dungeonProgress.wolf.bossDefeated);add('elf_village','portal_room',400,830,'포탈 방으로');
+      add('portal_room','mage_tower',100,380,'대마법사의 탑 포탈',dungeonProgress.ghost.bossDefeated);add('mage_tower','portal_room',400,830,'포탈 방으로');
+      return edges;
+    }
+    function objectiveNavigation(goal) {
+      if(!goal||goal.complete||goal.locked)return {text:goal?.locked||'목표를 선택하세요.',point:null};
+      const target=goal.target;
+      if(['minje_duel','elf_duel','mage_duel'].includes(gameState))return {text:'진행 중인 스승 결투를 마친 뒤 이동하세요.',point:null};
+      if(gameState==='dungeon'){
+        if(target.map!=='dungeon'||target.category!==currentDungeon.category)return {text:'아래 출구로 현재 던전을 나가세요.',point:{x:400,y:850,label:'던전 출구'}};
+        if(currentDungeon.isBoss&&!target.boss)return {text:'일반 적 목표는 아래 출구로 이전 구역에 돌아가세요.',point:{x:400,y:850,label:'이전 구역'}};
+        if(currentDungeon.isBoss)return {text:enemies.length?'보스와의 전투를 완료하세요.':`보스 재소환까지 ${Math.ceil(bossRespawnCooldown[currentDungeon.category]/60)}초`,point:null};
+        const stage=currentDungeon.stage,desired=target.stage;
+        if(!target.boss&&(desired===null||desired===stage))return {text:'현재 구역에서 목표 적을 처치하세요.',point:null};
+        if(desired!==null&&desired<stage)return {text:'아래 출구로 이전 구역에 돌아가세요.',point:{x:400,y:850,label:'이전 구역'}};
+        const tier=dungeonDefs[currentDungeon.category].tiers[stage];
+        if(dungeonProgress[currentDungeon.category].progress[stage]<tier.target)return {text:'먼저 현재 구역 완료: '+tierProgressText(currentDungeon.category,stage),point:null};
+        return {text:'열린 위쪽 포탈로 다음 구역에 이동하세요.',point:{x:400,y:130,label:'다음 구역'}};
+      }
+      if(gameState==='tower')return target.map==='tower'?{text:towerMobsRemaining?'현재 층의 남은 적 '+towerMobsRemaining+'마리를 처치하세요.':'위쪽 포탈로 다음 층에 올라가세요.',point:towerMobsRemaining?null:{x:400,y:130,label:'다음 층'}}:{text:'아래 출구로 탑을 나가세요.',point:{x:400,y:850,label:'탑 출구'}};
+      let map=target.map,point=target;
+      if(map==='dungeon'){
+        if(target.category==='demon'){map='demon_entrance';point={x:400,y:160,label:'마왕성 문'};}
+        else {map='portal_room';const positions={slime:[150,190],wolf:[650,190],zombie:[150,560],ghost:[650,560]};const [x,y]=positions[target.category];point={x,y,label:dungeonDefs[target.category].label+' 포탈'};}
+      }
+      if(map==='tower'){map='portal_room';point={x:400,y:380,label:'무한의 탑 포탈'};}
+      if(gameState===map)return {text:point.label+' 쪽으로 이동하세요.',point:{x:point.x,y:point.y,label:point.label}};
+      const edges=navigationEdges(),queue=[{map:gameState,first:null}],seen=new Set([gameState]);
+      while(queue.length){const node=queue.shift();for(const edge of edges[node.map]||[]){
+        if(seen.has(edge.to))continue;const first=node.first||edge;if(edge.to===map)return {text:first.label+' → '+mapLabel(map),point:first};
+        seen.add(edge.to);queue.push({map:edge.to,first});
+      }}
+      return {text:'이동 조건을 확인하고 현재 전투나 메뉴를 마치세요.',point:null};
+    }
+    function setTextIfChanged(element,text) { if(element.textContent!==text)element.textContent=text; }
+    function refreshObjectiveUI(force=false) {
+      if(!force&&objectiveRefreshMap===gameState&&frameCount-objectiveRefreshFrame<12)return;
+      objectiveRefreshFrame=frameCount;objectiveRefreshMap=gameState;
+      const goals=buildObjectives();
+      if(trackedObjective&&!goals.some(g=>g.id===trackedObjective&&!g.complete&&!g.locked))trackedObjective=null;
+      const goal=currentObjective(goals),nav=objectiveNavigation(goal);
+      objectiveGuide={map:gameState,...nav};
+      const text=goal?`${trackedObjective?'추적':'자동 안내'} · [${goal.type}] ${goal.title}\n${goal.progress}\n${goal.detail}\n📍 ${nav.text}`:'목표를 선택하세요.';
+      setTextIfChanged(document.getElementById('quest-hud-text'),text);
+      document.getElementById('quest-hud').classList.remove('hidden');
+      const current=gameState==='dungeon'?`${dungeonDefs[currentDungeon.category].label} · ${currentDungeon.isBoss?'보스':(currentDungeon.stage+1)+'구역'}\n${currentDungeon.isBoss?dungeonDefs[currentDungeon.category].boss.name:tierProgressText(currentDungeon.category,currentDungeon.stage)}`:gameState==='tower'?`무한의 탑 ${towerFloor}층 · 남은 적 ${towerMobsRemaining}마리`:'';
+      document.getElementById('dungeon-hud').classList.toggle('hidden',!current);
+      setTextIfChanged(document.getElementById('dungeon-hud-title'),'현재 도전');setTextIfChanged(document.getElementById('dungeon-hud-text'),current);
+    }
+    function drawObjectiveGuide() {
+      if(!objectiveGuide||objectiveGuide.map!==gameState||!objectiveGuide.point)return;
+      const {x,y}=objectiveGuide.point,dx=x-player.x,dy=y-player.y,distance=Math.hypot(dx,dy);
+      if(distance<25)return;
+      const angle=Math.atan2(dy,dx),length=Math.min(65,distance-12),sx=player.x+Math.cos(angle)*30,sy=player.y+Math.sin(angle)*30;
+      ctx.save();ctx.strokeStyle='#fde047';ctx.fillStyle='#fde047';ctx.lineWidth=2;
+      ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx+Math.cos(angle)*length,sy+Math.sin(angle)*length);ctx.stroke();ctx.setLineDash([]);
+      ctx.translate(sx+Math.cos(angle)*length,sy+Math.sin(angle)*length);ctx.rotate(angle);
+      ctx.beginPath();ctx.moveTo(8,0);ctx.lineTo(-5,-5);ctx.lineTo(-5,5);ctx.closePath();ctx.fill();ctx.restore();
+    }
+    function renderObjectiveMenu() {
+      const list=document.getElementById('objective-list');list.replaceChildren();
+      for(const goal of buildObjectives()){
+        const card=document.createElement('article');card.className='objective-card';card.dataset.objective=goal.id;
+        const title=document.createElement('strong');title.textContent=`[${goal.type}] ${goal.title}`;card.appendChild(title);
+        for(const text of [goal.progress,goal.detail,goal.locked?'🔒 '+goal.locked:''])if(text){const p=document.createElement('p');p.textContent=text;card.appendChild(p);}
+        const button=document.createElement('button');button.className='btn';button.disabled=!!goal.locked||goal.complete;
+        button.textContent=goal.complete?'완료':goal.locked?'해금 필요':trackedObjective===goal.id?'추적 중':'추적하기';button.onclick=()=>selectObjective(goal.id);card.appendChild(button);list.appendChild(card);
+      }
+      setTextIfChanged(document.getElementById('objective-mode'),trackedObjective?'선택한 목표를 추적하고 있습니다.':'자동 안내: 보상 수령 → 메인/서브 의뢰 → 스킬·던전·각성 순서로 추천합니다.');
+    }
+    function selectObjective(id) {
+      if(id!==null&&!buildObjectives().some(g=>g.id===id&&!g.locked&&!g.complete))return false;
+      trackedObjective=id;refreshObjectiveUI(true);closeObjectiveScreen();
+      showTopNotification(id?'📌 '+currentObjective().title+' 추적 중':'📌 자동 안내로 전환했습니다.');return true;
+    }
+    function openObjectiveScreen() {
+      if(!isPlaying||GAMEPLAY_OVERLAYS.some(id=>id!=='pause-menu'&&overlayVisible(id)))return;
+      objectiveReturnToPause=isPaused||overlayVisible('pause-menu');
+      closeSidePanel(false);releaseGameplayInput();hideItemTooltip();document.getElementById('pause-menu').classList.add('hidden');
+      renderObjectiveMenu();document.getElementById('objective-screen').classList.remove('hidden');document.getElementById('objective-close').focus({preventScroll:true});
+    }
+    function closeObjectiveScreen() {
+      document.getElementById('objective-screen').classList.add('hidden');releaseGameplayInput();
+      if(isPlaying&&(objectiveReturnToPause||isPaused)){isPaused=true;document.getElementById('pause-menu').classList.remove('hidden');}
+      objectiveReturnToPause=false;
+    }
+
+    function updateQuestHUD() { refreshObjectiveUI(true); }
 
     function expForLevel(lvl) {
       // 가파른 성장 곡선: 초반은 완만하되 레벨이 오를수록 요구량이 급증해 연속 레벨업을 방지
@@ -5370,6 +5555,7 @@
         if (isPlaying || openSidePanel!==null) { e.preventDefault(); if (!e.repeat) handleEscape(); }
         return;
       }
+      if (overlayVisible('objective-screen') && e.code==='Tab') { trapFocus(document.getElementById('objective-screen'),e); return; }
       if (openSidePanel!==null && e.code==='Tab') { handlePanelTab(e); return; }
       if (!canUseGameplayInput(e)) return;
       if (e.ctrlKey || e.altKey || e.metaKey) return;
@@ -10102,6 +10288,7 @@
       const returnToVillage = ['dungeon','tower','story','minje_duel','elf_duel','mage_duel'].includes(gameState);
       return {
         version: SAVE_SCHEMA_VERSION,
+        trackedObjective,
         savedAt: Date.now(),
         towerBestFloor, towerFloor,
         level, exp, nextExp, gold, hp, maxHp, mp, maxMp,
@@ -10170,6 +10357,10 @@
         if (required.some(key => input[key] === undefined)) fail();
       }
       const data = { version: SAVE_SCHEMA_VERSION };
+      if(version>=4 && input.trackedObjective===undefined)fail();
+      const tracking=input.trackedObjective===undefined?null:input.trackedObjective;
+      if(tracking!==null&&(typeof tracking!=='string'||!validObjectiveId(tracking)))fail();
+      data.trackedObjective=tracking;
       for (const key of ['level','nextExp']) data[key] = integer(input[key], 1);
       for (const key of ['exp','gold','statPoints']) data[key] = integer(input[key]);
       for (const key of ['statStr','statVit','statAgi','statAtk']) data[key] = integer(input[key], 10);
@@ -10345,6 +10536,7 @@
       skillParticles = []; cameraShake = 0; screenFlash = 0; shakeFlip = 1; hitStop = 0;
       impactRings = []; dustPuffs = []; lastHudWeaponSlot = null;
       trainingDummy = null; resetTrainingStats(); trainingLatch = {};
+      objectiveRefreshFrame=-Infinity;objectiveRefreshMap=null;objectiveGuide=null;objectiveReturnToPause=false;
       trainingOpts = {infMana:true,noCd:false,moving:false};
       activeNpc = null; hoveredSlot = {area:null,index:null}; tooltipCompareItem = null;
       blacksmithTab = 'shop'; autoSaveTimer = 0; saveScreenReturnTo = 'start'; saveManagerMode = 'load';
@@ -10352,7 +10544,7 @@
     function resetSessionPresentation() {
       closeSidePanel(false);
       for (const id of ['start-screen','save-screen','help-screen','story-screen','clear-screen','pause-menu','settings-modal',
-        'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal',
+        'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal','objective-screen',
         'status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator','item-tooltip']) {
         document.getElementById(id).classList.add('hidden');
       }
@@ -10374,12 +10566,13 @@
       ({towerBestFloor,towerFloor,level,exp,nextExp,gold,hp,maxHp,mp,maxMp,
         statPoints,statStr,statVit,statAgi,statAtk,statCrit,statCritDmg,statMp,
         activeWeaponSlot,lockedSlots,activeQuests,dungeonProgress,currentDungeon,npcFlags,awakenState,
-        demonDefeated,minjeDefeated,elfQueenDefeated,archmageDefeated} = data);
+        demonDefeated,minjeDefeated,elfQueenDefeated,archmageDefeated,trackedObjective} = data);
       player.x = data.player.x; player.y = data.player.y; player.facing = data.player.facing;
       player.faceDir = data.player.facing === 'left' ? -1 : 1;
       equipped = prepared.equipped; inventory = prepared.inventory; hotbar = prepared.hotbar;
       skills = {...data.skills,cooldowns:{q:0,e:0,r:0,f:0}};
       gameState = data.gameState;
+      for(const slot of ['sword','bow','staff'])if(awakenState[slot].stage==='quest'&&awakenState[slot].mats>=AWAKEN_DEFS[slot].matNeed&&awakenTaskDone(slot))awakenState[slot].stage='ready';
       syncActiveWeapon(); recalcEquipmentStats(); setupInventory(); updateQuestHUD(); updateBuffHUD();
     }
     function applySaveData(input) {
@@ -10604,7 +10797,7 @@
 
     // 입력은 현재 가장 위의 메뉴에만 전달한다. 모달이 열려 있으면 게임 시간도 멈춘다.
     const GAMEPLAY_OVERLAYS = ['pause-menu','settings-modal','save-screen','help-screen','npc-modal',
-      'alert-modal','tower-choice-modal','guild-ui','blacksmith-ui','potion-ui','start-screen','clear-screen','story-screen'];
+      'alert-modal','tower-choice-modal','objective-screen','guild-ui','blacksmith-ui','potion-ui','start-screen','clear-screen','story-screen'];
     function overlayVisible(id) { return !document.getElementById(id).classList.contains('hidden'); }
     function hasGameplayOverlay() { return GAMEPLAY_OVERLAYS.some(overlayVisible); }
     function gameplayPaused() { return isPaused || document.hidden || openSidePanel!==null || hasGameplayOverlay(); }
@@ -10622,7 +10815,7 @@
       if (!isPlaying) return;
       isPaused = true;
       // 저장/설정 화면을 덮지 않는다. 닫으면 기존 일시정지 메뉴로 돌아간다.
-      if (!overlayVisible('save-screen') && !overlayVisible('settings-modal')) {
+      if (!overlayVisible('save-screen') && !overlayVisible('settings-modal') && !overlayVisible('objective-screen')) {
         document.getElementById('pause-menu').classList.remove('hidden');
       }
     }
@@ -10649,6 +10842,7 @@
       if (overlayVisible('settings-modal')) { closeSettingsModal(); return; }
       if (overlayVisible('pause-menu')) { togglePauseMenu(); return; }
       if (overlayVisible('save-screen')) { closeSaveScreen(); return; }
+      if (overlayVisible('objective-screen')) { closeObjectiveScreen(); return; }
       if (overlayVisible('npc-modal')) { closeNpcModal(); return; }
       for (const [id,close] of [['potion-ui','potion-close'],['blacksmith-ui','blacksmith-close'],['guild-ui','guild-close']]) {
         if (overlayVisible(id)) { document.getElementById(close).click(); return; }
@@ -10684,8 +10878,9 @@
       document.getElementById('panel-backdrop').classList.remove('hidden');
       panel.querySelector('[data-close-panel]').focus({preventScroll:true});
     }
-    function handlePanelTab(event) {
-      const controls = [...document.getElementById(openSidePanel).querySelectorAll('button:not([disabled]),a[href],input,[tabindex="0"]')].filter(el=>el.getClientRects().length);
+    function handlePanelTab(event) { trapFocus(document.getElementById(openSidePanel),event); }
+    function trapFocus(container,event) {
+      const controls = [...container.querySelectorAll('button:not([disabled]),a[href],input,[tabindex="0"]')].filter(el=>el.getClientRects().length);
       if (!controls.length) return;
       const first=controls[0],last=controls[controls.length-1];
       if (event.shiftKey && document.activeElement===first) { event.preventDefault(); last.focus(); }
@@ -10727,12 +10922,12 @@
       releaseGameplayInput();
       const menu = document.getElementById('pause-menu');
       if (menu.classList.contains('hidden')) {
-        if (overlayVisible('settings-modal') || overlayVisible('save-screen')) return;
+        if (overlayVisible('settings-modal') || overlayVisible('save-screen') || overlayVisible('objective-screen')) return;
         menu.classList.remove('hidden');
         isPaused = true;
       } else {
         menu.classList.add('hidden');
-        isPaused = overlayVisible('settings-modal') || overlayVisible('save-screen');
+        isPaused = overlayVisible('settings-modal') || overlayVisible('save-screen') || overlayVisible('objective-screen');
       }
     };
 
@@ -11004,6 +11199,7 @@
         finally { if (!present) ctx.restore(); }
       }
       loopStats.maxSteps = Math.max(loopStats.maxSteps, actualSteps);
+      refreshObjectiveUI();
       updateSkillHUD(); // 표시 갱신은 화면 프레임당 한 번, 쿨타임 진행은 고정 틱에서 처리한다.
     }
     function stepGame(present) {
@@ -12375,6 +12571,7 @@
         if(ft.alpha <= 0) floatingTexts.splice(i, 1);
       });
       ctx.globalAlpha = 1;
+      drawObjectiveGuide();
     }
 
     let isPlaying = false, isPaused = true;
