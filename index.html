@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v3.4.8</title>
+  <title>만기 월드 (Mangi World) - v3.4.9</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -258,6 +258,11 @@
       </div>
 
       <div class="changelog-box">
+        <h4>📌 v3.4.9 패치 노트</h4>
+        • 🛡️ <b>최근 피격 기록과 사망 원인</b>을 확인합니다. 빙결·밀려남 남은 시간도 전투 중 표시합니다<br>
+        • ⚔️ 패배 후 <b>입장 조건을 충족한 보스에 즉시 재도전</b>할 수 있습니다. 소모한 아이템·소지금은 복구되지 않습니다<br>
+        • 🎬 <b>끝까지 본 도입부·엔딩</b>은 다음 재생부터 건너뛸 수 있습니다<br>
+        <br>
         <h4>📌 v3.4.8 패치 노트</h4>
         • ⚖️ <b>같은 슬롯의 장비와 능력치를 비교</b>합니다. 검·활·지팡이는 각각 비교하고, 버프와 상한을 반영한 실제 스탯 변화도 보여줍니다<br>
         • 🛍️ <b>상점·교환 목록에서도 교체 효과를 미리 확인</b>할 수 있습니다. 현재 사용·대기 무기와 잠금 표시를 구분했습니다<br>
@@ -558,7 +563,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v3.4.8</div>
+      <div id="version-badge">v3.4.9</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -622,7 +627,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.8 : 장비 비교 · 잠금 보호 · 물약 수량 관리</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v3.4.9 : 전투 기록 · 보스 재도전 · 본 연출 건너뛰기</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
       </div>
@@ -633,6 +638,15 @@
         <button class="btn" style="background:#1e293b; color:#fff; margin-top:15px;" onclick="closeSaveScreen()">돌아가기</button>
       </div>
 
+      <div id="combat-report-screen" class="hidden" role="dialog" aria-modal="true" aria-labelledby="combat-report-title" style="position:absolute;inset:0;z-index:95;background:rgba(10,15,26,.97);display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px;overflow:auto;box-sizing:border-box;">
+        <h2 id="combat-report-title" style="color:#fde047;margin:4px 0;flex-shrink:0;">전투 기록</h2>
+        <div id="combat-report-content" tabindex="0" aria-label="피격 기록 내용" style="width:100%;max-width:520px;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;">
+          <p id="combat-report-summary" style="white-space:pre-line;margin:0 0 12px;"></p>
+          <div id="combat-report-list"></div>
+        </div>
+        <button id="combat-retry" class="btn hidden" style="flex-shrink:0;" onclick="retryCombat()">보스 즉시 재도전</button>
+        <button id="combat-report-close" class="btn" style="flex-shrink:0;" onclick="closeCombatReport()">닫기</button>
+      </div>
       <div id="pause-menu" class="hidden" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(10,15,26,0.92); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:80; gap:10px;">
         <h2 style="color:#fde047; margin-bottom:10px; font-family:'Cinzel';">일시정지</h2>
         <button class="btn" style="width:220px;" onclick="togglePauseMenu()">계속하기</button>
@@ -640,6 +654,7 @@
         <button class="btn" style="width:220px;" onclick="openSaveManager('load')">불러오기</button>
         <button class="btn" style="width:220px;" onclick="openObjectiveScreen()">목표와 진행</button>
         <button class="btn" style="width:220px;" onclick="openSettingsModal()">설정</button>
+        <button class="btn" style="width:220px;" onclick="openCombatHistory()">피격 기록</button>
         <button class="btn" style="width:220px; background:#7f1d1d;" onclick="goToMainMenu()">메인 메뉴</button>
         <button class="btn" style="width:220px; background:#1e293b; border:2px solid #eab308;" onclick="quitGame()">게임 종료</button>
       </div>
@@ -687,6 +702,7 @@
         <div id="objective-list"></div>
       </section>
       <div id="story-screen" class="hidden" onclick="advanceStory()">
+        <button id="story-skip" class="btn hidden" style="position:absolute;top:12px;right:12px;z-index:5;" onclick="skipSeenStory(event)">본 연출 건너뛰기</button>
         <div class="story-dialog-box">
           <div style="font-size:18px; font-weight:900; color:#fde047; margin-bottom:8px;" id="story-speaker">만기</div>
           <div style="font-size:15px; color:#e2e8f0; line-height:1.6; min-height:50px;" id="story-text">...</div>
@@ -2086,7 +2102,128 @@
       document.getElementById('alert-modal').classList.add('hidden');
     }
 
+    let damageLog = [], lastDeath = null, retryTicket = null, combatReportMode = null;
+    function inDrainBeam(en) {
+      const dx=player.x-en.x,dy=player.y-en.y,angle=en.drainAngle;
+      const x=dx*Math.cos(-angle)-dy*Math.sin(-angle),y=dx*Math.sin(-angle)+dy*Math.cos(-angle);
+      return x>0 && x<280 && Math.abs(y)<40;
+    }
+    function enemyAttackLabel(en) {
+      return ({life_drain:'생명력 흡수 (주기 피해)',mark_leap_dash:'도약 강타',claw_flurry:'발톱 연타',
+        d4_dash:'돌진 강타',d8_wind:'순간이동 베기',d9_dash:'최후 돌진',
+        triple_dash:'연속 돌진',spin_hit:'회전 베기',iai_dash:'발도 돌진',flurry_hit:'연속 베기',
+        landed:'착지 충격',pulse:'영혼 파동',grabbing:'붙잡기',biting:'물어뜯기'})[en.state] || '접촉 공격';
+    }
+    function refreshCombatFeedback() {
+      const states = [];
+      if (player.frozenTimer > 0) states.push(`빙결 ${(player.frozenTimer/60).toFixed(1)}초`);
+      if (player.knockbackTimer > 0) states.push(`밀려남 ${(player.knockbackTimer/60).toFixed(1)}초`);
+      const drain = enemies.find(en=>en.state==='life_drain' && inDrainBeam(en));
+      if (drain) states.push(`생명력 흡수 위험 ${(Math.max(0,drain.stateTimer)/60).toFixed(1)}초 · 범위를 벗어나세요`);
+      const hit = damageLog.at(-1);
+      if (hit && frameCount-hit.tick < 180) states.push(`${hit.source} · -${hit.amount.toFixed(1)} HP`);
+      if (!states.length) return;
+      ctx.save(); ctx.font='bold 14px sans-serif';ctx.textAlign='center';
+      ctx.fillStyle='rgba(10,15,26,0.85)';ctx.fillRect(130,735,540,30);
+      ctx.fillStyle='#fef08a';ctx.fillText(states.join(' / '),400,755,520);ctx.restore();
+    }
+    function combatSource() {
+      const boss = enemies.find(en => en.isBoss);
+      return boss ? boss.name : gameState === 'dungeon' ? dungeonDefs[currentDungeon.category].label : '적';
+    }
+    function applyPlayerDamage(amount, source = combatSource(), attack = '근접 공격') {
+      if (!isPlaying || !COMBAT_STATES.includes(gameState) || combatReportMode === 'death' || !Number.isFinite(amount) || amount < 0) return false;
+      hp = Math.max(0, hp - amount);
+      damageLog.push({source, attack, amount, tick:frameCount, fatal:hp === 0});
+      if (damageLog.length > 8) damageLog.shift();
+      updateHUD();
+      return true;
+    }
+    function clearBattleRuntime() {
+      enemies = []; projectiles = []; floatingTexts = []; pendingSpawns = [];
+      slimeZones = []; ghostZones = []; ghostDecoys = []; demonZones = [];
+      minjeZones = []; elfZones = []; archmageZones = [];
+      bowState = {homingActive:false,rapidFireTimer:0};
+      moonSlashFx = null; skyArrows = []; sanctuary = null; crescents = [];
+      swordChain = {left:0,timer:0}; iaiFx = null; frostFx = null; skyBlade = null;
+      sanctum = null; meteorStorm = null; meteors = []; fireZones = []; scorchMarks = [];
+      stormVolley = null; windCorridors = []; skyJudge = null; arrowRain = null; delayedArrows = []; rainShock = null;
+      staffMeteorZones = []; staffTeleportFx = []; staffUltimateFx = null;
+      voidChain = {left:0,timer:0,points:[]}; voidRifts = []; voidCollapse = null;
+      dashGhosts = []; dashSparks = []; dashStreaks = [];
+      skillSlashFx = null; skillThrustFx = null; skillNovaFx = null; skillLeapFx = null; skillLandFx = null;
+      skillParticles = []; cameraShake = 0; screenFlash = 0; shakeFlip = 1; hitStop = 0;
+      impactRings = []; dustPuffs = []; lastHudWeaponSlot = null;
+      releaseGameplayInput();
+      Object.assign(player,{vx:0,vy:0,knockbackVx:0,knockbackVy:0,knockbackTimer:0,frozenTimer:0,attackTimer:0,lastAttackTime:null});
+      player.swing = {...INITIAL_PLAYER_STATE.swing};
+      skills.cooldowns = {q:0,e:0,r:0,f:0}; ultCooldown = {sword:0,bow:0,staff:0};
+      respawnTimer = 0; periodicSpawnTimer = 0;
+    }
+    function retryEligible(ticket) {
+      if (!ticket) return false;
+      if (ticket.kind === 'dungeon') {
+        const {category} = ticket;
+        return (category !== 'demon' || level >= 80) && bossRespawnCooldown[category] === 0 &&
+          dungeonDefs[category].tiers.every((tier,i) => dungeonProgress[category].progress[i] >= tier.target);
+      }
+      const slot = ticket.kind;
+      return !skillLock(slot) && (!ticket.awakened || (demonDefeated && skills[OBJECTIVE_SKILLS[slot].learned] &&
+        OBJECTIVE_SKILLS[slot].defeated() && awakenState[slot].stage === 'ready'));
+    }
+    function captureRetry(kind, awakened = false) {
+      const ticket = kind === 'dungeon' ? {kind,map:gameState,category:currentDungeon.category,returns:JSON.parse(JSON.stringify(returnStack))} : {kind,map:gameState,awakened};
+      retryTicket = retryEligible(ticket) ? ticket : null;
+    }
+    function renderCombatReport() {
+      const death = combatReportMode === 'death';
+      document.getElementById('combat-report-title').textContent = death ? '전투 패배' : '최근 피격 기록';
+      document.getElementById('combat-report-summary').textContent = death ?
+        `${lastDeath.source} · ${lastDeath.attack} · 마지막 피해 ${lastDeath.amount.toFixed(1)} HP\n소지금 ${lastDeath.gold}G를 잃었습니다. 재도전해도 소모한 아이템과 소지금은 복구되지 않습니다.` : '최근 8회 · 방어력 적용 후 피해량 · 새 게임/불러오기 시 초기화';
+      const list = document.getElementById('combat-report-list');list.replaceChildren();
+      for (const hit of damageLog.slice().reverse()) {
+        const row = document.createElement('p');
+        row.textContent = `${hit.fatal ? '패배 · ' : ''}${hit.source} / ${hit.attack} / ${hit.amount.toFixed(1)} HP`;
+        list.appendChild(row);
+      }
+      if (!damageLog.length) list.textContent = '아직 피격 기록이 없습니다.';
+      document.getElementById('combat-retry').classList.toggle('hidden',!death || !retryEligible(retryTicket));
+      document.getElementById('combat-report-close').textContent = death ? '여관에서 계속하기' : '일시정지로 돌아가기';
+    }
+    function showCombatReport(mode) {
+      closeSidePanel(false); releaseGameplayInput(); hideItemTooltip();
+      document.getElementById('pause-menu').classList.add('hidden');
+      clearSessionTimeout(notifTimeout); notifTimeout = null;
+      document.getElementById('top-notification').classList.remove('show');
+      combatReportMode = mode; renderCombatReport();
+      document.getElementById('combat-report-screen').classList.remove('hidden');
+      document.getElementById('combat-report-close').focus();
+    }
+    window.openCombatHistory = function() { if (isPlaying && !GAMEPLAY_OVERLAYS.some(id => id !== 'pause-menu' && overlayVisible(id))) { isPaused = true; showCombatReport('history'); } };
+    window.closeCombatReport = function() {
+      if (!combatReportMode) return;
+      const history = combatReportMode === 'history';
+      combatReportMode = null; if (!history) retryTicket = null;
+      document.getElementById('combat-report-screen').classList.add('hidden'); releaseGameplayInput();
+      if (history || isPaused) { isPaused = true; document.getElementById('pause-menu').classList.remove('hidden'); }
+    };
+    window.retryCombat = function() {
+      if (combatReportMode !== 'death' || !retryEligible(retryTicket)) return false;
+      const ticket = retryTicket; retryTicket = null; combatReportMode = null;
+      document.getElementById('combat-report-screen').classList.add('hidden');
+      clearBattleRuntime(); hp = maxHp; mp = maxMp; isPaused = false;
+      if (ticket.kind === 'dungeon') {
+        returnStack = ticket.returns; enterDungeonStage(ticket.category,2,true,false);
+      } else ({sword:startMinjeDuel,bow:startElfQueenDuel,staff:startMageDuel})[ticket.kind](ticket.awakened);
+      updateHUD(); return true;
+    };
+
     function respawnPlayerAtInn() {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
+      if (!retryTicket || retryTicket.map !== gameState || !enemies.some(en => en.isBoss && !en.isTowerMob) || (retryTicket.kind === 'dungeon' && (!currentDungeon.isBoss || currentDungeon.category !== retryTicket.category))) retryTicket = null;
+      lastDeath = {...(damageLog.at(-1) || {source:combatSource(),attack:'전투',amount:0}),gold};
+      clearBattleRuntime(); activeBuffs = {}; recalcAllStats(); updateBuffHUD();
+
       towerFloor = 0; // 무한의 탑에서 사망 시 진행 층은 초기화(최고 기록은 유지)
       gold = 0;
       hp = maxHp;
@@ -2096,7 +2233,7 @@
       player.y = 250;
       returnStack = [{ state: 'village', x: 630, y: 710 }];
       showTopNotification("사망하였습니다! 돈을 모두 잃고 여관 침대에서 부활했습니다.", 4000);
-      updateHUD();
+      updateHUD(); showCombatReport('death');
     }
 
     function createSlime(x, y) {
@@ -2177,6 +2314,7 @@
           dungeon: gameState === 'dungeon' ? JSON.parse(JSON.stringify(currentDungeon)) : null
         });
       }
+      retryTicket = null;
       currentDungeon = { category, stage: stageIndex, isBoss };
       gameState = 'dungeon';
       player.x = 400; player.y = 780; portalCooldown = 60;
@@ -2189,7 +2327,7 @@
           // 쿨타임 중에도 입장은 항상 허용 — 방 안에서 카운트다운을 보여주고 0이 되면 자동 재소환(던전 렌더 루프에서 처리)
           enemies = [];
         } else {
-          enemies = [createDungeonBoss(category)];
+          enemies = [createDungeonBoss(category)]; captureRetry('dungeon');
           showTopNotification(`⚔️ ${dungeonDefs[category].boss.name}이(가) 나타났다!`, 3500);
         }
       } else {
@@ -2335,6 +2473,7 @@
     }
 
     function damageEnemy(en, dmg, isCrit) {
+      if (combatReportMode === 'death' || !COMBAT_STATES.includes(gameState)) return;
       // 이미 죽어서 목록에서 빠진 적은 무시한다.
       // 광역기는 적 목록의 사본을 돌기 때문에(도중에 죽어도 건너뛰지 않으려고)
       // 같은 프레임에 죽은 적이 사본에 남아 다시 들어올 수 있다.
@@ -2368,6 +2507,7 @@
     }
 
     function handleEnemyDeath(en) {
+      if (combatReportMode === 'death') return;
       const idx = enemies.indexOf(en);
       if (idx === -1) return;
       enemies.splice(idx, 1);
@@ -2480,6 +2620,7 @@
     }
 
     function handleBossDefeated(en) {
+      retryTicket = null;
       dungeonProgress[en.category].bossDefeated = true;
       bossRespawnCooldown[en.category] = BOSS_RESPAWN_FRAMES[en.category];
       playSfx('bossDefeat');
@@ -2502,6 +2643,7 @@
     let pendingSpawns = [];
 
     function updateDungeonMobAI(en) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
       const distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
@@ -2717,7 +2859,7 @@
         if (en.aiType === 'jump') baseDmg = 12 + en.level*1.3;
         if (en.aiType === 'combo') baseDmg = 5 + en.level*0.8;
         const dmgTaken = mitigateDamage(baseDmg);
-        hp -= dmgTaken;
+        if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
         updateHUD();
         createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
         en.hitTimer = en.aiType === 'combo' ? 12 : 40;
@@ -2725,7 +2867,7 @@
         player.knockbackVx = Math.cos(kbAngle) * (en.aiType === 'grab' ? 14 : 10);
         player.knockbackVy = Math.sin(kbAngle) * (en.aiType === 'grab' ? 14 : 10);
         player.knockbackTimer = en.aiType === 'grab' ? 20 : 14;
-        if (hp <= 0) respawnPlayerAtInn();
+        if (hp <= 0) { respawnPlayerAtInn(); return; }
       }
       if (en.hitTimer > 0) en.hitTimer--;
     }
@@ -2737,7 +2879,8 @@
     let ghostDecoys = []; // 사령왕 환영 분신 — enemies[] 밖에서 관리해 처치 보상과 완전히 분리
     let demonZones = [];
 
-    function tickZoneArray(zones) {
+    function tickZoneArray(zones, source = combatSource()) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       for (let i = zones.length - 1; i >= 0; i--) {
         const z = zones[i];
         z.timer--;
@@ -2751,10 +2894,10 @@
           }
           if (hit) {
             const dmgTaken = mitigateDamage(z.dmg);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, source, '범위 공격')) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
             if (z.freeze) player.frozenTimer = Math.max(player.frozenTimer || 0, z.freeze);
-            if (hp <= 0) respawnPlayerAtInn();
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
           }
           zones.splice(i, 1);
         }
@@ -2795,6 +2938,7 @@
 
     // ===== 슬라임 킹: 분열 소환 / 산성 웅덩이 =====
     function updateSlimeBossAI(en) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
       const distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
@@ -2839,12 +2983,12 @@
       if (en.state !== 'telegraph') {
         if (distToPlayer < en.r + 20 && (en.hitTimer || 0) <= 0 && player.knockbackTimer <= 0) {
           const dmgTaken = mitigateDamage(8 + en.level * 0.5);
-          hp -= dmgTaken; updateHUD();
+          if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
           createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
           en.hitTimer = 50;
           const kbAngle = Math.atan2(player.y - en.y, player.x - en.x);
           player.knockbackVx = Math.cos(kbAngle) * 9; player.knockbackVy = Math.sin(kbAngle) * 9; player.knockbackTimer = 12;
-          if (hp <= 0) respawnPlayerAtInn();
+          if (hp <= 0) { respawnPlayerAtInn(); return; }
         }
       }
       if (en.hitTimer > 0) en.hitTimer--;
@@ -2856,6 +3000,7 @@
 
     // ===== 늑대왕 페릴: 표식 도약 / 발톱 연격 =====
     function updateWolfBossAI(en) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
       const distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
@@ -2890,9 +3035,9 @@
         if (en.stateTimer <= 0) {
           if (Math.hypot(player.x - en.x, player.y - en.y) < en.r + 40) {
             const dmgTaken = mitigateDamage(30 + en.level * 0.7);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
-            if (hp <= 0) respawnPlayerAtInn();
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
           }
           en.state = 'cooldown'; en.stateTimer = 80;
         }
@@ -2901,9 +3046,9 @@
         if (en.stateTimer === 5) {
           if (Math.hypot(player.x - en.x, player.y - en.y) < en.r + 45) {
             const dmgTaken = mitigateDamage(11 + en.level * 0.35);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
-            if (hp <= 0) respawnPlayerAtInn();
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
           }
         }
         if (en.stateTimer <= 0) {
@@ -2922,12 +3067,12 @@
       if (en.state !== 'telegraph' && en.state !== 'mark_leap_wait' && en.state !== 'mark_leap_dash' && en.state !== 'claw_flurry') {
         if (distToPlayer < en.r + 20 && (en.hitTimer || 0) <= 0 && player.knockbackTimer <= 0) {
           const dmgTaken = mitigateDamage(8 + en.level * 0.5);
-          hp -= dmgTaken; updateHUD();
+          if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
           createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
           en.hitTimer = 50;
           const kbAngle = Math.atan2(player.y - en.y, player.x - en.x);
           player.knockbackVx = Math.cos(kbAngle) * 9; player.knockbackVy = Math.sin(kbAngle) * 9; player.knockbackTimer = 12;
-          if (hp <= 0) respawnPlayerAtInn();
+          if (hp <= 0) { respawnPlayerAtInn(); return; }
         }
       }
       if (en.hitTimer > 0) en.hitTimer--;
@@ -2938,6 +3083,7 @@
 
     // ===== 리치 로드: 생명 흡수 / 해골 소환 =====
     function updateZombieBossAI(en) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
       const distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
@@ -2963,14 +3109,12 @@
       } else if (en.state === 'life_drain') {
         en.stateTimer--;
         if (en.stateTimer % 10 === 0) {
-          const relX = (player.x - en.x) * Math.cos(-en.drainAngle) - (player.y - en.y) * Math.sin(-en.drainAngle);
-          const relY = (player.x - en.x) * Math.sin(-en.drainAngle) + (player.y - en.y) * Math.cos(-en.drainAngle);
-          if (relX > 0 && relX < 280 && Math.abs(relY) < 40) {
+          if (inDrainBeam(en)) {
             const dmgTaken = mitigateDamage(9 + en.level * 0.4);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#a855f7');
             en.hp = Math.min(en.maxHp, en.hp + dmgTaken * 0.5);
-            if (hp <= 0) respawnPlayerAtInn();
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
           }
         }
         if (en.stateTimer <= 0) { en.state = 'cooldown'; en.stateTimer = 80; }
@@ -2992,12 +3136,12 @@
       if (en.state !== 'telegraph' && en.state !== 'life_drain') {
         if (distToPlayer < en.r + 20 && (en.hitTimer || 0) <= 0 && player.knockbackTimer <= 0) {
           const dmgTaken = mitigateDamage(8 + en.level * 0.5);
-          hp -= dmgTaken; updateHUD();
+          if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
           createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
           en.hitTimer = 50;
           const kbAngle = Math.atan2(player.y - en.y, player.x - en.x);
           player.knockbackVx = Math.cos(kbAngle) * 9; player.knockbackVy = Math.sin(kbAngle) * 9; player.knockbackTimer = 12;
-          if (hp <= 0) respawnPlayerAtInn();
+          if (hp <= 0) { respawnPlayerAtInn(); return; }
         }
       }
       if (en.hitTimer > 0) en.hitTimer--;
@@ -3008,6 +3152,7 @@
 
     // ===== 사령왕: 환영 분신 / 그림자 손아귀 =====
     function updateGhostBossAI(en) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
       const distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
@@ -3053,12 +3198,12 @@
       if (en.state !== 'telegraph') {
         if (distToPlayer < en.r + 20 && (en.hitTimer || 0) <= 0 && player.knockbackTimer <= 0) {
           const dmgTaken = mitigateDamage(8 + en.level * 0.5);
-          hp -= dmgTaken; updateHUD();
+          if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
           createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
           en.hitTimer = 50;
           const kbAngle = Math.atan2(player.y - en.y, player.x - en.x);
           player.knockbackVx = Math.cos(kbAngle) * 9; player.knockbackVy = Math.sin(kbAngle) * 9; player.knockbackTimer = 12;
-          if (hp <= 0) respawnPlayerAtInn();
+          if (hp <= 0) { respawnPlayerAtInn(); return; }
         }
       }
       if (en.hitTimer > 0) en.hitTimer--;
@@ -3120,6 +3265,7 @@
     }
 
     function updateDemonBossAI(en) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
       if (en.demonPatternIndex === undefined) {
@@ -3148,9 +3294,9 @@
         if (en.stateTimer <= 0) {
           if (Math.hypot(player.x - en.x, player.y - en.y) < en.r + 150) {
             const dmgTaken = mitigateDamage(32 + en.level * 0.75);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
-            if (hp <= 0) respawnPlayerAtInn();
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
           }
           en.demonPatternIndex++; startDemonPattern(en);
         }
@@ -3158,7 +3304,7 @@
         en.stateTimer--;
         if (en.stateTimer % 12 === 0 && en.projCount > 0) {
           const a = Math.atan2(player.y - en.y, player.x - en.x) + (Math.random()-0.5)*0.3;
-          projectiles.push({ x: en.x, y: en.y, vx: Math.cos(a)*6, vy: Math.sin(a)*6, r: 9, dmg: 16 + en.level*0.5, color: en.colors.hi, life: 130 });
+          projectiles.push({ source: en.name, x: en.x, y: en.y, vx: Math.cos(a)*6, vy: Math.sin(a)*6, r: 9, dmg: 16 + en.level*0.5, color: en.colors.hi, life: 130 });
           en.projCount--;
         }
         if (en.stateTimer <= 0 || en.projCount <= 0) { en.demonPatternIndex++; startDemonPattern(en); }
@@ -3169,9 +3315,9 @@
           en.x = player.x - Math.cos(a) * 50; en.y = player.y - Math.sin(a) * 50;
           if (Math.hypot(player.x - en.x, player.y - en.y) < 130) {
             const dmgTaken = mitigateDamage(20 + en.level * 0.55);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
-            if (hp <= 0) respawnPlayerAtInn();
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
           }
           en.blinkCount--;
           if (en.blinkCount > 0) { en.state = 'd8_wind'; en.stateTimer = 20; }
@@ -3188,9 +3334,9 @@
         if (en.stateTimer <= 0) {
           if (Math.hypot(player.x - en.x, player.y - en.y) < en.r + 45) {
             const dmgTaken = mitigateDamage(45 + en.level * 0.9);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
-            if (hp <= 0) respawnPlayerAtInn();
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
           }
           en.demonStaggered = true;
           en.state = 'staggered';
@@ -3201,12 +3347,12 @@
 
       if (en.state !== 'staggered' && distToPlayer < en.r + 20 && (en.hitTimer || 0) <= 0 && player.knockbackTimer <= 0) {
         const dmgTaken = mitigateDamage(8 + en.level * 0.5);
-        hp -= dmgTaken; updateHUD();
+        if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
         createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
         en.hitTimer = 50;
         const kbAngle = Math.atan2(player.y - en.y, player.x - en.x);
         player.knockbackVx = Math.cos(kbAngle) * 9; player.knockbackVy = Math.sin(kbAngle) * 9; player.knockbackTimer = 12;
-        if (hp <= 0) respawnPlayerAtInn();
+        if (hp <= 0) { respawnPlayerAtInn(); return; }
       }
       if (en.hitTimer > 0) en.hitTimer--;
       tickZoneArray(demonZones);
@@ -3332,9 +3478,9 @@
           const dist = Math.hypot(player.x - p.x, player.y - p.y);
           if (dist < p.r + 16) {
             const dmgTaken = mitigateDamage(p.dmg);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, p.source || combatSource(), '투사체')) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
-            if (hp <= 0) respawnPlayerAtInn();
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
             projectiles.splice(i, 1); continue;
           }
         }
@@ -3369,12 +3515,14 @@
       projectiles = []; minjeZones = [];
       player.x = 400; player.y = 760;
       returnStack = [];
+      captureRetry('sword',awakened);
       showTopNotification(awakened
         ? "⚔️ 각성한 민제와의 재대결이 시작됩니다!"
         : "⚔️ 전설의 용사 민제와의 결투가 시작됩니다!", 3000);
     }
 
     function handleMinjeDefeated(awakened) {
+      retryTicket = null;
       npcFlags.metMinje = true;
       minjeDefeated = true;
       skills.learnedSword = true;
@@ -3390,6 +3538,7 @@
     const minjePatternPoolAwakened = ['triple', 'spin', 'iai', 'flurry', 'skyfall'];
 
     function updateMinjeAI(en) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
       const distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
@@ -3504,14 +3653,14 @@
 
       if (doHit && (en.hitTimer||0) <= 0) {
         const dmgTaken = mitigateDamage(dmg);
-        hp -= dmgTaken;
+        if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), enemyAttackLabel(en))) return;
         updateHUD();
         createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#ef4444');
         en.hitTimer = en.state.includes('flurry') || en.state.includes('triple') ? 10 : 45;
         const kbAngle = Math.atan2(player.y - en.y, player.x - en.x);
         player.knockbackVx = Math.cos(kbAngle) * 12; player.knockbackVy = Math.sin(kbAngle) * 12;
         player.knockbackTimer = 14;
-        if (hp <= 0) { enemies = []; respawnPlayerAtInn(); }
+        if (hp <= 0) { respawnPlayerAtInn(); return; }
       }
       if (en.hitTimer > 0) en.hitTimer--;
     }
@@ -3595,12 +3744,14 @@
       projectiles = []; elfZones = [];
       player.x = 400; player.y = 760;
       returnStack = [];
+      captureRetry('bow',awakened);
       showTopNotification(awakened
         ? "🏹 각성한 엘프 여왕과의 재대결이 시작됩니다!"
         : "🏹 엘프 여왕 민석과의 결투가 시작됩니다!", 3000);
     }
 
     function handleElfQueenDefeated(awakened) {
+      retryTicket = null;
       npcFlags.metElfQueen = true;
       elfQueenDefeated = true;
       skills.learnedBow = true;
@@ -3616,6 +3767,7 @@
     const elfPatternPoolAwakened = ['volley', 'snipe', 'nature', 'flurry', 'thornfield'];
 
     function updateElfQueenAI(en) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
       const distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
@@ -3661,7 +3813,7 @@
           const a2 = Math.atan2(player.y - en.y, player.x - en.x);
           for (let i = -3; i <= 3; i++) {
             const fa = a2 + i * 0.12;
-            projectiles.push({ x: en.x, y: en.y, vx: Math.cos(fa)*5, vy: Math.sin(fa)*5, r: 8, dmg: 14 + en.level*0.4, color: '#4ade80', life: 130 });
+            projectiles.push({ source: en.name, x: en.x, y: en.y, vx: Math.cos(fa)*5, vy: Math.sin(fa)*5, r: 8, dmg: 14 + en.level*0.4, color: '#4ade80', life: 130 });
           }
           en.state = 'cooldown'; en.stateTimer = 55;
         }
@@ -3680,7 +3832,7 @@
         en.stateTimer--;
         en.snipeAng = Math.atan2(player.y - en.y, player.x - en.x);
         if (en.stateTimer <= 0) {
-          projectiles.push({ x: en.x, y: en.y, vx: Math.cos(en.snipeAng)*13, vy: Math.sin(en.snipeAng)*13, r: 10, dmg: 40 + en.level*0.8, color: '#fde047', life: 130 });
+          projectiles.push({ source: en.name, x: en.x, y: en.y, vx: Math.cos(en.snipeAng)*13, vy: Math.sin(en.snipeAng)*13, r: 10, dmg: 40 + en.level*0.8, color: '#fde047', life: 130 });
           en.state = 'cooldown'; en.stateTimer = 60;
         }
       }
@@ -3711,7 +3863,7 @@
         en.stateTimer--;
         if (en.stateTimer <= 0) {
           const a2 = Math.atan2(player.y - en.y, player.x - en.x);
-          projectiles.push({ x: en.x, y: en.y, vx: Math.cos(a2)*7.5, vy: Math.sin(a2)*7.5, r: 8, dmg: 13 + en.level*0.3, color: '#86efac', life: 110 });
+          projectiles.push({ source: en.name, x: en.x, y: en.y, vx: Math.cos(a2)*7.5, vy: Math.sin(a2)*7.5, r: 8, dmg: 13 + en.level*0.3, color: '#86efac', life: 110 });
           en.comboCount--;
           if (en.comboCount > 0) { en.state = 'flurry_shoot'; en.stateTimer = 9; }
           else { en.state = 'cooldown'; en.stateTimer = 55; }
@@ -3734,9 +3886,9 @@
         if (z.timer <= 0) {
           if (Math.hypot(player.x - z.x, player.y - z.y) < z.r) {
             const dmgTaken = mitigateDamage(z.dmg);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), '범위 공격')) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#4ade80');
-            if (hp <= 0) { enemies = []; elfZones = []; respawnPlayerAtInn(); }
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
           }
           elfZones.splice(i, 1);
         }
@@ -3817,12 +3969,14 @@
       projectiles = []; archmageZones = [];
       player.x = 400; player.y = 760;
       returnStack = [];
+      captureRetry('staff',awakened);
       showTopNotification(awakened
         ? "🔮 각성한 대마법사와의 재대결이 시작됩니다!"
         : "🔮 대마법사 에녹와의 결투가 시작됩니다!", 3000);
     }
 
     function handleArchmageDefeated(awakened) {
+      retryTicket = null;
       npcFlags.metArchmage = true;
       archmageDefeated = true;
       skills.learnedStaff = true;
@@ -3838,6 +3992,7 @@
     const archmagePatternPoolAwakened = ['firebolt', 'meteorzone', 'icenova', 'blink', 'starfall'];
 
     function updateArchmageAI(en) {
+      if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (en.suspended > 0) { en.suspended--; return; }
       if (en.frozenTimer > 0) { en.frozenTimer--; return; }
       const distToPlayer = Math.hypot(player.x - en.x, player.y - en.y);
@@ -3882,7 +4037,7 @@
           const a2 = Math.atan2(player.y - en.y, player.x - en.x);
           for (let i = -2; i <= 2; i++) {
             const fa = a2 + i * 0.14;
-            projectiles.push({ x: en.x, y: en.y, vx: Math.cos(fa)*5.4, vy: Math.sin(fa)*5.4, r: 9, dmg: 15 + en.level*0.42, color: '#f97316', life: 130 });
+            projectiles.push({ source: en.name, x: en.x, y: en.y, vx: Math.cos(fa)*5.4, vy: Math.sin(fa)*5.4, r: 9, dmg: 15 + en.level*0.42, color: '#f97316', life: 130 });
           }
           en.state = 'cooldown'; en.stateTimer = 55;
         }
@@ -3947,9 +4102,9 @@
         if (z.timer <= 0) {
           if (Math.hypot(player.x - z.x, player.y - z.y) < z.r) {
             const dmgTaken = mitigateDamage(z.dmg);
-            hp -= dmgTaken; updateHUD();
+            if (!applyPlayerDamage(dmgTaken, en.name || combatSource(), '범위 공격')) return;
             createFloatingText(player.x, player.y - 30, `-${dmgTaken.toFixed(0)} HP 💥`, '#f97316');
-            if (hp <= 0) { enemies = []; archmageZones = []; respawnPlayerAtInn(); }
+            if (hp <= 0) { respawnPlayerAtInn(); return; }
           }
           archmageZones.splice(i, 1);
         }
@@ -5602,6 +5757,7 @@
         if (isPlaying || openSidePanel!==null) { e.preventDefault(); if (!e.repeat) handleEscape(); }
         return;
       }
+      if (overlayVisible('combat-report-screen') && e.code==='Tab') { trapFocus(document.getElementById('combat-report-screen'),e); return; }
       if (overlayVisible('objective-screen') && e.code==='Tab') { trapFocus(document.getElementById('objective-screen'),e); return; }
       if (openSidePanel!==null && e.code==='Tab') { handlePanelTab(e); return; }
       // 오른쪽 가방 패널의 Shift+숫자는 전투 입력과 분리된 인벤토리 조작이다.
@@ -10558,6 +10714,7 @@
       clearTimeout(timer); sessionTimers.delete(timer);
     }
     function resetSessionRuntime() {
+      damageLog = []; lastDeath = null; retryTicket = null; combatReportMode = null;
       isPlaying = false; isPaused = true;
       stopGameLoop(); stopStoryPlayback();
       for (const timer of sessionTimers) clearTimeout(timer);
@@ -10598,7 +10755,7 @@
     function resetSessionPresentation() {
       closeSidePanel(false);
       for (const id of ['start-screen','save-screen','help-screen','story-screen','clear-screen','pause-menu','settings-modal',
-        'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal','objective-screen',
+        'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal','combat-report-screen','objective-screen',
         'status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator','item-tooltip']) {
         document.getElementById(id).classList.add('hidden');
       }
@@ -10851,7 +11008,7 @@
 
     // 입력은 현재 가장 위의 메뉴에만 전달한다. 모달이 열려 있으면 게임 시간도 멈춘다.
     const GAMEPLAY_OVERLAYS = ['pause-menu','settings-modal','save-screen','help-screen','npc-modal',
-      'alert-modal','tower-choice-modal','objective-screen','guild-ui','blacksmith-ui','potion-ui','start-screen','clear-screen','story-screen'];
+      'alert-modal','tower-choice-modal','combat-report-screen','objective-screen','guild-ui','blacksmith-ui','potion-ui','start-screen','clear-screen','story-screen'];
     function overlayVisible(id) { return !document.getElementById(id).classList.contains('hidden'); }
     function hasGameplayOverlay() { return GAMEPLAY_OVERLAYS.some(overlayVisible); }
     function gameplayPaused() { return isPaused || document.hidden || openSidePanel!==null || hasGameplayOverlay(); }
@@ -10869,7 +11026,7 @@
       if (!isPlaying) return;
       isPaused = true;
       // 저장/설정 화면을 덮지 않는다. 닫으면 기존 일시정지 메뉴로 돌아간다.
-      if (!overlayVisible('save-screen') && !overlayVisible('settings-modal') && !overlayVisible('objective-screen')) {
+      if (!overlayVisible('save-screen') && !overlayVisible('settings-modal') && !overlayVisible('objective-screen') && !overlayVisible('combat-report-screen')) {
         document.getElementById('pause-menu').classList.remove('hidden');
       }
     }
@@ -10892,6 +11049,7 @@
         document.getElementById('tower-choice-modal').classList.add('hidden');
         player.y = Math.min(875,player.y+60); portalCooldown = 60; return;
       }
+      if (overlayVisible('combat-report-screen')) { closeCombatReport(); return; }
       if (overlayVisible('alert-modal')) { closeAlertModal(); return; }
       if (overlayVisible('settings-modal')) { closeSettingsModal(); return; }
       if (overlayVisible('pause-menu')) { togglePauseMenu(); return; }
@@ -10976,7 +11134,7 @@
       releaseGameplayInput();
       const menu = document.getElementById('pause-menu');
       if (menu.classList.contains('hidden')) {
-        if (overlayVisible('settings-modal') || overlayVisible('save-screen') || overlayVisible('objective-screen')) return;
+        if (overlayVisible('settings-modal') || overlayVisible('save-screen') || overlayVisible('objective-screen') || overlayVisible('combat-report-screen')) return;
         menu.classList.remove('hidden');
         isPaused = true;
       } else {
@@ -11041,12 +11199,21 @@
     };
 
     let currentScript = null, onStoryComplete = null;
+    function storyKey(script) { return script === storyScripts ? 'intro' : script === endingScripts ? 'ending' : null; }
+    function seenStories() { try { const value=JSON.parse(localStorage.getItem('mangiworld_seen_stories')||'[]');return Array.isArray(value)?value.filter(key=>['intro','ending'].includes(key)):[]; } catch { return []; } }
+    window.skipSeenStory = function(event) {
+      if(event) event.stopPropagation();
+      if (!currentScript || !seenStories().includes(storyKey(currentScript))) return;
+      const script=currentScript;
+      while(storyAnimRunning && currentScript===script) advanceStory();
+    };
 
     function beginStory(script, onComplete) {
       stopGameLoop(); stopStoryPlayback();
       isPlaying = false; isPaused = true; keys = {};
       storyIndex = 0; gameState = 'story';
       currentScript = script; onStoryComplete = onComplete;
+      document.getElementById('story-skip').classList.toggle('hidden',!seenStories().includes(storyKey(script)));
       document.getElementById('story-screen').classList.remove('hidden');
       updateStory();
       storyAnimRunning = true; storySceneStart = performance.now();
@@ -11063,6 +11230,8 @@
         if (currentScript[storyIndex].action === 'giveGold') { gold += 50; updateHUD(); }
         updateStory(); storySceneStart = performance.now();
       } else {
+        const key=storyKey(currentScript);
+        if(key) try { localStorage.setItem('mangiworld_seen_stories',JSON.stringify([...new Set([...seenStories(),key])])); } catch {}
         const complete = onStoryComplete;
         stopStoryPlayback(); currentScript = null; onStoryComplete = null;
         document.getElementById('story-screen').classList.add('hidden');
@@ -12473,7 +12642,7 @@
             ctx.fillText(`⏳ ${bossDef.name} 재소환까지: ${secs}초`, 400, 460); ctx.textAlign='left';
           } else if (dungeonProgress[cat].bossDefeated) {
             // 쿨타임이 다 돌아왔는데 아직 보스가 없는 상태 -> 이 방에서 바로 자동 재소환
-            enemies = [createDungeonBoss(cat)];
+            enemies = [createDungeonBoss(cat)]; captureRetry('dungeon');
             showTopNotification(`⚔️ ${bossDef.name}이(가) 다시 나타났다!`, 3000);
           }
         }
@@ -12534,6 +12703,7 @@
       }
 
 
+      if (combatReportMode === 'death') return;
       if (moonSlashFx) {
         // 만월참 시전 중에는 제자리에 선다 (연출이 직접 위치를 옮긴다)
         player.vx = 0; player.vy = 0;
@@ -12601,6 +12771,7 @@
       if (player.attackTimer > 0) player.attackTimer--;
 
       updateAndDrawProjectiles();
+      if (combatReportMode === 'death') return;
       drawScorchMarks();
       drawImpactFx();
       updateAndDrawStaffMeteors();
@@ -12626,6 +12797,7 @@
       });
       ctx.globalAlpha = 1;
       drawObjectiveGuide();
+      refreshCombatFeedback();
     }
 
     let isPlaying = false, isPaused = true;
