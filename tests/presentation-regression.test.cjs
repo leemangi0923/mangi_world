@@ -5,7 +5,7 @@ const {manualAnimationClock}=require('./helpers/manual-clock.cjs');
 const {runPresentationScene}=require('./helpers/presentation-scene.cjs');
 const baseline=require('./fixtures/presentation-v5.5.0.json');
 const {run}=createBrowserHarness({before,after}),options={init:manualAnimationClock};
-for(const {input,expected} of baseline.scenarios.filter(s=>!['demon','slime'].includes(s.input.category)))test(input.category+' '+input.mode+' keeps v5.5.0 damage, attacks, movement, RNG and rewards across 1200 actual game ticks',()=>run(async page=>{
+for(const {input,expected} of baseline.scenarios.filter(s=>!['demon','slime','wolf'].includes(s.input.category)))test(input.category+' '+input.mode+' keeps v5.5.0 damage, attacks, movement, RNG and rewards across 1200 actual game ticks',()=>run(async page=>{
  const actual=await page.evaluate(runPresentationScene,input);assert.deepEqual(actual,expected);
 },options));
 
@@ -59,3 +59,5 @@ test('compact combat summary yields to danger and returns after the warning with
 for(const mode of ['easy','normal','hard'])test('v6 demon '+mode+' rendering strength never changes combat, RNG or rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'demon',mode,effects:0});const b=await page.evaluate(runPresentationScene,{category:'demon',mode,effects:1});assert.deepEqual(a,b);},options));
 
 for(const mode of ['easy','normal','hard'])test('v6 slime '+mode+' rendering strength preserves combat, RNG and rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'slime',mode,effects:0});const b=await page.evaluate(runPresentationScene,{category:'slime',mode,effects:1});assert.deepEqual(a,b);},options));
+
+for(const mode of ['easy','normal','hard'])test('v6 wolf '+mode+' render strength preserves combat, RNG and rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'wolf',mode,effects:0});const b=await page.evaluate(runPresentationScene,{category:'wolf',mode,effects:1});assert.deepEqual(a,b);},options));
