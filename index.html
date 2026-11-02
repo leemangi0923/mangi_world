@@ -3842,7 +3842,7 @@
       }
       if(a.key==='crown'){
         const first=t<=42,p=slimeClamp(first?t/42:(t-42)/42,0,1),from=first?a.origin:{x:a.x,y:a.y},to=first?{x:a.x,y:a.y}:a.second;
-        return {x:from.x+(to.x-from.x)*p,y:from.y+(to.y-from.y)*p,lift:t<84?Math.sin(p*Math.PI)*(first?85:60):0};
+        return {x:from.x+(to.x-from.x)*p,y:from.y+(to.y-from.y)*p,lift:t<84?(first?(1-p)*a.baseRadius*.85:0)+Math.sin(p*Math.PI)*(first?85:60):0};
       }
       return {};
     }
