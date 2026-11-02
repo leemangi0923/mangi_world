@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v6.1.0</title>
+  <title>만기 월드 (Mangi World) - v6.2.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -350,7 +350,7 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
-        <h4>📌 v6.1.0 패치 노트</h4><p>대마왕6기술 완성: 흑익의 검우 · 용혈의 숨결 · 흑염의 성벽 추가. 검우 엄폐→숨결, 성벽→왕검 연계와 암흑 기사·악마 장군을 개편했습니다. 관리자 패턴 재생은 민첩30·속도 버프 없음으로 설정됩니다.</p>
+        <h4>📌 v6.2.0 패치 노트</h4><p>슬라임 킹의 왕관해일 · 점탄성 투석기 · 두 개의 젤 철퇴와 초록 슬라임의 탄성을 개편했습니다. 슬라임 실험실은 기본 민첩10·속도 버프 없음으로 설정됩니다. 나머지 새3기술과 소굴 전체 마감은4차입니다.</p>
         • 🚪 던전/탑 이탈 시 남던 적 공격·예고 정리<br>
         • 📌 다음 목표 창 접기·펼치기와 표시 상태 기억<br>
         • 👁️ 쉬움은 전체 공격 안내, 보통/어려움은 필수 범위만 표시<br><br>
@@ -713,7 +713,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v6.1.0</div>
+      <div id="version-badge">v6.2.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -777,7 +777,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v6.1.0 : 대마왕6기술 완성 · 검우 엄폐 · 흑염 성벽</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v6.2.0 : 슬라임 왕관해일 · 탄성 투석기 · 젤 철퇴</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -802,7 +802,7 @@
       <div id="battle-summary" class="hidden" aria-label="현재 전투 상황" style="position:absolute;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:360px;padding:5px 8px;border:1px solid #64748b;border-radius:6px;background:rgba(10,15,26,.9);font-size:12px;text-align:center;pointer-events:none;z-index:22;"></div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v6.1.0</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v6.2.0</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
@@ -834,7 +834,7 @@
           <div class="admin-actions"><button class="btn" onclick="adminStartEncounter()">선택 전투 새로 준비</button><button class="btn" onclick="adminResetBattle()">전투 초기화·마을로</button></div>
         </details>
         <details><summary>테스트 프리셋·전용 저장</summary><p>프리셋은 현재 테스트 상태를 교체합니다. 일반 저장은 변경하지 않습니다.</p><div class="admin-actions"><button class="btn" onclick="adminPreset('early')">초반 Lv.5</button><button class="btn" onclick="adminPreset('mid')">중반 Lv.40·늑대 보스</button><button class="btn" onclick="adminPreset('awakened')">각성 Lv.80</button><button class="btn" onclick="adminPreset('tower')">탑 Lv.100·30층</button><button class="btn" onclick="adminSaveTest()">관리자 전용 저장</button><button class="btn" onclick="adminLoadTest()">관리자 전용 불러오기</button></div></details>
-        <details><summary>슬라임 킹 패턴·판정 실험실</summary><label>패턴<select id="slime-pattern"><option value="leap">왕의 낙하</option><option value="sweep">젤리 휩쓸기</option><option value="acid">산성 비</option><option value="split">분열·핵 노출</option><option value="dash">돌진 (일반 학습용)</option></select></label><label>체력 단계<select id="slime-phase"><option value="1">1단계</option><option value="2">2단계</option></select></label><label><input type="checkbox" onchange="if(adminOnly())slimeDebugHitboxes=this.checked;">활성 판정 표시</label><div class="admin-actions"><button class="btn" onclick="adminSlimePattern()">패턴 새로 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button></div><p id="slime-inspection"></p></details>
+        <details><summary>슬라임 킹 패턴·판정 실험실</summary><label>패턴<select id="slime-pattern"><option value="tide">왕관해일</option><option value="catapult">점탄성 투석기</option><option value="maces">두 개의 젤 철퇴</option><option value="spring">탄성 튀어오르기 (초록 학습용)</option><option value="leap">왕의 낙하</option><option value="sweep">젤리 휩쓸기</option><option value="acid">산성 비</option><option value="split">분열·핵 노출</option><option value="dash">돌진 (일반 학습용)</option></select></label><label>체력 단계<select id="slime-phase"><option value="1">1단계</option><option value="2">2단계</option></select></label><label><input type="checkbox" onchange="if(adminOnly())slimeDebugHitboxes=this.checked;">활성 판정 표시</label><div class="admin-actions"><button class="btn" onclick="adminSlimePattern()">패턴 새로 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button></div><p id="slime-inspection"></p></details>
         <details><summary>보스 패턴·판정 실험실 — 리치·사령왕·대마왕</summary>
           <label>던전<select id="encounter-family" onchange="updateEncounterPatternOptions()"><option value="zombie">망자의 묘지 · 리치 로드</option><option value="ghost">저주받은 폐허 · 사령왕</option><option value="demon">마왕성 내부 · 대마왕</option></select></label>
           <div class="admin-grid"><label>패턴<select id="encounter-pattern"><option value="scythe">영혼 낫</option><option value="drain">생명력 흡수</option><option value="summon">망자의 호위</option><option value="ritual">부활 의식</option></select></label><label>체력 단계<select id="encounter-phase"><option value="1">1단계</option><option value="2">2단계</option><option value="3">3단계</option></select></label></div>
@@ -846,7 +846,7 @@
         <details><summary>장비 특성·보상 테스트</summary><p>테스트 보관함·선택 보상·장비는 관리자 저장에만 반영됩니다.</p><button class="btn" onclick="adminPrepareRewards()">첫 보상·보관함 테스트</button><label>특성 무기<select id="admin-trait-weapon"></select></label><button class="btn" onclick="adminPrepareTrait()">선택 특성 평타 테스트 준비</button><p id="admin-trait-inspection"></p></details>
         <details><summary>2차 배경·연출 미리보기</summary><div class="admin-grid"><label>던전<select id="visual-category" onchange="adminVisualPreview()"><option value="slime">슬라임</option><option value="wolf">늑대</option><option value="zombie">묘지</option><option value="ghost">폐허</option><option value="demon">마왕성</option></select></label><label>구역<select id="visual-grade" onchange="adminVisualPreview()"><option value="0">일반</option><option value="1">정예</option><option value="2">생존</option><option value="boss">보스 방</option></select></label></div><button class="btn" onclick="adminVisualPreview()">배경·몸체 미리보기</button><p id="visual-caption"></p><canvas id="visual-preview" width="400" height="450" style="max-width:100%;height:auto;cursor:default;"></canvas></details>
         <details><summary>도감·전투 기록 확인</summary><p>몬스터20종·장비·개인 기록·도전 목표의 읽기 전용 샘플입니다. 일반 진행과 기록은 바꾸지 않습니다.</p><button id="admin-journal-preview" class="btn" onclick="adminPreviewJournal()">도감·기록 미리보기</button><button class="btn" onclick="openJournal('records')">현재 격리 기록 확인</button></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v6.1.0: 대마왕의 지옥의 용광로·왕검의 처형·군주의 강림과 하급 악마를 개편했습니다. 위의 마왕성 패턴 재생은 민첩30·속도 버프 없음으로 설정합니다. 검우·숨결·성벽과 연계2개, 세 체력 단계와 마왕성 몬스터 개편을 완료했습니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v6.2.0: 슬라임 킹의 왕관해일·점탄성 투석기·젤 철퇴와 초록 슬라임을 개편했습니다. 슬라임 실험실은 기본 민첩10·속도 버프 없음, 마왕성 실험실은 민첩30으로 설정합니다. 나머지 슬라임3기술·파랑/빨강 슬라임은4차 범위입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
 
       <section id="journal-screen" class="hidden" role="dialog" aria-modal="true" aria-labelledby="journal-title">
@@ -1395,13 +1395,13 @@
       document.getElementById('encounter-inspection').textContent=ea?`${encounter.name} · ${encounter.encounterStage}단계 · ${ENCOUNTER_ATTACKS[encounter.category][ea.key].name} · ${{windup:'준비',active:'공격',recovery:'후딜'}[ea.phase]} · ${ea.left}틱 · 목표 ${Math.round(ea.x)},${Math.round(ea.y)}`:'보스 전투를 준비하세요.';
       document.getElementById('encounter-hitboxes').checked=encounterDebugHitboxes;
       const wolf=enemies.find(en=>en.category==='wolf'&&en.isBoss),wa=wolf?.wolfAttack;document.getElementById('wolf-inspection').textContent=wa?`${WOLF_ATTACKS[wa.key].name} · ${{windup:'준비',active:'공격',recovery:'후딜'}[wa.phase]} · ${wa.left}틱 · 목표 ${Math.round(wa.x)},${Math.round(wa.y)}`:'페릴 전투를 준비하세요.';
-      const actor=enemies.find(en=>en.category==='slime'&&en.isBoss),attack=actor?.slimeAttack;document.getElementById('slime-inspection').textContent=attack?`${SLIME_ATTACKS[attack.key].name} · ${{windup:'준비',active:'공격',recovery:'후딜'}[attack.phase]} · ${attack.left}틱 · 목표 ${Math.round(attack.x)},${Math.round(attack.y)}`:'슬라임 전투를 준비하세요.';
+      const actor=enemies.find(en=>en.category==='slime'&&en.isBoss),attack=actor?.slimeAttack;document.getElementById('slime-inspection').textContent=attack?`${SLIME_ATTACKS[attack.key].name} · ${{windup:'준비',active:'공격',recovery:'후딜'}[attack.phase]} · ${attack.left}틱 · ${attack.key==='tide'?'통로 높이 '+Math.round(slimeChoreographyPose(actor,attack,attack.phase==='windup'?0:attack.duration-attack.left).gap):'목표 '+Math.round(attack.x)+','+Math.round(attack.y)} · 민첩 ${statAgi}`:'슬라임 전투를 준비하세요.';
       const values={'admin-level':level,'admin-gold':gold,'admin-points':statPoints};
       for(const [name,value] of Object.entries({Str:statStr,Vit:statVit,Agi:statAgi,Atk:statAtk,Crit:statCrit,CritDmg:statCritDmg,Mp:statMp}))values['admin-stat-'+name]=value;
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v6.1.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
+      document.getElementById('admin-metrics').textContent=`v6.2.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
       const traitSelect=document.getElementById('admin-trait-weapon');if(!traitSelect.options.length)for(const [id,def] of Object.entries(WEAPON_TRAITS)){const opt=document.createElement('option');opt.value=id;opt.textContent=findItemById(id).name+' · '+def.name;traitSelect.appendChild(opt);}
       document.getElementById('admin-trait-inspection').textContent='특성 발동 '+weaponTraitState.procs+'회 · 충전 '+weaponTraitState.count+' · 예약 '+weaponTraitState.pending.length+' · 보관 '+rewardArchive.inbox.reduce((n,e)=>n+e.count,0)+'개';
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
@@ -2509,8 +2509,10 @@
 
     function drawSlime(en,tt,colorOverride,showGuide=true){
       if(showGuide)drawSlimeAttackGuide(en);
+      if(liveEnemyWarning(en))drawSlimeChoreography(en);
       const a=en.slimeAttack,r=en.r||24,boss=en.isBoss,p=a?slimeClamp(1-a.left/a.duration,0,1):0;
       let sx=1+Math.sin(tt*3+en.x)*.035,sy=1;
+      if(a?.key==='catapult'||a?.key==='spring'){sx+=a.phase==='windup'?p*.5:.2;sy-=a.phase==='windup'?p*.25:.08;}if(a?.key==='maces'&&a.phase==='active'){sx=1.18;sy=.8;}
       if(a?.phase==='windup'){sx+=p*(a.key==='split'?.3:.22);sy+=p*(a.key==='acid'?.18:-.25);}if(en.slimeLift>0){sx=.85;sy=1.18;}if(a?.phase==='recovery'){sx+=.24*(1-p);sy-=.22*(1-p);}if(a?.phase==='active'&&a.key==='sweep'){sx=1.35;sy=.78;}if(a?.phase==='active'&&a.key==='dash'){sx=1.2;sy=.82;}
       const colors=colorOverride||en.colors||{base:'#4ade80',hi:'#bbf7d0',dark:'#166534'};
       ctx.save();ctx.fillStyle='rgba(0,0,0,.3)';ctx.beginPath();ctx.ellipse(en.x,en.y+r*.65,r*.9,r*.23,0,0,Math.PI*2);ctx.fill();
@@ -2718,7 +2720,7 @@
       if(difficulty==='easy')return true;
       if(en.category==='demon'&&ENCOUNTER_ATTACKS.demon[attack.key]?.essential)return true;
       // Ground hazards, off-body landings and arena safety mechanics must remain readable.
-      if(en.category==='slime')return attack.key==='acid'||(en.isBoss&&attack.key==='leap');
+      if(en.category==='slime')return SLIME_ATTACKS[attack.key]?.essential||attack.key==='acid'||(en.isBoss&&attack.key==='leap');
       if(en.category==='wolf')return en.isBoss&&attack.key==='leap';
       return ({zombie:['drain','ritual'],ghost:['hands','corridor'],demon:['fissure','brand','judgment']})[en.category]?.includes(attack.key)||false;
     }
@@ -3783,6 +3785,10 @@
 
     // Shared, fixed-tick attack lifecycle. Rendering never applies damage.
     const SLIME_ATTACKS=Object.freeze({
+      tide:{name:'왕관해일',wind:135,active:240,recover:135,shape:'gel',radius:26,essential:true},
+      catapult:{name:'점탄성 투석기',wind:105,active:72,recover:115,shape:'gel',radius:30},
+      maces:{name:'두 개의 젤 철퇴',wind:100,active:150,recover:120,shape:'gel',radius:32},
+      spring:{name:'탄성 튀어오르기',wind:48,active:48,recover:60,shape:'gel',radius:14},
       leap:{name:'왕의 낙하',wind:60,active:36,recover:65,shape:'circle',radius:88},
       sweep:{name:'젤리 휩쓸기',wind:54,active:12,recover:55,shape:'cone',radius:145},
       acid:{name:'산성 비',wind:62,active:1,recover:70,shape:'pools',radius:58},
@@ -3798,8 +3804,93 @@
       const angle=Math.atan2(dy,dx);if(dist>reach){dx*=reach/dist;dy*=reach/dist;}
       const wind=Math.ceil(def.wind*difficultyProfile().warning*(boss?1:.85));
       en.slimeAttack={key,phase:'windup',left:wind,duration:wind,angle,x:slimeClamp(en.x+dx,70,730),y:slimeClamp(en.y+dy,145,785),fromX:en.x,fromY:en.y,radius:def.radius*scale,hit:false,released:false};
-      en.state='slime_windup';en.stateTimer=wind;en.coreExposed=false;return true;
+      if(def.shape==='gel')prepareSlimeChoreography(en,en.slimeAttack);
+      en.slimeLift=0;en.state='slime_windup';en.stateTimer=wind;en.coreExposed=false;return true;
     }
+    function prepareSlimeChoreography(en,a){
+      a.hits=[];a.origin={x:a.fromX,y:a.fromY};
+      if(a.key==='tide'){
+        a.startX=player.x>=400?110:690;a.endX=800-a.startX;a.gapY=slimeClamp(player.y,250,610);a.gapWidth=180;
+      }else if(a.key==='catapult'||a.key==='spring'){
+        const reach=en.isBoss?240:110,d=Math.min(reach,Math.hypot(a.x-a.fromX,a.y-a.fromY));
+        a.x=slimeClamp(a.fromX+Math.cos(a.angle)*d,75,725);a.y=slimeClamp(a.fromY+Math.sin(a.angle)*d,155,775);
+        const bend=en.isBoss?85:24;a.control={x:slimeClamp((a.fromX+a.x)/2-Math.sin(a.angle)*bend,75,725),y:slimeClamp((a.fromY+a.y)/2+Math.cos(a.angle)*bend,155,775)};
+        a.anchor={x:slimeClamp(a.fromX-Math.cos(a.angle)*(en.isBoss?115:38),60,740),y:slimeClamp(a.fromY-Math.sin(a.angle)*(en.isBoss?115:38),150,790)};
+        a.radius=en.r*.8;
+      }
+    }
+    function slimeChoreographyPose(en,a,t){
+      const def=SLIME_ATTACKS[a.key],p=slimeClamp(t/def.active,0,1);
+      if(a.key==='tide'){const gap=a.gapY+Math.sin(p*Math.PI*2)*30;return {x:a.startX+(a.endX-a.startX)*p,y:gap+120,gap};}
+      if(a.key==='catapult'||a.key==='spring')return {x:(1-p)*(1-p)*a.fromX+2*(1-p)*p*a.control.x+p*p*a.x,y:(1-p)*(1-p)*a.fromY+2*(1-p)*p*a.control.y+p*p*a.y};
+      if(a.key==='maces'){
+        const extend=slimeClamp(t/40,0,1),fold=slimeClamp((t-70)/75,0,1),angle=a.angle+1.3-fold*1.8;
+        const point=(along,side,angle=a.angle)=>({x:slimeClamp(a.fromX+Math.cos(angle)*along-Math.sin(angle)*side,75,725),y:slimeClamp(a.fromY+Math.sin(angle)*along+Math.cos(angle)*side,155,775)});
+        return {heads:[{...point(35+105*extend,-65*extend),r:a.radius,hot:t>=20&&t<=42},{...point(145-95*fold,0,angle),r:a.radius,hot:t>=70&&t<=145}]};
+      }
+      return {};
+    }
+    function tickSlimeChoreography(en,a){
+      const t=a.duration-a.left+1,current=slimeChoreographyPose(en,a,t),previous=slimeChoreographyPose(en,a,t-1);
+      const hit=token=>{if(a.hits.includes(token))return;a.hits.push(token);slimeHit(en,a);};
+      if(a.key==='tide'){
+        en.x=current.x;en.y=current.y;
+        if(Math.abs(player.x-current.x)<=42&&(player.y<current.gap-74||player.y>current.gap+74))hit('wall');
+      }else if(a.key==='catapult'||a.key==='spring'){
+        en.x=current.x;en.y=current.y;en.slimeLift=Math.sin(t/a.duration*Math.PI)*(en.isBoss?34:18);
+        if(demonSegmentHit(previous,current,a.radius))hit('body');
+        if(!liveEnemyWarning(en))return;
+        if(t===a.duration)slimeImpact(en.x,en.y,en.r,'land',false);
+      }else if(a.key==='maces'){
+        for(let i=0;i<2;i++)if(current.heads[i].hot&&demonSegmentHit(previous.heads[i],current.heads[i],current.heads[i].r)){hit('head'+i);if(!liveEnemyWarning(en))return;}
+        if(t===40||t===145)slimeImpact(current.heads[t===40?0:1].x,current.heads[t===40?0:1].y,a.radius,'land',false);
+      }
+    }
+    function drawSlimeChoreography(en){
+      const a=en.slimeAttack;if(!a||SLIME_ATTACKS[a.key]?.shape!=='gel')return;
+      const wind=a.phase==='windup',recover=a.phase==='recovery',t=wind?0:recover?SLIME_ATTACKS[a.key].active:a.duration-a.left;
+      const pose=slimeChoreographyPose(en,a,t),r=en.r,c=en.colors||{hi:'#e0ffba',base:'#83ce71',dark:'#255c52'};ctx.save();ctx.lineCap='round';
+      const gel=(x,y,radius)=>{const g=ctx.createRadialGradient(x-radius*.3,y-radius*.4,2,x,y,radius*1.2);g.addColorStop(0,c.hi);g.addColorStop(.45,c.base);g.addColorStop(1,c.dark);ctx.fillStyle=g;ctx.strokeStyle=c.hi;ctx.lineWidth=2;};
+      if(a.key==='tide'){
+        const p=wind?1-a.left/a.duration:recover?a.left/a.duration:1,x=wind?a.startX:pose.x,gap=wind?a.gapY:pose.gap;
+        for(const [lo,hi] of [[150,gap-90],[gap+90,800]]){
+          const top=en.y+(lo-en.y)*p,bottom=en.y+(hi-en.y)*p;if(bottom<=top)continue;
+          const g=ctx.createLinearGradient(x-26,0,x+26,0);g.addColorStop(0,c.dark);g.addColorStop(.45,c.hi);g.addColorStop(1,c.base);ctx.fillStyle=g;ctx.strokeStyle=c.hi;ctx.lineWidth=2;
+          ctx.beginPath();ctx.moveTo(x-26,top);for(let y=top;y<bottom;y+=35)ctx.quadraticCurveTo(x-34-Math.sin(t*.08+y)*5,y+18,x-26,y+35);ctx.lineTo(x+26,bottom);for(let y=bottom;y>top;y-=35)ctx.quadraticCurveTo(x+34+Math.sin(t*.08+y)*5,y-18,x+26,y-35);ctx.closePath();ctx.fill();ctx.stroke();
+          ctx.strokeStyle='rgba(235,255,211,.6)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,top+8);ctx.bezierCurveTo(x-12,top+(bottom-top)*.3,x+12,top+(bottom-top)*.7,x,bottom-8);ctx.stroke();
+        }
+        if(wind){ctx.strokeStyle=c.base;ctx.lineWidth=12;ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.quadraticCurveTo((x+en.x)/2,en.y+30,x,gap+120);ctx.stroke();}
+      }else if(a.key==='catapult'||a.key==='spring'){
+        const thickness=recover?Math.max(1,a.left/a.duration*14):wind?8:Math.max(3,14-t/a.duration*9);
+        ctx.strokeStyle=c.base;ctx.lineWidth=thickness;ctx.beginPath();ctx.moveTo(a.anchor.x,a.anchor.y);ctx.quadraticCurveTo((a.anchor.x+en.x)/2,en.y+35,en.x,en.y);ctx.stroke();
+        ctx.strokeStyle=c.hi;ctx.lineWidth=2;ctx.stroke();
+        ctx.fillStyle=en.isBoss?'#6c7e9a':'#93d582';ctx.strokeStyle='#d2e2bd';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(a.anchor.x-15,a.anchor.y+10);ctx.lineTo(a.anchor.x-10,a.anchor.y-27);ctx.lineTo(a.anchor.x+3,a.anchor.y-37);ctx.lineTo(a.anchor.x+17,a.anchor.y-10);ctx.lineTo(a.anchor.x+12,a.anchor.y+12);ctx.closePath();ctx.fill();ctx.stroke();
+      }else if(a.key==='maces'){
+        const fold=recover?a.left/a.duration:1;
+        for(let i=0;i<2;i++){
+          const head=pose.heads[i],x=en.x+(head.x-en.x)*fold,y=en.y+(head.y-en.y)*fold;
+          ctx.strokeStyle=c.dark;ctx.lineWidth=18;ctx.beginPath();ctx.moveTo(en.x+(i?1:-1)*r*.4,en.y);ctx.quadraticCurveTo((en.x+x)/2,en.y+40,x,y);ctx.stroke();ctx.strokeStyle=c.hi;ctx.lineWidth=4;ctx.stroke();
+          gel(x,y,head.r);ctx.beginPath();ctx.ellipse(x,y,head.r,head.r,Math.sin(t*.05)*.2,0,Math.PI*2);ctx.fill();ctx.stroke();
+          ctx.fillStyle=c.hi;for(let j=0;j<3;j++){const angle=j*Math.PI*2/3+t*.025;ctx.beginPath();ctx.ellipse(x+Math.cos(angle)*head.r*.45,y+Math.sin(angle)*head.r*.4,4,7,angle,0,Math.PI*2);ctx.fill();}
+        }
+      }
+      ctx.restore();
+    }
+    function drawSlimeChoreographyGuide(en,a,showRange,details){
+      if(a.phase==='recovery')return;ctx.save();ctx.strokeStyle=a.phase==='windup'?'#fde68a':'#fb923c';ctx.lineWidth=2;ctx.setLineDash([7,6]);
+      if(showRange){
+        if(a.key==='tide'){
+          const pose=slimeChoreographyPose(en,a,a.phase==='windup'?0:a.duration-a.left),x=pose.x,gap=pose.gap;
+          for(const [lo,hi] of [[125,gap-74],[gap+74,825]])ctx.strokeRect(x-42,lo,84,hi-lo);
+          ctx.strokeStyle='#c0f3b1';ctx.beginPath();ctx.moveTo(70,gap-74);ctx.lineTo(730,gap-74);ctx.moveTo(70,gap+74);ctx.lineTo(730,gap+74);ctx.stroke();
+        }else if(a.key==='catapult'||a.key==='spring'){
+          ctx.beginPath();ctx.moveTo(a.fromX,a.fromY);ctx.quadraticCurveTo(a.control.x,a.control.y,a.x,a.y);ctx.stroke();ctx.beginPath();ctx.arc(a.x,a.y,a.radius+16,0,Math.PI*2);ctx.stroke();
+        }else if(a.key==='maces')for(const t of [40,70,100,145])for(const head of slimeChoreographyPose(en,a,t).heads){ctx.beginPath();ctx.arc(head.x,head.y,head.r+16,0,Math.PI*2);ctx.stroke();}
+      }
+      if(details){ctx.setLineDash([]);ctx.fillStyle='#fef3c7';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText(SLIME_ATTACKS[a.key].name+' · '+(a.left/60).toFixed(1)+'초',en.x,en.y-en.r-25);}
+      ctx.restore();
+    }
+
     function slimeHit(en,attack){
       const base=en.isBoss?({leap:28,sweep:22,dash:20}[attack.key]||16)+en.level*.4:7+en.level*.7;
       const dmg=mitigateDamage(base);attack.hit=true;
@@ -3835,20 +3926,23 @@
         en.slimeIdle=(en.slimeIdle===undefined?45:en.slimeIdle)-1;
         const d=Math.hypot(player.x-en.x,player.y-en.y);if(d>150){const angle=Math.atan2(player.y-en.y,player.x-en.x);en.x+=Math.cos(angle)*en.speed*.65;en.y+=Math.sin(angle)*en.speed*.65;}
         if(en.slimeIdle<=0){
+          if(!en.isBoss&&enemies.filter(e=>!e.isBoss&&e.slimeAttack&&e.slimeAttack.phase!=='recovery').length>=2)return;
           en.slimePhase=en.isBoss&&en.hp/en.maxHp<=.6?2:1;
-          const choices=en.isBoss?(en.slimePhase===2?['leap','acid','sweep','split']:['leap','sweep']):en.isElite?['leap','sweep']:en.stageIndex===2?['leap','acid']:['dash','leap'];
+          const choices=en.isBoss?(en.slimePhase===2?['tide','catapult','maces','acid','split']:['tide','catapult','maces']):en.isElite?['leap','sweep']:en.stageIndex===2?['leap','acid']:en.stageIndex===0?['spring','dash']:['dash','leap'];
           en.slimeSequence=(en.slimeSequence||0);beginSlimeAttack(en,choices[en.slimeSequence++%choices.length]);
         }
         return;
       }
       en.stateTimer=a.left;
       if(a.phase==='windup'){
+        if(a.key==='tide'){const p=1-a.left/a.duration;en.x=a.fromX+(a.startX-a.fromX)*p;en.y=a.fromY+(a.gapY+120-a.fromY)*p;}
         if(--a.left>0)return;
         enterAttackPhase(en,a,'active',SLIME_ATTACKS[a.key].active,'slime');
       }
       if(a.phase==='active'){
         const def=SLIME_ATTACKS[a.key];
-        if(a.key==='leap'){
+        if(def.shape==='gel'){tickSlimeChoreography(en,a);}
+        else if(a.key==='leap'){
           const p=slimeClamp(1-(a.left-1)/a.duration,0,1);en.x=a.fromX+(a.x-a.fromX)*p;en.y=a.fromY+(a.y-a.fromY)*p;en.slimeLift=Math.sin(p*Math.PI)*(en.isBoss?125:65);
           if(a.left===1){en.slimeLift=0;slimeImpact(a.x,a.y,a.radius,'land',en.isBoss);if(!a.hit&&Math.hypot(player.x-a.x,player.y-a.y)<=a.radius+16)slimeHit(en,a);if(!en.isBoss&&en.stageIndex===2)addSlimeAcid(en,a.x,a.y);}
         }else if(a.key==='dash'){
@@ -3866,11 +3960,12 @@
           }
         }
         if(combatReportMode==='death'||!enemies.includes(en))return;
-        if(--a.left<=0){enterAttackPhase(en,a,'recovery',SLIME_ATTACKS[a.key].recover,'slime');en.coreExposed=en.isBoss&&a.key==='split';}
+        if(--a.left<=0){enterAttackPhase(en,a,'recovery',SLIME_ATTACKS[a.key].recover,'slime');en.slimeLift=0;en.coreExposed=en.isBoss&&(a.key==='split'||def.shape==='gel');}
       }else if(a.phase==='recovery'&&--a.left<=0){en.slimeAttack=null;en.coreExposed=false;en.state='idle';en.slimeIdle=en.isBoss?42:55;}
     }
     function drawSlimeAttackGuide(en){
       const a=en.slimeAttack;if(!a||!liveEnemyWarning(en))return;const def=SLIME_ATTACKS[a.key],showRange=enemyWarningRange(en,a),details=enemyWarningDetails(en);
+      if(def.shape==='gel'){drawSlimeChoreographyGuide(en,a,showRange||(adminMode.active&&slimeDebugHitboxes),details);return;}
       ctx.save();ctx.lineWidth=2;ctx.strokeStyle=a.phase==='windup'?'#fde68a':'#fb923c';ctx.fillStyle='rgba(251,191,36,.13)';
       if(showRange&&(a.phase==='windup'||(a.phase==='active'&&(a.key==='leap'||(slimeDebugHitboxes&&adminMode.active))))){
         ctx.beginPath();if(def.shape==='circle')ctx.arc(a.x,a.y,a.radius+16,0,Math.PI*2);
@@ -3894,7 +3989,7 @@
     }
     window.adminSlimePattern=function(){
       if(!adminOnly())return;const key=document.getElementById('slime-pattern').value;if(!SLIME_ATTACKS[key])return;
-      prepareAdminArena();enterDungeonStage('slime',2,true,false);const en=enemies[0];if(document.getElementById('slime-phase').value==='2')en.hp=en.maxHp*.55;
+      prepareAdminArena();statAgi=10;delete activeBuffs.speed;recalcAllStats();enterDungeonStage('slime',2,true,false);const en=enemies[0];if(document.getElementById('slime-phase').value==='2')en.hp=en.maxHp*.55;
       beginSlimeAttack(en,key);openAdminPanel();adminMessage('패턴 준비: '+SLIME_ATTACKS[key].name+' · 플레이 또는 한 틱 진행으로 확인하세요.');
     };
     window.adminSlimeStep=function(){if(!adminOnly())return;const frozen=adminMode.freezeAI;adminMode.freezeAI=false;try{stepGame(true);updateSkillHUD();refreshAdminPanel();}finally{adminMode.freezeAI=frozen;isPaused=true;refreshAdminPanel();}};
@@ -5828,7 +5923,7 @@
     const POTION_BUY_QTYS = [1, 3, 10, 64];
 
     // The journal observes existing combat events; it never supplies combat or reward values.
-    const GAME_VERSION='6.1.0', JOURNAL_RULESET='6.1.0';
+    const GAME_VERSION='6.2.0', JOURNAL_RULESET='6.2.0';
     const JOURNAL_WEAPONS=['sword','bow','staff'];
     const JOURNAL_GRADES=['일반','정예','생존','보스'];
     const JOURNAL_OUTCOMES={victory:'승리',defeat:'패배',escape:'중도 이탈'};
@@ -5996,7 +6091,7 @@
     }
 
     const JOURNAL_LORE={
-      slime:['젖은 바닥을 튀어 다니는 젤 생명체. 몸을 웅크리는 순간 다음 도약을 준비합니다.','광물을 흡수한 푸른 개체. 정예의 큰 몸과 넓어진 공격 범위를 먼저 확인하세요.','뜨거운 핵을 품은 붉은 개체. 산성 흔적을 남겨 오래 서 있을 자리를 줄입니다.','젤 왕좌를 지키는 소굴의 지배자. 몸을 납작하게 펴거나 크게 부풀리는 자세가 공격의 단서입니다.'],
+      slime:['젖은 바닥을 튀어 다니는 젤 생명체. 몸을 웅크리는 순간 다음 도약을 준비합니다.','광물을 흡수한 푸른 개체. 정예의 큰 몸과 넓어진 공격 범위를 먼저 확인하세요.','뜨거운 핵을 품은 붉은 개체. 산성 흔적을 남겨 오래 서 있을 자리를 줄입니다.','몸을 해일로 펴고 결정에 붙여 튕기는 젤 군주. 철퇴의 박힘과 회수를 구분하고, 재결합하는 핵을 공략하세요. 기본 민첩10 기준입니다.'],
       wolf:['숲의 길을 순찰하는 사냥꾼. 머리를 낮추고 몸을 당긴 뒤 전방을 물어뜯습니다.','달빛 아래 숨는 검은 사냥꾼. 정예의 준비 동작 뒤 돌진 경로 옆으로 움직이세요.','무리를 격려하는 우두머리 개체. 포효와 도약을 함께 경계하세요.','둥지를 지키는 늑대왕. HP 50% 이하에서는 공격이 이어지므로 첫 공격 회피 뒤에도 다음 예고를 확인하세요.'],
       zombie:['묘지를 떠도는 망자. 느리게 접근하지만 붙잡기 범위 안에 오래 머물면 위험합니다.','부서진 뼈가 다시 모인 병사. 칼을 드는 준비 자세 뒤 전방을 피하세요.','묘지의 갑옷 수호자. 방패를 든 동안과 내려찍기 뒤의 후딜을 구분하세요.','뼈 제단의 의식을 지휘하는 마법사. 낫·흡수·호위를 구분하고 부활 의식의 봉인석을 활용하세요.'],
       ghost:['폐허에 남은 떠도는 영혼. 손을 뻗기 전의 자세와 순간이동 도착 위치를 확인하세요.','거울 파편을 따라 움직이는 망령. 환영과 본체의 모양을 구분하세요.','안개와 함께 나타나는 악령. 여러 위치의 공격은 한꺼번에 끝나지 않으므로 순서를 보세요.','영혼 문을 지키는 사령왕. 왕관과 가면을 가진 본체를 찾고, 고정된 탄막 틈과 회랑을 이용하세요.'],
@@ -6004,8 +6099,9 @@
     };
     const JOURNAL_BOSS_GUIDES={
       slime:[
-        ['leap','몸을 부풀린 뒤 고정된 원으로 높이 도약합니다.','착지 원이 정해지면 옆으로 달려 원 밖으로 나오세요.','착지 뒤 몸을 다시 모으는 동안 접근해 공격하세요.'],
-        ['sweep','젤 몸체가 낮아지며 전방 부채꼴을 예고합니다.','부채꼴 옆이나 몸 뒤로 돌아가세요.','휩쓸기가 끝난 뒤 다음 예고 전에 공격하세요.'],
+        ['tide','몸이 길게 펴져 이동하는 젤 막과 통과 틈을 만듭니다.','넓은 틈으로 들어가 움직이는 틈을 따라가거나 막이 지나간 쪽으로 이동하세요.','해일이 끝나고 왕관 아래로 재결합할 때 핵을 공격하세요.'],
+        ['catapult','뒤쪽 결정에 젤을 붙이고 길게 당겨 몸을 튕깁니다.','고정된 곡선 경로 밖으로 빠지고 날아오는 몸의 그림자를 확인하세요.','착지한 뒤 접착 젤을 회수하는 동안 반격하세요.'],
+        ['maces','두 팔이 무거운 젤 철퇴가 됩니다. 한 팔이 박히면 다른 팔이 접혀 돌아옵니다.','먼저 박힌 팔 바깥쪽으로 돌며 회수하는 두 번째 머리를 피하세요.','팔을 회수하고 얇아진 핵이 드러나는 동안 공격하세요.'],
         ['acid','여러 원이 생긴 뒤 산성 장판이 남습니다.','원을 벗어나고 남은 장판 위에 오래 서 있지 마세요.','장판 사이 빈 바닥에서 원거리 공격을 이어가세요.'],
         ['split','몸이 갈라지며 작은 슬라임을 소환하고 핵이 노출됩니다.','소환 위치와 부하의 도약 예고를 피하세요.','핵 노출 동안 본체를 공격하면 추가 피해를 줄 수 있습니다.']
       ],
