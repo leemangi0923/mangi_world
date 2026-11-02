@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v6.2.0</title>
+  <title>만기 월드 (Mangi World) - v6.3.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -350,7 +350,7 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
-        <h4>📌 v6.2.0 패치 노트</h4><p>슬라임 킹의 왕관해일 · 점탄성 투석기 · 두 개의 젤 철퇴와 초록 슬라임의 탄성을 개편했습니다. 슬라임 실험실은 기본 민첩10·속도 버프 없음으로 설정됩니다. 나머지 새3기술과 소굴 전체 마감은4차입니다.</p>
+        <h4>📌 v6.3.0 패치 노트</h4><p>슬라임 킹 새6기술 완성: 핵의 잠행 · 갈라진 왕의 심장 · 왕관 박격. 파랑·빨강 슬라임과 소굴 생존 구역을 개편했습니다. 기본 민첩10 기준입니다.</p>
         • 🚪 던전/탑 이탈 시 남던 적 공격·예고 정리<br>
         • 📌 다음 목표 창 접기·펼치기와 표시 상태 기억<br>
         • 👁️ 쉬움은 전체 공격 안내, 보통/어려움은 필수 범위만 표시<br><br>
@@ -713,7 +713,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v6.2.0</div>
+      <div id="version-badge">v6.3.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -777,7 +777,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v6.2.0 : 슬라임 왕관해일 · 탄성 투석기 · 젤 철퇴</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v6.3.0 : 슬라임6기술 완성 · 잠행 · 분리 핵 · 왕관 박격</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -802,7 +802,7 @@
       <div id="battle-summary" class="hidden" aria-label="현재 전투 상황" style="position:absolute;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:360px;padding:5px 8px;border:1px solid #64748b;border-radius:6px;background:rgba(10,15,26,.9);font-size:12px;text-align:center;pointer-events:none;z-index:22;"></div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v6.2.0</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v6.3.0</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
@@ -834,7 +834,7 @@
           <div class="admin-actions"><button class="btn" onclick="adminStartEncounter()">선택 전투 새로 준비</button><button class="btn" onclick="adminResetBattle()">전투 초기화·마을로</button></div>
         </details>
         <details><summary>테스트 프리셋·전용 저장</summary><p>프리셋은 현재 테스트 상태를 교체합니다. 일반 저장은 변경하지 않습니다.</p><div class="admin-actions"><button class="btn" onclick="adminPreset('early')">초반 Lv.5</button><button class="btn" onclick="adminPreset('mid')">중반 Lv.40·늑대 보스</button><button class="btn" onclick="adminPreset('awakened')">각성 Lv.80</button><button class="btn" onclick="adminPreset('tower')">탑 Lv.100·30층</button><button class="btn" onclick="adminSaveTest()">관리자 전용 저장</button><button class="btn" onclick="adminLoadTest()">관리자 전용 불러오기</button></div></details>
-        <details><summary>슬라임 킹 패턴·판정 실험실</summary><label>패턴<select id="slime-pattern"><option value="tide">왕관해일</option><option value="catapult">점탄성 투석기</option><option value="maces">두 개의 젤 철퇴</option><option value="spring">탄성 튀어오르기 (초록 학습용)</option><option value="leap">왕의 낙하</option><option value="sweep">젤리 휩쓸기</option><option value="acid">산성 비</option><option value="split">분열·핵 노출</option><option value="dash">돌진 (일반 학습용)</option></select></label><label>체력 단계<select id="slime-phase"><option value="1">1단계</option><option value="2">2단계</option></select></label><label><input type="checkbox" onchange="if(adminOnly())slimeDebugHitboxes=this.checked;">활성 판정 표시</label><div class="admin-actions"><button class="btn" onclick="adminSlimePattern()">패턴 새로 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button></div><p id="slime-inspection"></p></details>
+        <details><summary>슬라임 킹 패턴·판정 실험실</summary><label>패턴<select id="slime-pattern"><option value="burrow">핵의 잠행</option><option value="sever">갈라진 왕의 심장</option><option value="crown">왕관 박격</option><option value="bloom">끓는 젤 분출 (빨강 학습용)</option><option value="tide">왕관해일</option><option value="catapult">점탄성 투석기</option><option value="maces">두 개의 젤 철퇴</option><option value="spring">탄성 튀어오르기 (초록 학습용)</option><option value="leap">왕의 낙하</option><option value="sweep">젤리 휩쓸기</option><option value="acid">산성 비</option><option value="split">분열·핵 노출</option><option value="dash">돌진 (일반 학습용)</option></select></label><label>체력 단계<select id="slime-phase"><option value="1">1단계</option><option value="2">2단계</option></select></label><label><input type="checkbox" onchange="if(adminOnly())slimeDebugHitboxes=this.checked;">활성 판정 표시</label><div class="admin-actions"><button class="btn" onclick="adminSlimePattern()">패턴 새로 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button></div><p id="slime-inspection"></p></details>
         <details><summary>보스 패턴·판정 실험실 — 리치·사령왕·대마왕</summary>
           <label>던전<select id="encounter-family" onchange="updateEncounterPatternOptions()"><option value="zombie">망자의 묘지 · 리치 로드</option><option value="ghost">저주받은 폐허 · 사령왕</option><option value="demon">마왕성 내부 · 대마왕</option></select></label>
           <div class="admin-grid"><label>패턴<select id="encounter-pattern"><option value="scythe">영혼 낫</option><option value="drain">생명력 흡수</option><option value="summon">망자의 호위</option><option value="ritual">부활 의식</option></select></label><label>체력 단계<select id="encounter-phase"><option value="1">1단계</option><option value="2">2단계</option><option value="3">3단계</option></select></label></div>
@@ -846,7 +846,7 @@
         <details><summary>장비 특성·보상 테스트</summary><p>테스트 보관함·선택 보상·장비는 관리자 저장에만 반영됩니다.</p><button class="btn" onclick="adminPrepareRewards()">첫 보상·보관함 테스트</button><label>특성 무기<select id="admin-trait-weapon"></select></label><button class="btn" onclick="adminPrepareTrait()">선택 특성 평타 테스트 준비</button><p id="admin-trait-inspection"></p></details>
         <details><summary>2차 배경·연출 미리보기</summary><div class="admin-grid"><label>던전<select id="visual-category" onchange="adminVisualPreview()"><option value="slime">슬라임</option><option value="wolf">늑대</option><option value="zombie">묘지</option><option value="ghost">폐허</option><option value="demon">마왕성</option></select></label><label>구역<select id="visual-grade" onchange="adminVisualPreview()"><option value="0">일반</option><option value="1">정예</option><option value="2">생존</option><option value="boss">보스 방</option></select></label></div><button class="btn" onclick="adminVisualPreview()">배경·몸체 미리보기</button><p id="visual-caption"></p><canvas id="visual-preview" width="400" height="450" style="max-width:100%;height:auto;cursor:default;"></canvas></details>
         <details><summary>도감·전투 기록 확인</summary><p>몬스터20종·장비·개인 기록·도전 목표의 읽기 전용 샘플입니다. 일반 진행과 기록은 바꾸지 않습니다.</p><button id="admin-journal-preview" class="btn" onclick="adminPreviewJournal()">도감·기록 미리보기</button><button class="btn" onclick="openJournal('records')">현재 격리 기록 확인</button></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v6.2.0: 슬라임 킹의 왕관해일·점탄성 투석기·젤 철퇴와 초록 슬라임을 개편했습니다. 슬라임 실험실은 기본 민첩10·속도 버프 없음, 마왕성 실험실은 민첩30으로 설정합니다. 나머지 슬라임3기술·파랑/빨강 슬라임은4차 범위입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v6.3.0: 슬라임 킹의6기술·철퇴→탄성 회수·왕관 회수→해일 연계와 파랑/빨강 슬라임을 완성했습니다. 슬라임 실험실은 기본 민첩10·속도 버프 없음, 마왕성 실험실은 민첩30으로 설정합니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
 
       <section id="journal-screen" class="hidden" role="dialog" aria-modal="true" aria-labelledby="journal-title">
@@ -1401,7 +1401,7 @@
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v6.2.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
+      document.getElementById('admin-metrics').textContent=`v6.3.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
       const traitSelect=document.getElementById('admin-trait-weapon');if(!traitSelect.options.length)for(const [id,def] of Object.entries(WEAPON_TRAITS)){const opt=document.createElement('option');opt.value=id;opt.textContent=findItemById(id).name+' · '+def.name;traitSelect.appendChild(opt);}
       document.getElementById('admin-trait-inspection').textContent='특성 발동 '+weaponTraitState.procs+'회 · 충전 '+weaponTraitState.count+' · 예약 '+weaponTraitState.pending.length+' · 보관 '+rewardArchive.inbox.reduce((n,e)=>n+e.count,0)+'개';
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
@@ -2508,12 +2508,16 @@
     }
 
     function drawSlime(en,tt,colorOverride,showGuide=true){
+      if(en.isSlimeAux){if(en.isSlimeCrown)drawSlimeCrown(en);return;}
       if(showGuide)drawSlimeAttackGuide(en);
       if(liveEnemyWarning(en))drawSlimeChoreography(en);
       const a=en.slimeAttack,r=en.r||24,boss=en.isBoss,p=a?slimeClamp(1-a.left/a.duration,0,1):0;
+      if(a?.key==='sever'&&a.phase==='active'){drawSlimeSharedCore(en);return;}
       let sx=1+Math.sin(tt*3+en.x)*.035,sy=1;
       if(a?.key==='catapult'||a?.key==='spring'){sx+=a.phase==='windup'?p*.5:.2;sy-=a.phase==='windup'?p*.25:.08;}if(a?.key==='maces'&&a.phase==='active'){sx=1.18;sy=.8;}
       if(a?.phase==='windup'){sx+=p*(a.key==='split'?.3:.22);sy+=p*(a.key==='acid'?.18:-.25);}if(en.slimeLift>0){sx=.85;sy=1.18;}if(a?.phase==='recovery'){sx+=.24*(1-p);sy-=.22*(1-p);}if(a?.phase==='active'&&a.key==='sweep'){sx=1.35;sy=.78;}if(a?.phase==='active'&&a.key==='dash'){sx=1.2;sy=.82;}
+      if(a?.key==='burrow'&&a.phase==='active'){const t=a.duration-a.left;sx=1.45;sy=t<100?.24:Math.min(1.15,.24+(t-100)/24);}if(a?.key==='crown'&&a.phase==='active'){sx=1.2;sy=.82;}
+      if(a?.key==='bloom'&&a.phase==='windup'){sx+=p*.2;sy+=p*.55;}
       const colors=colorOverride||en.colors||{base:'#4ade80',hi:'#bbf7d0',dark:'#166534'};
       ctx.save();ctx.fillStyle='rgba(0,0,0,.3)';ctx.beginPath();ctx.ellipse(en.x,en.y+r*.65,r*.9,r*.23,0,0,Math.PI*2);ctx.fill();
       ctx.translate(en.x,en.y-(en.slimeLift||0));ctx.scale(sx,sy);
@@ -2525,7 +2529,7 @@
       for(const side of [-1,1]){ctx.fillStyle='#152539';ctx.beginPath();ctx.ellipse(side*r*.3,-r*.22,r*.11,r*.15,side*-.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(side*r*.3-r*.03,-r*.27,r*.04,0,Math.PI*2);ctx.fill();}
       ctx.strokeStyle='#26324b';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,r*.02,r*.16,.15,Math.PI-.15);ctx.stroke();
       if(en.isElite){ctx.strokeStyle='#93c5fd';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(0,-r*.05,r*.93,r*.7,0,Math.PI,Math.PI*2);ctx.stroke();}
-      if(boss){ctx.fillStyle='#d5a13e';ctx.strokeStyle='#713f12';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.5,-r*.8);ctx.lineTo(-r*.58,-r*1.2);ctx.lineTo(-r*.22,-r*1.03);ctx.lineTo(0,-r*1.4);ctx.lineTo(r*.22,-r*1.03);ctx.lineTo(r*.58,-r*1.2);ctx.lineTo(r*.5,-r*.8);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#e879f9';ctx.beginPath();ctx.arc(0,-r*1.01,5,0,Math.PI*2);ctx.fill();if(en.hp/en.maxHp<=.6){ctx.strokeStyle='#fff7ed';ctx.beginPath();ctx.moveTo(-6,-r*1.25);ctx.lineTo(2,-r*1.1);ctx.lineTo(-3,-r*.86);ctx.stroke();}}
+      if(boss&&!en.crownDetached){ctx.fillStyle='#d5a13e';ctx.strokeStyle='#713f12';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.5,-r*.8);ctx.lineTo(-r*.58,-r*1.2);ctx.lineTo(-r*.22,-r*1.03);ctx.lineTo(0,-r*1.4);ctx.lineTo(r*.22,-r*1.03);ctx.lineTo(r*.58,-r*1.2);ctx.lineTo(r*.5,-r*.8);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#e879f9';ctx.beginPath();ctx.arc(0,-r*1.01,5,0,Math.PI*2);ctx.fill();if(en.hp/en.maxHp<=.6){ctx.strokeStyle='#fff7ed';ctx.beginPath();ctx.moveTo(-6,-r*1.25);ctx.lineTo(2,-r*1.1);ctx.lineTo(-3,-r*.86);ctx.stroke();}}
       ctx.restore();
 
     }
@@ -3295,6 +3299,10 @@
       // 이미 죽어서 목록에서 빠진 적은 무시한다.
       // 광역기는 적 목록의 사본을 돌기 때문에(도중에 죽어도 건너뛰지 않으려고)
       // 같은 프레임에 죽은 적이 사본에 남아 다시 들어올 수 있다.
+      if(en.isSlimeAux&&!enemies.includes(en))return;
+      if(en.isSlimePart){if(!liveEnemyWarning(en.slimeOwner))return;en=en.slimeOwner;}
+      if(basicAttack?.slimeSharedHits?.has(en))return;
+      if(en.category==='slime'&&en.slimeAttack?.key==='sever'&&en.slimeAttack.phase==='active'){if(basicAttack?.id!==undefined){basicAttack.slimeSharedHits=basicAttack.slimeSharedHits||new WeakSet();basicAttack.slimeSharedHits.add(en);}const a=en.slimeAttack,token=basicAttack?.id!==undefined?'basic:'+basicAttack.id:'tick:'+frameCount;a.damageEvents=a.damageEvents||[];if(a.damageEvents.includes(token))return;a.damageEvents.push(token);}
       if (en.hp <= 0) return;
       observeJournalEnemy(en);
       if(basicAttack)journalWeaponUsed(findItemById(basicAttack.weaponId)?.weaponKind,basicAttack.weaponId);
@@ -3335,6 +3343,7 @@
       if (combatReportMode === 'death') return;
       const idx = enemies.indexOf(en);
       if (idx === -1) return;
+      if(en.isSlimeAux){enemies.splice(idx,1);if(en.isSlimeCrown&&en.slimeOwner?.slimeAttack===en.slimeCast){const a=en.slimeCast,owner=en.slimeOwner;a.interrupted=true;a.interruptBonus=60;if(a.phase==='recovery'){a.recoverFrom={x:owner.x,y:owner.y};enterAttackPhase(owner,a,'recovery',Math.min(205,a.left+60),'slime');owner.coreExposed=true;}createFloatingText(owner.x,owner.y-65,'왕관 파괴 · 회수 지연','#fde68a');slimeImpact(en.x,en.y,25,'break');}return;}
       observeJournalEnemy(en);journalEnemyDefeated(en);
       enemies.splice(idx, 1);addCombatVisual('death',en);
       if(ENCOUNTER_ATTACKS[en.category]){
@@ -3343,7 +3352,7 @@
         if(en.isEncounterSummon||en.isEncounterObject)return;
       }
       if(en.category==='wolf'){wolfEffect(en,'death');if(en.isWolfSummon)return;if(en.isBoss)enemies=enemies.filter(m=>!m.isWolfSummon);}
-      if(en.category==='slime'){slimeImpact(en.x,en.y,en.r,'death',en.isBoss,en.colors?.base);if(en.isSlimeSummon)return;if(en.isBoss){slimeZones=[];enemies=enemies.filter(m=>!m.isSlimeSummon);}}
+      if(en.category==='slime'){slimeImpact(en.x,en.y,en.r,'death',en.isBoss,en.colors?.base);if(en.isSlimeSummon)return;if(en.isBoss){clearSlimeAux(en);slimeZones=[];enemies=enemies.filter(m=>!m.isSlimeSummon);}}
 
       if (en.isMinje) {
         handleMinjeDefeated(en.awakened);
@@ -3785,6 +3794,10 @@
 
     // Shared, fixed-tick attack lifecycle. Rendering never applies damage.
     const SLIME_ATTACKS=Object.freeze({
+      burrow:{name:'핵의 잠행',wind:85,active:170,recover:135,shape:'gel',radius:55,essential:true},
+      sever:{name:'갈라진 왕의 심장',wind:100,active:180,recover:135,shape:'gel',radius:55,essential:true},
+      crown:{name:'왕관 박격',wind:95,active:150,recover:145,shape:'gel',radius:22,essential:true},
+      bloom:{name:'끓는 젤 분출',wind:82,active:95,recover:85,shape:'gel',radius:26,essential:true},
       tide:{name:'왕관해일',wind:135,active:240,recover:135,shape:'gel',radius:26,essential:true},
       catapult:{name:'점탄성 투석기',wind:105,active:72,recover:115,shape:'gel',radius:30},
       maces:{name:'두 개의 젤 철퇴',wind:100,active:150,recover:120,shape:'gel',radius:32},
@@ -3799,6 +3812,7 @@
     const slimeClamp=(v,min,max)=>Math.max(min,Math.min(max,v));
     function beginSlimeAttack(en,key){
       const def=SLIME_ATTACKS[key];if(!def)return false;
+      clearSlimeAux(en);if(en.slimeBaseRadius)en.r=en.slimeBaseRadius;else en.slimeBaseRadius=en.r;en.crownDetached=false;
       const boss=en.isBoss,scale=boss?1:en.isElite?.75:.5;
       let dx=player.x-en.x,dy=player.y-en.y,dist=Math.hypot(dx,dy),reach=boss?240:125;
       const angle=Math.atan2(dy,dx);if(dist>reach){dx*=reach/dist;dy*=reach/dist;}
@@ -3807,8 +3821,109 @@
       if(def.shape==='gel')prepareSlimeChoreography(en,en.slimeAttack);
       en.slimeLift=0;en.state='slime_windup';en.stateTimer=wind;en.coreExposed=false;return true;
     }
+    function clearSlimeAux(owner,keepCrown=false){enemies=enemies.filter(e=>!e.isSlimeAux||e.slimeOwner!==owner||(keepCrown&&e.isSlimeCrown));}
+    function prepareSlimeStage4(en,a){
+      a.baseRadius=en.slimeBaseRadius||en.r;
+      if(a.key==='sever'){
+        a.halves=[-1,1].map(side=>({x:slimeClamp(a.fromX-Math.sin(a.angle)*105*side,90,710),y:slimeClamp(a.fromY+Math.cos(a.angle)*105*side,175,765)}));a.damageEvents=[];
+      }
+      if(a.key==='crown'){
+        a.second={x:slimeClamp(a.x+Math.cos(a.angle)*80-Math.sin(a.angle)*50,90,710),y:slimeClamp(a.y+Math.sin(a.angle)*80+Math.cos(a.angle)*50,175,765)};
+      }
+      if(a.key==='bloom'){
+        a.points=[80,150].map(d=>({x:slimeClamp(a.fromX+Math.cos(a.angle)*d,85,715),y:slimeClamp(a.fromY+Math.sin(a.angle)*d,160,775)}));
+        if(Math.hypot(a.points[0].x-a.points[1].x,a.points[0].y-a.points[1].y)<60)a.points=a.points.slice(0,1);
+      }
+    }
+    function slimeStage4Pose(en,a,t){
+      if(a.key==='sever'){
+        const drift=Math.sin(t/180*Math.PI*2)*85;
+        return {core:{x:slimeClamp(a.fromX-Math.sin(a.angle)*drift,80,720),y:slimeClamp(a.fromY+Math.cos(a.angle)*drift,165,775)},halves:a.halves};
+      }
+      if(a.key==='crown'){
+        const first=t<=42,p=slimeClamp(first?t/42:(t-42)/42,0,1),from=first?a.origin:{x:a.x,y:a.y},to=first?{x:a.x,y:a.y}:a.second;
+        return {x:from.x+(to.x-from.x)*p,y:from.y+(to.y-from.y)*p,lift:t<84?Math.sin(p*Math.PI)*(first?85:60):0};
+      }
+      return {};
+    }
+    function makeSlimePart(owner,index,r){
+      const part={x:owner.x,y:owner.y,r,isSlimeAux:true,isSlimePart:true,isEncounterObject:true,slimeOwner:owner,slimePartIndex:index,category:'slime',stageIndex:0,isBoss:false,colors:owner.colors,level:owner.level,name:'연결된 젤',speed:0,floatSeed:0};
+      for(const field of ['hp','maxHp'])Object.defineProperty(part,field,{enumerable:true,get:()=>owner[field]});
+      for(const field of ['frozenTimer','suspended','vulnTimer','brittleTimer'])Object.defineProperty(part,field,{enumerable:true,get:()=>owner[field]||0,set:value=>{owner[field]=Math.max(owner[field]||0,value);}});
+      return part;
+    }
+    function updateSlimeParts(en,a,pose){
+      if(!a.partsReady){for(let i=0;i<8;i++)enemies.push(makeSlimePart(en,i,i<2?48:18));a.partsReady=true;}
+      for(const part of enemies.filter(e=>e.isSlimePart&&e.slimeOwner===en)){
+        if(part.slimePartIndex<2)Object.assign(part,pose.halves[part.slimePartIndex]);
+        else{const i=part.slimePartIndex-2,anchor=pose.halves[Math.floor(i/3)],p=(i%3+1)/4;part.x=anchor.x+(pose.core.x-anchor.x)*p;part.y=anchor.y+(pose.core.y-anchor.y)*p;}
+      }
+    }
+    function tickSlimeStage4(en,a,t,pose,hit){
+      if(a.key==='burrow'){
+        if(t<60){a.x=slimeClamp(player.x,75,725);a.y=slimeClamp(player.y,155,775);const d=Math.hypot(a.x-en.x,a.y-en.y);en.x+=(a.x-en.x)*Math.min(1,1.6/Math.max(1,d));en.y+=(a.y-en.y)*Math.min(1,1.6/Math.max(1,d));}
+        if(t===60){a.locked=true;a.lockFrom={x:en.x,y:en.y};a.x=slimeClamp(player.x,75,725);a.y=slimeClamp(player.y,155,775);}
+        if(t>=60){const p=slimeClamp((t-60)/40,0,1);en.x=a.lockFrom.x+(a.x-a.lockFrom.x)*p;en.y=a.lockFrom.y+(a.y-a.lockFrom.y)*p;}
+        if(t===112){slimeImpact(en.x,en.y,55,'land');if(Math.hypot(player.x-en.x,player.y-en.y)<=71)hit('emerge');}
+        if(t>=120)en.coreExposed=en.isBoss;
+      }else if(a.key==='sever'){
+        en.x=pose.core.x;en.y=pose.core.y;en.r=22;updateSlimeParts(en,a,pose);
+        for(let i=0;i<2;i++)if(t===[40,110][i]){slimeImpact(a.halves[i].x,a.halves[i].y,55,'land');if(Math.hypot(player.x-a.halves[i].x,player.y-a.halves[i].y)<=71){hit('half'+i);if(!liveEnemyWarning(en))return;}}
+      }else if(a.key==='crown'){
+        en.crownDetached=true;
+        if(t===42||t===84){slimeImpact(pose.x,pose.y,22,'land');if(Math.hypot(player.x-pose.x,player.y-pose.y)<=38){hit('bounce'+t);if(!liveEnemyWarning(en))return;}}
+        if(t===84)enemies.push({x:pose.x,y:pose.y,r:22,hp:40,maxHp:40,isSlimeAux:true,isSlimeCrown:true,isEncounterObject:true,slimeOwner:en,slimeCast:a,category:'slime',stageIndex:0,level:en.level,colors:en.colors,name:'박힌 왕관',isBoss:false,speed:0,floatSeed:0});
+        if(t>=84){const p=slimeClamp((t-84)/66,0,1)*.65;en.x=a.fromX+(a.second.x-a.fromX)*p;en.y=a.fromY+(a.second.y-a.fromY)*p;}
+      }else if(a.key==='bloom'){
+        for(let i=0;i<a.points.length;i++)if(t===[40,75][i]){const p=a.points[i];slimeImpact(p.x,p.y,26,'land');if(Math.hypot(player.x-p.x,player.y-p.y)<=42){hit('bloom'+i);if(!liveEnemyWarning(en))return;}addSlimeAcid(en,p.x,p.y);}
+      }
+    }
+    function tickSlimeRecovery(en,a){
+      if(a.key!=='crown')return;
+      const p=1-a.left/a.duration,from=a.recoverFrom||a.origin;en.x=from.x+(a.second.x-from.x)*p;en.y=from.y+(a.second.y-from.y)*p;
+    }
+    function drawSlimeCrown(object){
+      ctx.save();ctx.translate(object.x,object.y-(object.lift||0));ctx.rotate(object.rotation||0);ctx.fillStyle='#e7b94d';ctx.strokeStyle='#744326';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-24,12);ctx.lineTo(-30,-23);ctx.lineTo(-11,-8);ctx.lineTo(0,-35);ctx.lineTo(11,-8);ctx.lineTo(30,-23);ctx.lineTo(24,12);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#f5b4ff';ctx.beginPath();ctx.arc(0,-3,7,0,Math.PI*2);ctx.fill();
+      if(object.isSlimeCrown){ctx.fillStyle='#f1e7b9';ctx.fillRect(-22,-48,44*Math.max(0,object.hp/object.maxHp),4);ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('◇ 파괴 가능',0,-57);}ctx.restore();
+    }
+    function drawSlimeSharedCore(en){
+      ctx.save();const g=ctx.createRadialGradient(en.x-5,en.y-7,2,en.x,en.y,24);g.addColorStop(0,'#fff8cb');g.addColorStop(.5,'#f3b8ff');g.addColorStop(1,'#9556b2');ctx.fillStyle=g;ctx.strokeStyle='#ffecaf';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(en.x,en.y,22,26,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore();
+    }
+    function drawSlimeStage4(en,a,t,wind,recover){
+      const c=en.colors||{base:'#a979ce',hi:'#f1c8ff',dark:'#693087'};ctx.save();
+      if(a.key==='burrow'){
+        ctx.fillStyle=c.dark;ctx.globalAlpha=.45;ctx.beginPath();ctx.ellipse(en.x,en.y,100,24,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+        ctx.strokeStyle=c.hi;ctx.lineWidth=3;for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(en.x-i*12*Math.cos(a.angle),en.y-i*12*Math.sin(a.angle),22+i*9,7+i*3,a.angle,0,Math.PI*2);ctx.stroke();}
+      }else if(a.key==='sever'){
+        const p=wind?1-a.left/a.duration:recover?a.left/a.duration:1,pose=slimeStage4Pose(en,a,t);if(recover)ctx.globalAlpha=.5*p;
+        for(let i=0;i<2;i++){
+          const fixed=a.halves[i],x=en.x+(fixed.x-en.x)*p,y=en.y+(fixed.y-en.y)*p,impactAt=[40,110][i],lift=!wind&&!recover&&t<impactAt?Math.sin(slimeClamp((t-(impactAt-30))/30,0,1)*Math.PI)*35:0;
+          ctx.strokeStyle=c.dark;ctx.lineWidth=24;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(en.x,en.y);ctx.stroke();ctx.strokeStyle=c.hi;ctx.lineWidth=4;ctx.stroke();
+          const g=ctx.createRadialGradient(x-12,y-lift-14,2,x,y-lift,60);g.addColorStop(0,c.hi);g.addColorStop(.5,c.base);g.addColorStop(1,c.dark);ctx.fillStyle=g;ctx.strokeStyle=c.hi;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(x,y-lift,48,36+Math.max(0,lift*.3),i?-.2:.2,0,Math.PI*2);ctx.fill();ctx.stroke();
+          ctx.fillStyle='#24313c';ctx.beginPath();ctx.ellipse(x,y-lift-7,5,8,0,0,Math.PI*2);ctx.fill();
+        }
+      }else if(a.key==='crown'&&!wind){
+        const pose=slimeStage4Pose(en,a,t);if(t<84&&!recover)drawSlimeCrown({...pose,rotation:t*.08});
+        if(t>=84||recover){ctx.strokeStyle=c.base;ctx.lineWidth=12;ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.quadraticCurveTo((en.x+a.second.x)/2,en.y+28,a.second.x,a.second.y);ctx.stroke();}
+      }else if(a.key==='bloom'){
+        for(let i=0;i<a.points.length;i++){
+          const point=a.points[i],end=[40,75][i],p=wind?0:slimeClamp(1-Math.abs(t-end)/30,0,1);if(recover)continue;
+          ctx.strokeStyle=c.base;ctx.lineWidth=12;ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.lineTo(point.x,point.y);ctx.stroke();ctx.fillStyle=c.base;ctx.strokeStyle=c.hi;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(point.x,point.y-15*p,26,8+p*24,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#ffe197';ctx.beginPath();ctx.ellipse(point.x,point.y-15*p,7,4+p*11,0,0,Math.PI*2);ctx.fill();
+        }
+      }
+      ctx.restore();
+    }
+    function drawSlimeStage4Guide(en,a){
+      const t=a.phase==='windup'?0:a.duration-a.left;ctx.save();
+      if(a.key==='burrow'&&a.locked){ctx.beginPath();ctx.arc(a.x,a.y,71,0,Math.PI*2);ctx.stroke();}
+      if(a.key==='sever')for(let i=0;i<2;i++)if(t<=[40,110][i]){ctx.beginPath();ctx.arc(a.halves[i].x,a.halves[i].y,71,0,Math.PI*2);ctx.stroke();}
+      if(a.key==='crown')for(const [i,p] of [{x:a.x,y:a.y},a.second].entries())if(t<=[42,84][i]){ctx.beginPath();ctx.arc(p.x,p.y,38,0,Math.PI*2);ctx.stroke();}
+      if(a.key==='bloom')for(let i=0;i<a.points.length;i++)if(t<=[40,75][i]){ctx.beginPath();ctx.arc(a.points[i].x,a.points[i].y,42,0,Math.PI*2);ctx.stroke();}
+      ctx.restore();
+    }
+
     function prepareSlimeChoreography(en,a){
-      a.hits=[];a.origin={x:a.fromX,y:a.fromY};
+      a.hits=[];a.origin={x:a.fromX,y:a.fromY};prepareSlimeStage4(en,a);
       if(a.key==='tide'){
         a.startX=player.x>=400?110:690;a.endX=800-a.startX;a.gapY=slimeClamp(player.y,250,610);a.gapWidth=180;
       }else if(a.key==='catapult'||a.key==='spring'){
@@ -3816,7 +3931,7 @@
         a.x=slimeClamp(a.fromX+Math.cos(a.angle)*d,75,725);a.y=slimeClamp(a.fromY+Math.sin(a.angle)*d,155,775);
         const bend=en.isBoss?85:24;a.control={x:slimeClamp((a.fromX+a.x)/2-Math.sin(a.angle)*bend,75,725),y:slimeClamp((a.fromY+a.y)/2+Math.cos(a.angle)*bend,155,775)};
         a.anchor={x:slimeClamp(a.fromX-Math.cos(a.angle)*(en.isBoss?115:38),60,740),y:slimeClamp(a.fromY-Math.sin(a.angle)*(en.isBoss?115:38),150,790)};
-        a.radius=en.r*.8;
+        a.radius=en.r*.8;if(en.slimeFollowAnchor&&a.key==='catapult'){a.anchor={...en.slimeFollowAnchor};a.linkedAnchor=true;en.slimeFollowAnchor=null;}
       }
     }
     function slimeChoreographyPose(en,a,t){
@@ -3825,14 +3940,16 @@
       if(a.key==='catapult'||a.key==='spring')return {x:(1-p)*(1-p)*a.fromX+2*(1-p)*p*a.control.x+p*p*a.x,y:(1-p)*(1-p)*a.fromY+2*(1-p)*p*a.control.y+p*p*a.y};
       if(a.key==='maces'){
         const extend=slimeClamp(t/40,0,1),fold=slimeClamp((t-70)/75,0,1),angle=a.angle+1.3-fold*1.8;
-        const point=(along,side,angle=a.angle)=>({x:slimeClamp(a.fromX+Math.cos(angle)*along-Math.sin(angle)*side,75,725),y:slimeClamp(a.fromY+Math.sin(angle)*along+Math.cos(angle)*side,155,775)});
+        const scale=en.isBoss?1:en.isElite?.75:.55;
+        const point=(distance,offset,angle=a.angle)=>{const along=distance*scale,side=offset*scale;return {x:slimeClamp(a.fromX+Math.cos(angle)*along-Math.sin(angle)*side,75,725),y:slimeClamp(a.fromY+Math.sin(angle)*along+Math.cos(angle)*side,155,775)};};
         return {heads:[{...point(35+105*extend,-65*extend),r:a.radius,hot:t>=20&&t<=42},{...point(145-95*fold,0,angle),r:a.radius,hot:t>=70&&t<=145}]};
       }
-      return {};
+      return slimeStage4Pose(en,a,t);
     }
     function tickSlimeChoreography(en,a){
       const t=a.duration-a.left+1,current=slimeChoreographyPose(en,a,t),previous=slimeChoreographyPose(en,a,t-1);
       const hit=token=>{if(a.hits.includes(token))return;a.hits.push(token);slimeHit(en,a);};
+      tickSlimeStage4(en,a,t,current,hit);if(!liveEnemyWarning(en))return;
       if(a.key==='tide'){
         en.x=current.x;en.y=current.y;
         if(Math.abs(player.x-current.x)<=42&&(player.y<current.gap-74||player.y>current.gap+74))hit('wall');
@@ -3849,7 +3966,8 @@
     function drawSlimeChoreography(en){
       const a=en.slimeAttack;if(!a||SLIME_ATTACKS[a.key]?.shape!=='gel')return;
       const wind=a.phase==='windup',recover=a.phase==='recovery',t=wind?0:recover?SLIME_ATTACKS[a.key].active:a.duration-a.left;
-      const pose=slimeChoreographyPose(en,a,t),r=en.r,c=en.colors||{hi:'#e0ffba',base:'#83ce71',dark:'#255c52'};ctx.save();ctx.lineCap='round';
+      const pose=slimeChoreographyPose(en,a,t),r=en.slimeBaseRadius||en.r,c=en.colors||{hi:'#e0ffba',base:'#83ce71',dark:'#255c52'};ctx.save();ctx.lineCap='round';
+      drawSlimeStage4(en,a,t,wind,recover);
       const gel=(x,y,radius)=>{const g=ctx.createRadialGradient(x-radius*.3,y-radius*.4,2,x,y,radius*1.2);g.addColorStop(0,c.hi);g.addColorStop(.45,c.base);g.addColorStop(1,c.dark);ctx.fillStyle=g;ctx.strokeStyle=c.hi;ctx.lineWidth=2;};
       if(a.key==='tide'){
         const p=wind?1-a.left/a.duration:recover?a.left/a.duration:1,x=wind?a.startX:pose.x,gap=wind?a.gapY:pose.gap;
@@ -3864,7 +3982,7 @@
         const thickness=recover?Math.max(1,a.left/a.duration*14):wind?8:Math.max(3,14-t/a.duration*9);
         ctx.strokeStyle=c.base;ctx.lineWidth=thickness;ctx.beginPath();ctx.moveTo(a.anchor.x,a.anchor.y);ctx.quadraticCurveTo((a.anchor.x+en.x)/2,en.y+35,en.x,en.y);ctx.stroke();
         ctx.strokeStyle=c.hi;ctx.lineWidth=2;ctx.stroke();
-        ctx.fillStyle=en.isBoss?'#6c7e9a':'#93d582';ctx.strokeStyle='#d2e2bd';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(a.anchor.x-15,a.anchor.y+10);ctx.lineTo(a.anchor.x-10,a.anchor.y-27);ctx.lineTo(a.anchor.x+3,a.anchor.y-37);ctx.lineTo(a.anchor.x+17,a.anchor.y-10);ctx.lineTo(a.anchor.x+12,a.anchor.y+12);ctx.closePath();ctx.fill();ctx.stroke();
+        ctx.fillStyle=a.linkedAnchor?c.base:en.isBoss?'#6c7e9a':'#93d582';ctx.strokeStyle='#d2e2bd';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(a.anchor.x-15,a.anchor.y+10);ctx.lineTo(a.anchor.x-10,a.anchor.y-27);ctx.lineTo(a.anchor.x+3,a.anchor.y-37);ctx.lineTo(a.anchor.x+17,a.anchor.y-10);ctx.lineTo(a.anchor.x+12,a.anchor.y+12);ctx.closePath();ctx.fill();ctx.stroke();
       }else if(a.key==='maces'){
         const fold=recover?a.left/a.duration:1;
         for(let i=0;i<2;i++){
@@ -3879,6 +3997,7 @@
     function drawSlimeChoreographyGuide(en,a,showRange,details){
       if(a.phase==='recovery')return;ctx.save();ctx.strokeStyle=a.phase==='windup'?'#fde68a':'#fb923c';ctx.lineWidth=2;ctx.setLineDash([7,6]);
       if(showRange){
+        drawSlimeStage4Guide(en,a);
         if(a.key==='tide'){
           const pose=slimeChoreographyPose(en,a,a.phase==='windup'?0:a.duration-a.left),x=pose.x,gap=pose.gap;
           for(const [lo,hi] of [[125,gap-74],[gap+74,825]])ctx.strokeRect(x-42,lo,84,hi-lo);
@@ -3928,12 +4047,13 @@
         if(en.slimeIdle<=0){
           if(!en.isBoss&&enemies.filter(e=>!e.isBoss&&e.slimeAttack&&e.slimeAttack.phase!=='recovery').length>=2)return;
           en.slimePhase=en.isBoss&&en.hp/en.maxHp<=.6?2:1;
-          const choices=en.isBoss?(en.slimePhase===2?['tide','catapult','maces','acid','split']:['tide','catapult','maces']):en.isElite?['leap','sweep']:en.stageIndex===2?['leap','acid']:en.stageIndex===0?['spring','dash']:['dash','leap'];
-          en.slimeSequence=(en.slimeSequence||0);beginSlimeAttack(en,choices[en.slimeSequence++%choices.length]);
+          const choices=en.isBoss?(en.slimePhase===2?['tide','maces','catapult','burrow','sever','crown']:['tide','catapult','maces']):(en.isElite||en.stageIndex===1)?['maces','spring']:en.stageIndex===2?['spring','bloom']:['spring','dash'];
+          en.slimeSequence=(en.slimeSequence||0);let key=choices[en.slimeSequence++%choices.length];if(en.slimeFollow&&en.slimePhase===2){if(key!==en.slimeFollow)en.slimeSequence--;key=en.slimeFollow;en.slimeFollow=null;}beginSlimeAttack(en,key);
         }
         return;
       }
       en.stateTimer=a.left;
+      if(a.interrupted&&a.phase!=='recovery'){a.recoverFrom={x:en.x,y:en.y};clearSlimeAux(en);en.r=en.slimeBaseRadius||en.r;enterAttackPhase(en,a,'recovery',SLIME_ATTACKS[a.key].recover+(a.interruptBonus||0),'slime');en.coreExposed=en.isBoss;}
       if(a.phase==='windup'){
         if(a.key==='tide'){const p=1-a.left/a.duration;en.x=a.fromX+(a.startX-a.fromX)*p;en.y=a.fromY+(a.gapY+120-a.fromY)*p;}
         if(--a.left>0)return;
@@ -3960,8 +4080,8 @@
           }
         }
         if(combatReportMode==='death'||!enemies.includes(en))return;
-        if(--a.left<=0){enterAttackPhase(en,a,'recovery',SLIME_ATTACKS[a.key].recover,'slime');en.slimeLift=0;en.coreExposed=en.isBoss&&(a.key==='split'||def.shape==='gel');}
-      }else if(a.phase==='recovery'&&--a.left<=0){en.slimeAttack=null;en.coreExposed=false;en.state='idle';en.slimeIdle=en.isBoss?42:55;}
+        if(--a.left<=0){a.recoverFrom={x:en.x,y:en.y};enterAttackPhase(en,a,'recovery',SLIME_ATTACKS[a.key].recover,'slime');en.slimeLift=0;clearSlimeAux(en,a.key==='crown');en.r=en.slimeBaseRadius||en.r;en.coreExposed=en.isBoss&&(a.key==='split'||def.shape==='gel');}
+      }else if(a.phase==='recovery'){tickSlimeRecovery(en,a);if(--a.left<=0){if(en.isBoss&&en.hp/en.maxHp<=.6){if(a.key==='maces'){en.slimeFollow='catapult';en.slimeFollowAnchor={...slimeChoreographyPose(en,a,40).heads[0]};}else if(a.key==='crown')en.slimeFollow='tide';}clearSlimeAux(en);en.r=en.slimeBaseRadius||en.r;en.crownDetached=false;en.slimeAttack=null;en.coreExposed=false;en.state='idle';en.slimeIdle=en.isBoss?42:55;}}
     }
     function drawSlimeAttackGuide(en){
       const a=en.slimeAttack;if(!a||!liveEnemyWarning(en))return;const def=SLIME_ATTACKS[a.key],showRange=enemyWarningRange(en,a),details=enemyWarningDetails(en);
@@ -5364,6 +5484,7 @@
     }
 
     function drawDungeonMob(en, t,showGuide=true) {
+      if(en.isSlimeAux){if(en.isSlimeCrown)drawSlimeCrown(en);return;}
       drawCreatureContact(en);
       ctx.save();ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.ellipse(en.x,en.y+(en.r||24)*.65,(en.r||24)*.9,(en.r||24)*.25,0,0,Math.PI*2);ctx.fill();
       if(en.isBoss||en.isElite){ctx.strokeStyle=en.isBoss?'#e6b75c':'#b8c5da';ctx.lineWidth=2;ctx.globalAlpha=.6;ctx.beginPath();ctx.ellipse(en.x,en.y+(en.r||24)*.65,(en.r||24)*1.1,(en.r||24)*.34,0,0,Math.PI*2);ctx.stroke();}ctx.restore();
@@ -5923,7 +6044,7 @@
     const POTION_BUY_QTYS = [1, 3, 10, 64];
 
     // The journal observes existing combat events; it never supplies combat or reward values.
-    const GAME_VERSION='6.2.0', JOURNAL_RULESET='6.2.0';
+    const GAME_VERSION='6.3.0', JOURNAL_RULESET='6.3.0';
     const JOURNAL_WEAPONS=['sword','bow','staff'];
     const JOURNAL_GRADES=['일반','정예','생존','보스'];
     const JOURNAL_OUTCOMES={victory:'승리',defeat:'패배',escape:'중도 이탈'};
@@ -6091,7 +6212,7 @@
     }
 
     const JOURNAL_LORE={
-      slime:['젖은 바닥을 튀어 다니는 젤 생명체. 몸을 웅크리는 순간 다음 도약을 준비합니다.','광물을 흡수한 푸른 개체. 정예의 큰 몸과 넓어진 공격 범위를 먼저 확인하세요.','뜨거운 핵을 품은 붉은 개체. 산성 흔적을 남겨 오래 서 있을 자리를 줄입니다.','몸을 해일로 펴고 결정에 붙여 튕기는 젤 군주. 철퇴의 박힘과 회수를 구분하고, 재결합하는 핵을 공략하세요. 기본 민첩10 기준입니다.'],
+      slime:['젖은 바닥을 튀어 다니는 젤 생명체. 몸을 웅크리는 순간 다음 도약을 준비합니다.','단단한 외막의 푸른 개체. 젤 철퇴의 박힘/회수와 짧은 탄성 도약 뒤의 빈틈을 구분하세요.','끓는 핵의 붉은 개체. 두 젤 봉우리가 차례로 솟은 뒤 산성 흔적이 남습니다. 열린 바닥으로 이동하세요.','몸을 해일로 펴고 결정에 붙여 튕기는 젤 군주. 철퇴의 박힘과 회수를 구분하고, 재결합하는 핵을 공략하세요. 기본 민첩10 기준입니다.'],
       wolf:['숲의 길을 순찰하는 사냥꾼. 머리를 낮추고 몸을 당긴 뒤 전방을 물어뜯습니다.','달빛 아래 숨는 검은 사냥꾼. 정예의 준비 동작 뒤 돌진 경로 옆으로 움직이세요.','무리를 격려하는 우두머리 개체. 포효와 도약을 함께 경계하세요.','둥지를 지키는 늑대왕. HP 50% 이하에서는 공격이 이어지므로 첫 공격 회피 뒤에도 다음 예고를 확인하세요.'],
       zombie:['묘지를 떠도는 망자. 느리게 접근하지만 붙잡기 범위 안에 오래 머물면 위험합니다.','부서진 뼈가 다시 모인 병사. 칼을 드는 준비 자세 뒤 전방을 피하세요.','묘지의 갑옷 수호자. 방패를 든 동안과 내려찍기 뒤의 후딜을 구분하세요.','뼈 제단의 의식을 지휘하는 마법사. 낫·흡수·호위를 구분하고 부활 의식의 봉인석을 활용하세요.'],
       ghost:['폐허에 남은 떠도는 영혼. 손을 뻗기 전의 자세와 순간이동 도착 위치를 확인하세요.','거울 파편을 따라 움직이는 망령. 환영과 본체의 모양을 구분하세요.','안개와 함께 나타나는 악령. 여러 위치의 공격은 한꺼번에 끝나지 않으므로 순서를 보세요.','영혼 문을 지키는 사령왕. 왕관과 가면을 가진 본체를 찾고, 고정된 탄막 틈과 회랑을 이용하세요.'],
@@ -6102,8 +6223,9 @@
         ['tide','몸이 길게 펴져 이동하는 젤 막과 통과 틈을 만듭니다.','넓은 틈으로 들어가 움직이는 틈을 따라가거나 막이 지나간 쪽으로 이동하세요.','해일이 끝나고 왕관 아래로 재결합할 때 핵을 공격하세요.'],
         ['catapult','뒤쪽 결정에 젤을 붙이고 길게 당겨 몸을 튕깁니다.','고정된 곡선 경로 밖으로 빠지고 날아오는 몸의 그림자를 확인하세요.','착지한 뒤 접착 젤을 회수하는 동안 반격하세요.'],
         ['maces','두 팔이 무거운 젤 철퇴가 됩니다. 한 팔이 박히면 다른 팔이 접혀 돌아옵니다.','먼저 박힌 팔 바깥쪽으로 돌며 회수하는 두 번째 머리를 피하세요.','팔을 회수하고 얇아진 핵이 드러나는 동안 공격하세요.'],
-        ['acid','여러 원이 생긴 뒤 산성 장판이 남습니다.','원을 벗어나고 남은 장판 위에 오래 서 있지 마세요.','장판 사이 빈 바닥에서 원거리 공격을 이어가세요.'],
-        ['split','몸이 갈라지며 작은 슬라임을 소환하고 핵이 노출됩니다.','소환 위치와 부하의 도약 예고를 피하세요.','핵 노출 동안 본체를 공격하면 추가 피해를 줄 수 있습니다.']
+        ['burrow','납작한 젤 속의 핵이 추적하다 목표를 고정합니다.','핵을 빈 곳으로 유도하고 경계가 고정되면 옆으로 빠지세요.','솟아오른 뒤 노출된 핵을 공격하세요.'],
+        ['sever','두 몸체가 갈라져 번갈아 눌러치며 핵이 연결부를 이동합니다.','먼저 내려앉은 쪽을 이용해 다음 몸체의 공격을 피하세요.','핵·몸체·연결부 모두 같은 보스 HP를 공격합니다.'],
+        ['crown','왕관이 분리되어 두 번 튀고 땅에 박힙니다.','착지 위치를 피해 지나간 쪽으로 이동하세요. 박힌 왕관은 선택적으로 파괴할 수 있습니다.','왕관이 깨지거나 몸이 재결합하는 동안 노출된 핵을 공략하세요.']
       ],
       wolf:[
         ['rush','몸을 낮추고 직선 경로를 고정합니다.','선과 나란히 달리지 말고 옆으로 벗어나세요.','돌진이 멈춘 뒤 페릴이 몸을 돌릴 때 공격하세요.'],
