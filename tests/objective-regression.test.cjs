@@ -85,7 +85,7 @@ test('tracking persists in current schema and schema 3 loads in auto mode withou
     applySaveData(old);const migrated={tracking:trackedObjective,gold};
     const invalid=getSaveData();invalid.trackedObjective='unknown';let rejected=false;try{applySaveData(invalid);}catch{rejected=true;}
     return {restored,version,migrated,rejected,gold};
-  }),{restored:'dungeon:wolf',version:7,migrated:{tracking:null,gold:777},rejected:true,gold:777});
+  }),{restored:'dungeon:wolf',version:8,migrated:{tracking:null,gold:777},rejected:true,gold:777});
 }));
 
 test('objective chooser freezes gameplay, shows locked goals and returns through the right pause layer',()=>run(async page=>{

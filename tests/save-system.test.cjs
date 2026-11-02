@@ -35,7 +35,7 @@ test('legacy versions migrate without editing their source, and omitted progress
     dungeonProgress.wolf.progress=[25,3,5400]; applySaveData(data);
     return {unchanged:JSON.stringify(old)===original,version:data.version,progress:data.dungeonProgress.slime.progress,
       bow:equipped.bow.id,swordLearned:skills.learnedSword,bag:inventory.length,bar:hotbar.length,wolf:dungeonProgress.wolf.progress};
-  }), {unchanged:true,version:7,progress:[12,0,0],bow:'bow_wood',swordLearned:true,bag:27,bar:9,wolf:[0,0,0]});
+  }), {unchanged:true,version:8,progress:[12,0,0],bow:'bow_wood',swordLearned:true,bag:27,bar:9,wolf:[0,0,0]});
 }));
 
 test('invalid data and future versions cannot mutate current play or storage', () => run(async page => {
@@ -140,7 +140,7 @@ test('file export can be imported back and download contains validated save', ()
   await page.evaluate(()=>{gold=777;saveToSlot(1,false);});
   const downloadPromise=page.waitForEvent('download'); await page.evaluate(()=>doExportSlot(1));
   const download=await downloadPromise, exported=JSON.parse(fs.readFileSync(await download.path(),'utf8'));
-  assert.equal(exported.gold,777); assert.equal(exported.version,7);
+  assert.equal(exported.gold,777); assert.equal(exported.version,8);
   page.once('dialog',dialog=>dialog.accept());
   await page.evaluate(data=>importSaveText(2,JSON.stringify(data),'export.json'),exported);
   await page.evaluate(()=>doLoadSlot(2));
@@ -174,7 +174,7 @@ test('version 2 saves and combat snapshots normalize to a safe village spawn', (
     applySaveData(data);gameState='tower';player.x=10;player.y=20;
     const snapshot=getSaveData();
     return {version:normalized.version,state:normalized.gameState,player:normalized.player,snapshot: snapshot.player};
-  }), {version:7,state:'village',player:{x:400,y:500,facing:'left'},snapshot:{x:400,y:500,facing:'left'}});
+  }), {version:8,state:'village',player:{x:400,y:500,facing:'left'},snapshot:{x:400,y:500,facing:'left'}});
 }));
 
 test('cancelled manual overwrite and slot deletion preserve all data; active slot cannot be deleted', () => run(async page => {

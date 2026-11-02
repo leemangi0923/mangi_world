@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v5.6.0</title>
+  <title>만기 월드 (Mangi World) - v5.7.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -269,6 +269,36 @@
     #game-stage.small-game #loot-feed {top:auto;bottom:118px;right:6px;width:165px;}
     #game-stage.small-game #loot-feed .loot-receipt:not(:last-child) {display:none;}
     #game-stage.small-game .loot-receipt {padding:4px 6px;font-size:11px;} #game-stage.small-game .loot-receipt span {font-size:10px;}
+
+    #journal-screen {position:absolute;inset:0;z-index:108;overflow:auto;overscroll-behavior:contain;background:#0d1726;color:#e2e8f0;padding:12px;font-size:13px;}
+    #journal-screen * {box-sizing:border-box;}
+    #journal-screen header {position:sticky;top:-12px;z-index:4;background:#0d1726;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;}
+    #journal-screen h2 {font-size:21px;color:#fde047;margin:0;} #journal-screen h3 {font-size:18px;color:#fde6a4;margin:8px 0;} #journal-screen h4 {margin:12px 0 6px;color:#b8d6ef;}
+    #journal-screen p {margin:8px 0;line-height:1.6;white-space:pre-line;overflow-wrap:anywhere;}
+    #journal-screen .btn {font-size:12px;min-height:34px;padding:7px 10px;white-space:normal;}
+    #journal-tabs {display:flex;gap:4px;margin:10px 0;}
+    #journal-tabs button {flex:1;min-width:0;border:1px solid #62758b;background:#1d2b41;color:#d8e5ef;border-radius:5px;cursor:pointer;padding:9px 3px;font-size:12px;}
+    #journal-tabs button[aria-selected="true"] {background:#cfad54;color:#142237;border-color:#f8d684;font-weight:bold;}
+    #journal-filter-box {border:1px solid #475a73;border-radius:6px;padding:8px;margin-bottom:8px;} #journal-filter-box summary {cursor:pointer;color:#bfd9ea;}
+    .journal-filters {display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;} .journal-filters label {display:flex;flex-direction:column;gap:4px;min-width:100px;flex:1;color:#bfcee0;font-size:12px;}
+    #journal-screen :is(input,select) {width:100%;min-height:34px;border:1px solid #647b93;background:#142238;color:#e7edf4;padding:7px;border-radius:4px;font-size:12px;}
+    #journal-progress {font-size:12px;color:#a6c0d5;} #journal-count {font-size:12px;color:#d4c59e;}
+    #journal-content {display:grid;grid-template-columns:minmax(170px,32%) minmax(0,1fr);gap:12px;align-items:start;}
+    #journal-list {max-height:610px;overflow:auto;overscroll-behavior:contain;}
+    .journal-entry {display:block;width:100%;padding:10px;text-align:left;border:1px solid #3e546d;border-radius:6px;background:#142238;color:#e4ecf2;cursor:pointer;margin:0 0 7px;overflow-wrap:anywhere;}
+    .journal-entry[aria-pressed="true"] {border-color:#e9c66d;background:#26364a;} .journal-entry strong {display:block;font-size:13px;} .journal-entry span {display:block;color:#aac0d2;font-size:11px;margin-top:6px;}
+    #journal-detail {min-width:0;padding:12px;border:1px solid #455c77;border-radius:7px;background:#132136;}
+    #journal-detail canvas {width:auto;max-width:100%;height:auto;border-radius:6px;display:block;margin:8px auto;}
+    #journal-detail canvas.journal-creature {width:180px;height:180px;}
+    .journal-guide {border-top:1px solid #41516a;margin:12px 0;padding-top:4px;} .journal-muted {font-size:12px;color:#9fb6c9;} .journal-highlight {color:#f7d883;font-weight:bold;} .journal-action {display:block;margin:10px 0;max-width:100%;}
+    #journal-back {display:none;} #journal-status {color:#fde68a;} #journal-result-button {position:absolute;right:10px;bottom:48px;z-index:24;max-width:calc(100% - 20px);font-size:12px;padding:7px 10px;}
+    #game-stage.small-game #journal-screen {padding:8px;font-size:12px;} #game-stage.small-game #journal-screen header {top:-8px;} #game-stage.small-game #journal-screen h2 {font-size:15px;}
+    #game-stage.small-game #journal-content {display:block;} #game-stage.small-game #journal-list {max-height:none;} #game-stage.small-game #journal-detail {display:none;}
+    #game-stage.small-game #journal-screen.journal-detail-view #journal-list {display:none;} #game-stage.small-game #journal-screen.journal-detail-view #journal-detail {display:block;}
+    #game-stage.small-game #journal-screen.journal-detail-view :is(#journal-filter-box,#journal-count,#journal-progress,#journal-context) {display:none;}
+    #game-stage.small-game #journal-back {display:block;} #game-stage.small-game #journal-tabs {gap:3px;} #game-stage.small-game #journal-tabs button {font-size:11px;min-height:34px;}
+    #game-stage.small-game .journal-filters label {min-width:90px;} #game-stage.small-game #journal-result-button {font-size:11px;bottom:32px;}
+    body[data-large-ui] #journal-screen :is(p,label,input,select,.journal-entry strong,.journal-entry span,#journal-tabs button) {font-size:calc(12px * var(--ui-scale));}
   </style>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -315,6 +345,10 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
+        <h4>📌 v5.7.0 패치 노트</h4>
+        • 📚 몬스터20종 발견·공략과 장비 수집 도감<br>
+        • 🏆 보스별 시간·피해·물약·사용 무기·보상·신규 발견 기록<br>
+        • 🧭 개인 최고·첫 승리·대표 무기 수집 목표와 획득 경로 추적<br><br>
         <h4>📌 v5.6.0 패치 노트</h4>
         • 🏰 다섯 던전 지형·일반/정예/생존/보스 방과 주인공·NPC 재질 개편<br>
         • ✨ 특성별 전용 연출·소리, 무기별 명중·단계 전환·사망 마무리<br>
@@ -670,7 +704,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v5.6.0</div>
+      <div id="version-badge">v5.7.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -734,7 +768,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v5.6.0 : 다섯 던전 배경 · 전투 연출 · 보상 표시</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v5.7.0 : 몬스터·장비 도감 · 개인 전투 기록 · 재도전 목표</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -752,13 +786,14 @@
           <p id="combat-report-summary" style="white-space:pre-line;margin:0 0 12px;"></p>
           <div id="combat-report-list"></div>
         </div>
+        <button id="combat-journal-open" class="btn hidden" style="flex-shrink:0;" onclick="openJournal('records',journalLastResult?.id)">이번 보스 전투 상세</button>
         <button id="combat-retry" class="btn hidden" style="flex-shrink:0;" onclick="retryCombat()">보스 즉시 재도전</button>
         <button id="combat-report-close" class="btn" style="flex-shrink:0;" onclick="closeCombatReport()">닫기</button>
       </div>
       <div id="battle-summary" class="hidden" aria-label="현재 전투 상황" style="position:absolute;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:360px;padding:5px 8px;border:1px solid #64748b;border-radius:6px;background:rgba(10,15,26,.9);font-size:12px;text-align:center;pointer-events:none;z-index:22;"></div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v5.6.0</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v5.7.0</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
@@ -801,8 +836,28 @@
         <details><summary>페릴 패턴·판정 실험실</summary><label>패턴<select id="wolf-pattern"><option value="rush">사냥 돌진</option><option value="claw">쌍발톱</option><option value="leap">달빛 도약</option><option value="howl">왕의 포효</option><option value="bite">물어뜯기 (일반 학습용)</option></select></label><label>체력 단계<select id="wolf-phase"><option value="1">1단계</option><option value="2">2단계</option></select></label><label><input type="checkbox" onchange="if(adminOnly())wolfDebugHitboxes=this.checked;">활성 판정 표시</label><div class="admin-actions"><button class="btn" onclick="adminWolfPattern()">페릴 패턴 새로 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button></div><p id="wolf-inspection"></p></details>
         <details><summary>장비 특성·보상 테스트</summary><p>테스트 보관함·선택 보상·장비는 관리자 저장에만 반영됩니다.</p><button class="btn" onclick="adminPrepareRewards()">첫 보상·보관함 테스트</button><label>특성 무기<select id="admin-trait-weapon"></select></label><button class="btn" onclick="adminPrepareTrait()">선택 특성 평타 테스트 준비</button><p id="admin-trait-inspection"></p></details>
         <details><summary>2차 배경·연출 미리보기</summary><div class="admin-grid"><label>던전<select id="visual-category" onchange="adminVisualPreview()"><option value="slime">슬라임</option><option value="wolf">늑대</option><option value="zombie">묘지</option><option value="ghost">폐허</option><option value="demon">마왕성</option></select></label><label>구역<select id="visual-grade" onchange="adminVisualPreview()"><option value="0">일반</option><option value="1">정예</option><option value="2">생존</option><option value="boss">보스 방</option></select></label></div><button class="btn" onclick="adminVisualPreview()">배경·몸체 미리보기</button><p id="visual-caption"></p><canvas id="visual-preview" width="400" height="450" style="max-width:100%;height:auto;cursor:default;"></canvas></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v5.6.0: 다섯 던전/보스 방, 캐릭터 재질·특성 연출·전리품 표시와 최상위 공격 예고. 다음은 도감·전투 기록입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>도감·전투 기록 확인</summary><p>몬스터20종·장비·개인 기록·도전 목표의 읽기 전용 샘플입니다. 일반 진행과 기록은 바꾸지 않습니다.</p><button id="admin-journal-preview" class="btn" onclick="adminPreviewJournal()">도감·기록 미리보기</button><button class="btn" onclick="openJournal('records')">현재 격리 기록 확인</button></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v5.7.0: 몬스터20종·장비 도감, 개인 전투 기록과 재도전 목표를 추가했습니다. 실제 플레이 밸런스 조정은 이후에 진행합니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
+
+      <section id="journal-screen" class="hidden" role="dialog" aria-modal="true" aria-labelledby="journal-title">
+        <header><h2 id="journal-title">도감·전투 기록</h2><button id="journal-close" class="btn" onclick="closeJournal()">닫기</button></header>
+        <p id="journal-context"></p><button id="journal-real-data" class="btn hidden" onclick="journalView.preview=false;renderJournal()">실제 기록 보기</button>
+        <nav id="journal-tabs" role="tablist" aria-label="도감 종류" onkeydown="journalTabKey(event)">
+          <button id="journal-tab-monsters" role="tab" aria-controls="journal-content" aria-selected="true" onclick="setJournalTab('monsters')">몬스터</button>
+          <button id="journal-tab-equipment" role="tab" aria-controls="journal-content" aria-selected="false" tabindex="-1" onclick="setJournalTab('equipment')">장비</button>
+          <button id="journal-tab-records" role="tab" aria-controls="journal-content" aria-selected="false" tabindex="-1" onclick="setJournalTab('records')">전투 기록</button>
+          <button id="journal-tab-goals" role="tab" aria-controls="journal-content" aria-selected="false" tabindex="-1" onclick="setJournalTab('goals')">도전 목표</button>
+        </nav>
+        <details id="journal-filter-box" open><summary>검색·필터</summary>
+          <div class="journal-filters"><label>검색<input id="journal-search" type="search" placeholder="이름·장소·결과" oninput="journalView.selected=null;renderJournal()"></label><label>던전<select id="journal-category" onchange="journalView.selected=null;renderJournal()"></select></label><label>상태<select id="journal-state" onchange="journalView.selected=null;renderJournal()"></select></label><label id="journal-kind-label">등급·종류<select id="journal-kind" onchange="journalView.selected=null;renderJournal()"></select></label></div>
+          <div id="journal-record-filters" class="journal-filters hidden"><label>표시<select id="journal-record-view" onchange="journalView.selected=null;renderJournal()"><option value="recent">최근20건</option><option value="best">개인 최고</option></select></label><label>난이도<select id="journal-difficulty" onchange="journalView.selected=null;renderJournal()"></select></label><label>장소<select id="journal-arena" onchange="journalView.selected=null;renderJournal()"></select></label><label>사용 무기<select id="journal-weapon" onchange="journalView.selected=null;renderJournal()"></select></label></div>
+        </details>
+        <p id="journal-progress"></p><p id="journal-count" role="status"></p>
+        <div id="journal-content" role="tabpanel" aria-labelledby="journal-tab-monsters"><div id="journal-list" aria-label="도감 목록"></div><article id="journal-detail" aria-label="선택한 항목 상세" tabindex="0"></article></div>
+        <p id="journal-status" role="status"></p>
+      </section>
+      <button id="journal-result-button" class="btn hidden" aria-label="최근 보스 전투 결과 보기"></button>
       <aside id="loot-feed" class="hidden" aria-label="최근 획득 보상" aria-live="polite"></aside>
       <div id="weapon-trait-hud" class="hidden"></div>
       <section id="reward-screen" class="hidden" role="dialog" aria-modal="true" aria-labelledby="reward-title">
@@ -819,6 +874,7 @@
         <button class="btn" style="width:220px;" onclick="openObjectiveScreen()">목표와 진행</button>
         <button class="btn" style="width:220px;" onclick="openRewardScreen()">보상 보관함·첫 보상</button>
         <button class="btn" style="width:220px;" onclick="openSettingsModal()">설정</button>
+        <button class="btn" id="journal-open" onclick="openJournal()">도감·전투 기록</button>
         <button class="btn" style="width:220px;" onclick="openCombatHistory()">피격 기록</button>
         <button class="btn" style="width:220px; background:#7f1d1d;" onclick="goToMainMenu()">메인 메뉴</button>
         <button class="btn" style="width:220px; background:#1e293b; border:2px solid #eab308;" onclick="quitGame()">게임 종료</button>
@@ -1336,7 +1392,7 @@
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v5.6.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
+      document.getElementById('admin-metrics').textContent=`v5.7.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
       const traitSelect=document.getElementById('admin-trait-weapon');if(!traitSelect.options.length)for(const [id,def] of Object.entries(WEAPON_TRAITS)){const opt=document.createElement('option');opt.value=id;opt.textContent=findItemById(id).name+' · '+def.name;traitSelect.appendChild(opt);}
       document.getElementById('admin-trait-inspection').textContent='특성 발동 '+weaponTraitState.procs+'회 · 충전 '+weaponTraitState.count+' · 예약 '+weaponTraitState.pending.length+' · 보관 '+rewardArchive.inbox.reduce((n,e)=>n+e.count,0)+'개';
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
@@ -1906,6 +1962,7 @@
 
     function grantItemDrop(item,x,y,source='drop'){
       if(!item)return;const destination=deliverEquipment(item,source);if(!destination)return;
+      journalDrop(item,destination);
       setupInventory();const text=`🎁 ${item.name} · ${destination==='bag'?'가방에 지급':'보관함에 보관'}`;
       createFloatingText(x,y-60,destination==='bag'?'전리품 획득':'보관함 보관','#c084fc');pushLootNotice(item,destination);playSfx('drop');
     }
@@ -2029,7 +2086,7 @@
     let bossRespawnCooldown = { slime: 0, wolf: 0, zombie: 0, ghost: 0, demon: 0 };
 
     // ---------- 무한의 탑 ----------
-    const SAVE_SCHEMA_VERSION = 7; // 세이브 파일 구조 버전. 새 필드를 추가할 때마다 올리고 applySaveData에서 방어적으로 처리할 것.
+    const SAVE_SCHEMA_VERSION = 8; // 세이브 파일 구조 버전. 새 필드를 추가할 때마다 올리고 applySaveData에서 방어적으로 처리할 것.
     let towerFloor = 0;
     let towerBestFloor = 0;
     let towerMobsRemaining = 0;
@@ -2839,7 +2896,9 @@
     function applyPlayerDamage(amount, source = combatSource(), attack = '근접 공격') {
       if (!isPlaying || !COMBAT_STATES.includes(gameState) || combatReportMode === 'death' || !Number.isFinite(amount) || amount < 0) return false;
       if(adminMode.active && adminMode.invincible)return false;
+      const actualDamage=Math.min(hp,amount);
       hp = Math.max(0, hp - amount);
+      if(journalRunIsCurrent())activeBossRun.damage=journalCount(activeBossRun.damage,actualDamage);
       if(amount>0)addCombatVisual('player',{x:player.x,y:player.y,r:16});
       damageLog.push({source, attack, amount, tick:frameCount, fatal:hp === 0});
       if (damageLog.length > 8) damageLog.shift();
@@ -2847,6 +2906,7 @@
       return true;
     }
     function clearBattleRuntime() {
+      finishJournalRun('escape','transition');
       slimeImpacts=[];slimeZoneTickFrame=-1;wolfEffects=[];clearEncounterRuntime();clearWeaponTraits();clearCombatPresentation();
       enemies = []; projectiles = []; floatingTexts = []; pendingSpawns = [];
       slimeZones = []; ghostZones = []; ghostDecoys = []; demonZones = [];
@@ -2888,6 +2948,9 @@
       document.getElementById('combat-report-title').textContent = death ? '전투 패배' : '최근 피격 기록';
       document.getElementById('combat-report-summary').textContent = death ?
         `${lastDeath.source} · ${lastDeath.attack} · 마지막 피해 ${lastDeath.amount.toFixed(1)} HP\n소지금 ${lastDeath.gold}G를 잃었습니다. 재도전해도 소모한 아이템과 소지금은 복구되지 않습니다.` : '최근 8회 · 방어력 적용 후 피해량 · 새 게임/불러오기 시 초기화';
+      const result=death&&journalLastResult?.outcome==='defeat'?journalLastResult:null;
+      document.getElementById('combat-journal-open').classList.toggle('hidden',!result);
+      if(result)document.getElementById('combat-report-summary').textContent+='\n\n'+journalRunSummary(result);
       const list = document.getElementById('combat-report-list');list.replaceChildren();
       for (const hit of damageLog.slice().reverse()) {
         const row = document.createElement('p');
@@ -2929,6 +2992,7 @@
     function respawnPlayerAtInn() {
       if (!COMBAT_STATES.includes(gameState) || combatReportMode === 'death') return;
       if (!retryTicket || retryTicket.map !== gameState || !enemies.some(en => en.isBoss && !en.isTowerMob) || (retryTicket.kind === 'dungeon' && (!currentDungeon.isBoss || currentDungeon.category !== retryTicket.category))) retryTicket = null;
+      finishJournalRun('defeat','defeat');
       lastDeath = {...(damageLog.at(-1) || {source:combatSource(),attack:'전투',amount:0}),gold};
       clearBattleRuntime(); activeBuffs = {}; recalcAllStats(); updateBuffHUD();
 
@@ -3016,6 +3080,7 @@
     }
 
     function enterDungeonStage(category, stageIndex, isBoss, pushReturn) {
+      finishJournalRun('escape','transition');
       slimeZones=[];slimeImpacts=[];slimeZoneTickFrame=-1;wolfEffects=[];clearEncounterRuntime();clearWeaponTraits();clearCombatPresentation();
       if (pushReturn) {
         returnStack.push({
@@ -3036,11 +3101,11 @@
           // 쿨타임 중에도 입장은 항상 허용 — 방 안에서 카운트다운을 보여주고 0이 되면 자동 재소환(던전 렌더 루프에서 처리)
           enemies = [];
         } else {
-          enemies = [createDungeonBoss(category)]; captureRetry('dungeon');
+          enemies = [createDungeonBoss(category)]; observeJournalEnemies(); captureRetry('dungeon');
           showTopNotification(`⚔️ ${dungeonDefs[category].boss.name}이(가) 나타났다!`, 3500);
         }
       } else {
-        enemies = Array.from({length:5}, () => createDungeonMob(category, stageIndex));
+        enemies = Array.from({length:5}, () => createDungeonMob(category, stageIndex)); observeJournalEnemies();
         showTopNotification(`${dungeonDefs[category].icon} ${dungeonDefs[category].tiers[stageIndex].name} 구역에 입장했습니다!`);
       }
     }
@@ -3072,6 +3137,7 @@
     };
 
     function enterTowerAt(floor) {
+      finishJournalRun('escape','transition');
       slimeZones=[];slimeImpacts=[];slimeZoneTickFrame=-1;wolfEffects=[];clearEncounterRuntime();clearWeaponTraits();clearCombatPresentation();
       returnStack.push({ state: gameState, x: player.x, y: player.y, dungeon: null });
       currentDungeon = { category: null, stage: 0, isBoss: false };
@@ -3082,6 +3148,7 @@
     }
 
     function spawnTowerFloor() {
+      finishJournalRun('escape','transition');
       slimeZones=[];slimeImpacts=[];slimeZoneTickFrame=-1;wolfEffects=[];clearEncounterRuntime();clearWeaponTraits();clearCombatPresentation();
       const blockIndex = Math.floor((towerFloor - 1) / 5); // 5층 블록 단위로 테마 로테이션 (1-5=슬라임...21-25=마족, 26층부터 다시 슬라임)
       const cat = TOWER_CATS[blockIndex % 5];
@@ -3098,7 +3165,7 @@
         boss.exp = Math.round(boss.exp * (1 + blockIndex * 0.3));
         boss.name = `${dungeonDefs[cat].boss.name} · 탑 ${towerFloor}층`;
         boss.isTowerMob = true;
-        enemies = [boss];
+        enemies = [boss]; observeJournalEnemies();
         towerMobsRemaining = 1;
         showTopNotification(`🗼 ${towerFloor}층 - ${dungeonDefs[cat].boss.name} 등장!`, 3500);
       } else {
@@ -3108,7 +3175,7 @@
           m.isTowerMob = true;
           return m;
         });
-        towerMobsRemaining = mobCount;
+        towerMobsRemaining = mobCount; observeJournalEnemies();
         showTopNotification(`🗼 무한의 탑 ${towerFloor}층 입장 (${dungeonDefs[cat].label} 테마)`, 3000);
       }
     }
@@ -3117,7 +3184,7 @@
       playSfx(en.isBoss ? 'bossDefeat' : 'enemyDeath');
       const g = Math.round((en.gold != null ? en.gold : 15) * (1 + (activeBuffs.gold ? activeBuffs.gold.val/100 : 0)));
       const xp = en.exp != null ? en.exp : 15;
-      gold += g;
+      gold += g; journalCurrency(g,0);
       createFloatingText(en.x, en.y - 40, `+${g}G 💰`, '#fde047');
       gainExp(xp);
       updateHUD();
@@ -3139,6 +3206,7 @@
     }
 
     function exitTower() {
+      finishJournalRun('escape','exit');
       slimeZones=[];slimeImpacts=[];slimeZoneTickFrame=-1;wolfEffects=[];clearEncounterRuntime();clearWeaponTraits();clearCombatPresentation();
       const prev = returnStack.pop();
       projectiles = []; portalCooldown = 60;
@@ -3150,6 +3218,7 @@
 
     // 던전 내부 하단 출구 포탈 전용: 이전 단계(또는 이전 지역)로 정확히 복귀
     function exitDungeonPortal(fallbackState, fx, fy) {
+      finishJournalRun('escape','exit');
       slimeZones=[];slimeImpacts=[];slimeZoneTickFrame=-1;wolfEffects=[];clearEncounterRuntime();clearWeaponTraits();clearCombatPresentation();
       const prev = returnStack.pop();
       projectiles = []; portalCooldown = 60;
@@ -3160,9 +3229,9 @@
         player.x = prev.x; player.y = prev.y;
         respawnTimer = 0; periodicSpawnTimer = 0;
         if (currentDungeon.isBoss) {
-          enemies = [createDungeonBoss(currentDungeon.category)];
+          enemies = [createDungeonBoss(currentDungeon.category)]; observeJournalEnemies();
         } else {
-          enemies = Array.from({length:5}, () => createDungeonMob(currentDungeon.category, currentDungeon.stage));
+          enemies = Array.from({length:5}, () => createDungeonMob(currentDungeon.category, currentDungeon.stage)); observeJournalEnemies();
         }
       } else if (prev) {
         gameState = prev.state; player.x = prev.x; player.y = prev.y;
@@ -3191,6 +3260,8 @@
       // 광역기는 적 목록의 사본을 돌기 때문에(도중에 죽어도 건너뛰지 않으려고)
       // 같은 프레임에 죽은 적이 사본에 남아 다시 들어올 수 있다.
       if (en.hp <= 0) return;
+      observeJournalEnemy(en);
+      if(basicAttack)journalWeaponUsed(findItemById(basicAttack.weaponId)?.weaponKind,basicAttack.weaponId);
       // en.damageReduction(0~1)이 설정된 몹(예: 패턴 진행 중인 대마왕)은 데미지가 그만큼 경감된다.
       // 필드가 없는 일반 몹은 (undefined||0)=0이라 동작에 변화 없음.
       const reduction = en.damageReduction || 0;
@@ -3228,6 +3299,7 @@
       if (combatReportMode === 'death') return;
       const idx = enemies.indexOf(en);
       if (idx === -1) return;
+      observeJournalEnemy(en);journalEnemyDefeated(en);
       enemies.splice(idx, 1);addCombatVisual('death',en);
       if(ENCOUNTER_ATTACKS[en.category]){
         encounterEffect(en,'death');removeEncounterOwner(en);
@@ -3251,13 +3323,14 @@
       }
       if (en.isTowerMob) {
         handleTowerEnemyDeath(en);
+        if(en.isBoss)finishJournalRun('victory','victory',en);
         return;
       }
 
       playSfx('enemyDeath');
       const g = Math.round((en.gold != null ? en.gold : 15) * (1 + (activeBuffs.gold ? activeBuffs.gold.val/100 : 0)));
       const xp = en.exp != null ? en.exp : 15;
-      gold += g;
+      gold += g; journalCurrency(g,0);
       createFloatingText(en.x, en.y - 40, `+${g}G 💰`, '#fde047');
       gainExp(xp);
       updateHUD();
@@ -3267,6 +3340,7 @@
 
       if (en.isBoss) {
         handleBossDefeated(en);
+        finishJournalRun('victory','victory',en);
         return;
       }
 
@@ -3333,6 +3407,7 @@
         if (st.stage !== 'quest' || def.matBoss !== en.category || st.mats >= def.matNeed) continue;
         if (Math.random() < AWAKEN_MAT_CHANCE) {
           st.mats++;
+          if(journalCanCollect()){const material=activeBossRun.materials.find(m=>m.slot===slot);if(material)material.count++;else activeBossRun.materials.push({slot,count:1});}
           createFloatingText(en.x, en.y - 90, `${def.matIcon} ${def.matName} 획득!`, '#fde047');
           showTopNotification(`${def.matIcon} ${def.matName} 획득! (${st.mats}/${def.matNeed})`, 3000);
           playSfx('drop');
@@ -3348,6 +3423,7 @@
       retryTicket = null;
       dungeonProgress[en.category].bossDefeated = true;
       const firstReward=unlockFirstBossReward(en.category);
+      if(activeBossRun&&activeJournalEnemy===en)activeBossRun.firstReward=firstReward;
       bossRespawnCooldown[en.category] = BOSS_RESPAWN_FRAMES[en.category];
       playSfx('bossDefeat');
       const drops = rollBossItemDrops(en.category);
@@ -5279,7 +5355,7 @@
     let rewardArchive=freshRewardArchive(),rewardReturnTo='pause',forgePreview=null;
     function discoverOwnedEquipment(){
       const ids=new Set(rewardArchive.discovered);
-      for(const item of [...inventory,...['helmet','armor','pants','sword','bow','staff'].map(k=>equipped[k])])if(item&&item.type!=='consumable')ids.add(item.id);
+      for(const item of [...inventory,...['helmet','armor','pants','sword','bow','staff'].map(k=>equipped[k])])if(item&&item.type!=='consumable'){if(!ids.has(item.id))journalNewEquipment(item.id);ids.add(item.id);}
       rewardArchive.discovered=[...ids];
     }
     function normalizeRewardArchive(input,version,data){
@@ -5308,17 +5384,17 @@
         if(entry){if(!Number.isSafeInteger(entry.count+1))throw new Error('보관 수량 범위를 초과했습니다.');entry.count++;}
         else rewardArchive.inbox.push({id,itemId:item.id,source,count:1});
       }
-      if(!rewardArchive.discovered.includes(item.id))rewardArchive.discovered.push(item.id);
+      if(!rewardArchive.discovered.includes(item.id)){rewardArchive.discovered.push(item.id);journalNewEquipment(item.id);}
       return slot>=0?'bag':'inbox';
     }
     function rewardTransaction(change){
       if(!isPlaying)return false;
-      const before={inventory:inventory.map(i=>i?{...i}:null),archive:JSON.parse(JSON.stringify(rewardArchive)),locks:{...lockedSlots}};
+      const before={inventory:inventory.map(i=>i?{...i}:null),archive:JSON.parse(JSON.stringify(rewardArchive)),locks:{...lockedSlots},journalRun:activeBossRun?journalClone(activeBossRun):null};
       try{
         if(change()===false)return false;
         if(autoSaveEnabled&&!adminMode.active&&!saveToSlot(currentSaveSlot,true))throw new Error('저장하지 못해 이번 변경을 취소했습니다. 다시 수령/교환하세요.');
         setupInventory();updateBlacksmithForgeUI();renderRewardScreen();forgePreview=null;return true;
-      }catch(error){inventory=before.inventory;rewardArchive=before.archive;lockedSlots=before.locks;setupInventory();updateBlacksmithForgeUI();renderRewardScreen();rewardMessage(error.message);return false;}
+      }catch(error){inventory=before.inventory;rewardArchive=before.archive;lockedSlots=before.locks;activeBossRun=before.journalRun;setupInventory();updateBlacksmithForgeUI();renderRewardScreen();rewardMessage(error.message);return false;}
     }
     function rewardMessage(message){document.getElementById('reward-status').textContent=message;if(!overlayVisible('reward-screen'))showTopNotification(message,3500);}
     function unlockFirstBossReward(cat){
@@ -5439,7 +5515,7 @@
       projectiles=projectiles.filter(p=>!p.traitProc);
     }
     function syncWeaponTrait(){if(weaponTraitState.weapon!==(equipped.weapon?.id||null))clearWeaponTraits(true);}
-    function createBasicAttack(){syncWeaponTrait();return {id:++traitAttackId,weaponId:equipped.weapon?.id,epoch:weaponTraitState.epoch,angle:player.attackAngle,hit:false,damage:0};}
+    function createBasicAttack(){syncWeaponTrait();journalWeaponUsed(equipped.weapon?.weaponKind);return {id:++traitAttackId,weaponId:equipped.weapon?.id,epoch:weaponTraitState.epoch,angle:player.attackAngle,hit:false,damage:0};}
     function traitRewardTarget(en){return (TOWER_CATS.includes(en.category)||en.isMinje||en.isElfQueen||en.isArchmage||en.isDummy)&&!en.isMini&&!en.isSlimeSummon&&!en.isWolfSummon&&!en.isEncounterSummon&&!en.isEncounterObject&&!en.ghostIllusion;}
     function weaponTraitHit(en,attack,actual){
       syncWeaponTrait();const state=weaponTraitState,def=WEAPON_TRAITS[attack?.weaponId];
@@ -5497,7 +5573,7 @@
     window.adminPrepareRewards=function(){
       if(!adminOnly())return;
       for(const cat of TOWER_CATS){dungeonProgress[cat].bossDefeated=true;rewardArchive.first[cat]='ready';}
-      for(const cat of TOWER_CATS){const item=bossRewardItems(cat)[0],id='drop:'+item.id,entry=rewardArchive.inbox.find(e=>e.id===id);if(entry)entry.count++;else rewardArchive.inbox.push({id,itemId:item.id,source:'drop',count:1});if(!rewardArchive.discovered.includes(item.id))rewardArchive.discovered.push(item.id);}
+      for(const cat of TOWER_CATS){const item=bossRewardItems(cat)[0],id='drop:'+item.id,entry=rewardArchive.inbox.find(e=>e.id===id);if(entry)entry.count++;else rewardArchive.inbox.push({id,itemId:item.id,source:'drop',count:1});if(!rewardArchive.discovered.includes(item.id)){rewardArchive.discovered.push(item.id);journalNewEquipment(item.id);}}
       setupInventory();openRewardScreen();rewardMessage('관리자 전용 첫 보상·장비 샘플입니다. 일반 진행에는 반영되지 않습니다.');
     };
     window.adminPrepareTrait=function(){
@@ -5509,6 +5585,424 @@
     };
 
     const POTION_BUY_QTYS = [1, 3, 10, 64];
+
+    // The journal observes existing combat events; it never supplies combat or reward values.
+    const GAME_VERSION='5.7.0', JOURNAL_RULESET='5.7.0';
+    const JOURNAL_WEAPONS=['sword','bow','staff'];
+    const JOURNAL_GRADES=['일반','정예','생존','보스'];
+    const JOURNAL_OUTCOMES={victory:'승리',defeat:'패배',escape:'중도 이탈'};
+    const JOURNAL_REASONS={victory:'보스 처치',defeat:'전투 패배',exit:'구역 이탈',transition:'전투 변경',saved:'전투 중 저장을 불러와 마을에서 재개'};
+    const freshAdventureJournal=()=>({serial:0,monsters:{},totals:[],recent:[],bests:[]});
+    let adventureJournal=freshAdventureJournal(),activeBossRun=null,activeJournalEnemy=null;
+    let journalDeaths=new WeakSet(),journalLastResult=null,journalResultTicks=0;
+    const journalClone=value=>JSON.parse(JSON.stringify(value));
+    const journalGearCatalog=()=>[...new Map([...blacksmithItems,...dropItems].filter(i=>i.type!=='consumable').map(i=>[i.id,i])).values()];
+    const journalMonsterIds=()=>TOWER_CATS.flatMap(c=>[0,1,2,'boss'].map(g=>c+':'+g));
+    const journalCount=(a,b=1)=>Math.min(Number.MAX_SAFE_INTEGER,a+b);
+    const journalWeaponGroup=run=>run.weapons.length>1||run.weaponIds.length>1?'mixed':run.weapons[0]||'none';
+    const journalTotalKey=run=>[run.category,run.arena,run.difficulty].join(':');
+    const journalBestKey=run=>journalTotalKey(run)+':'+(journalWeaponGroup(run)==='mixed'?'mixed':run.weaponIds[0]||'none');
+    const journalWeaponLabel=run=>{const names=run.weaponIds.map(id=>findItemById(id).name);return journalWeaponGroup(run)==='mixed'?'혼합 ('+names.slice(0,3).join('·')+(names.length>3?' 외 '+(names.length-3)+'종':'')+')':names[0]||'무기 미사용·맨손';};
+    function journalTotal(data,run){
+      let total=data.totals.find(t=>journalTotalKey(t)===journalTotalKey(run));
+      if(!total){total={category:run.category,arena:run.arena,difficulty:run.difficulty,attempts:0,wins:0,defeats:0,escapes:0,improvements:0};data.totals.push(total);}
+      return total;
+    }
+    function journalEnemyId(en){
+      if(!en||!TOWER_CATS.includes(en.category)||en.isMini||en.isSlimeSummon||en.isWolfSummon||en.isEncounterSummon||en.isEncounterObject||en.ghostIllusion)return null;
+      if(!en.isBoss&&![0,1,2].includes(en.stageIndex))return null;
+      return en.category+':'+(en.isBoss?'boss':en.stageIndex);
+    }
+    function journalEnemyArena(en){
+      if(gameState==='tower'&&en.isTowerMob)return 'tower';
+      if(gameState==='dungeon'&&!en.isTowerMob&&currentDungeon.category===en.category)return 'dungeon';
+      return null;
+    }
+    function journalRunIsCurrent(){
+      if(!activeBossRun||adminMode.active||!isPlaying||!activeJournalEnemy||!enemies.includes(activeJournalEnemy))return false;
+      return journalEnemyArena(activeJournalEnemy)===activeBossRun.arena && (activeBossRun.arena!=='tower'||activeBossRun.floor===towerFloor);
+    }
+    function observeJournalEnemy(en){
+      const id=journalEnemyId(en),arena=journalEnemyArena(en);
+      if(!isPlaying||adminMode.active||!id||!arena||!enemies.includes(en))return;
+      if(en.isBoss&&(arena==='tower'||currentDungeon.isBoss)&&(!activeBossRun||activeJournalEnemy!==en)){
+        if(activeBossRun)finishJournalRun('escape','transition');
+        const previous=adventureJournal.totals.some(t=>t.category===en.category&&t.arena===arena&&t.wins>0);
+        activeBossRun={id:++adventureJournal.serial,category:en.category,arena,floor:arena==='tower'?towerFloor:0,difficulty,version:GAME_VERSION,rules:JOURNAL_RULESET,
+          level,ticks:0,damage:0,potions:0,weapons:[],weaponIds:[],gold:0,xp:0,items:[],materials:[],newMonsters:[],newEquipment:[],firstReward:false,
+          firstVictoryCandidate:!previous&&!(arena==='dungeon'&&dungeonProgress[en.category].bossDefeated),lastTickAt:Date.now()};
+        activeJournalEnemy=en;journalTotal(adventureJournal,activeBossRun).attempts=journalCount(journalTotal(adventureJournal,activeBossRun).attempts);
+        journalLastResult=null;journalResultTicks=0;
+      }
+      if(!adventureJournal.monsters[id]){
+        adventureJournal.monsters[id]={seen:true,kills:0,towerKills:0,legacyDefeated:false};
+        if(activeBossRun&&!activeBossRun.newMonsters.includes(id))activeBossRun.newMonsters.push(id);
+      }
+    }
+    function observeJournalEnemies(){for(const en of enemies)if(en.hp>0)observeJournalEnemy(en);}
+    function journalEnemyDefeated(en){
+      const id=journalEnemyId(en),arena=journalEnemyArena(en);
+      if(adminMode.active||!isPlaying||!id||!arena||journalDeaths.has(en))return;
+      journalDeaths.add(en);const entry=adventureJournal.monsters[id];if(!entry)return;
+      entry.kills=journalCount(entry.kills);if(arena==='tower')entry.towerKills=journalCount(entry.towerKills);
+    }
+    function journalWeaponUsed(slot,weaponId=equipped[slot]?.id){
+      if(!journalRunIsCurrent()||!JOURNAL_WEAPONS.includes(slot)||findItemById(weaponId)?.weaponKind!==slot)return;
+      if(!activeBossRun.weapons.includes(slot)){activeBossRun.weapons.push(slot);activeBossRun.weapons.sort((a,b)=>JOURNAL_WEAPONS.indexOf(a)-JOURNAL_WEAPONS.indexOf(b));}
+      if(!activeBossRun.weaponIds.includes(weaponId))activeBossRun.weaponIds.push(weaponId);
+    }
+    function journalCanCollect(){return activeBossRun&&!adminMode.active&&isPlaying&&journalEnemyArena(activeJournalEnemy)===activeBossRun.arena;}
+    function journalNewEquipment(id){if(journalCanCollect()&&!activeBossRun.newEquipment.includes(id))activeBossRun.newEquipment.push(id);}
+    function journalCurrency(g=0,xp=0){if(journalCanCollect()){activeBossRun.gold=journalCount(activeBossRun.gold,g);activeBossRun.xp=journalCount(activeBossRun.xp,xp);}}
+    function journalDrop(item,destination){
+      if(!journalCanCollect())return;
+      const existing=activeBossRun.items.find(i=>i.id===item.id&&i.destination===destination);
+      if(existing)existing.count=journalCount(existing.count);else activeBossRun.items.push({id:item.id,destination,count:1});
+    }
+    function finalizeJournalData(data,run,outcome,reason,endedAt){
+      const record={...journalClone(run),outcome,reason,endedAt,firstVictory:outcome==='victory'&&run.firstVictoryCandidate,bestKind:'none'};
+      delete record.firstVictoryCandidate;delete record.lastTickAt;
+      const total=journalTotal(data,run);const field={victory:'wins',defeat:'defeats',escape:'escapes'}[outcome];total[field]=journalCount(total[field]);
+      if(outcome==='victory'){
+        const index=data.bests.findIndex(r=>journalBestKey(r)===journalBestKey(run)),old=data.bests[index];
+        if(!old)record.bestKind='first';
+        else if(old.rules!==run.rules)record.bestKind='rules';
+        else if(run.arena==='tower'&&run.floor>old.floor)record.bestKind='floor';
+        else if(run.floor===old.floor&&run.ticks<old.ticks)record.bestKind='faster';
+        if(record.bestKind!=='none'){
+          if(record.bestKind==='faster'||record.bestKind==='floor')total.improvements=journalCount(total.improvements);
+          if(index<0)data.bests.push(journalClone(record));else data.bests[index]=journalClone(record);
+        }
+      }
+      data.recent.unshift(journalClone(record));data.recent=data.recent.slice(0,20);return record;
+    }
+    function finishJournalRun(outcome,reason=outcome,en=null){
+      if(!activeBossRun||(en&&en!==activeJournalEnemy))return null;
+      const run=activeBossRun;activeBossRun=null;activeJournalEnemy=null;
+      if(adminMode.active)return null;
+      const record=finalizeJournalData(adventureJournal,run,outcome,reason,Date.now());
+      journalLastResult=journalClone(record);journalResultTicks=600;renderJournalResult();return record;
+    }
+    function journalSnapshot(){
+      const data=journalClone(adventureJournal);
+      // A combat save resumes in town. Materialize its interrupted attempt only in the copy.
+      // The live attempt can still win; later saves replace this snapshot, never add a second attempt.
+      if(activeBossRun&&!adminMode.active)finalizeJournalData(data,activeBossRun,'escape','saved',activeBossRun.lastTickAt);
+      return data;
+    }
+    function tickAdventureJournal(){
+      if(activeBossRun&&!journalRunIsCurrent())finishJournalRun('escape','transition');
+      observeJournalEnemies();
+      if(journalRunIsCurrent()){activeBossRun.ticks=journalCount(activeBossRun.ticks);activeBossRun.lastTickAt=Date.now();}
+      if(journalResultTicks>0&&!presentationThreat())journalResultTicks--;renderJournalResult();
+    }
+    function resetAdventureJournalRuntime(){activeBossRun=null;activeJournalEnemy=null;journalDeaths=new WeakSet();journalLastResult=null;journalResultTicks=0;resetJournalView();}
+    function normalizeAdventureJournal(input,version,data){
+      const fail=()=>{throw new Error('도감·전투 기록의 형식이나 값이 올바르지 않습니다.');};
+      const object=v=>v&&typeof v==='object'&&!Array.isArray(v);
+      const integer=(v,min=0)=>{if(!Number.isSafeInteger(v)||v<min)fail();return v;};
+      const amount=v=>{if(typeof v!=='number'||!Number.isFinite(v)||v<0||v>Number.MAX_SAFE_INTEGER)fail();return v;};
+      const bool=v=>{if(typeof v!=='boolean')fail();return v;};
+      const ids=journalMonsterIds(),gear=journalGearCatalog().map(i=>i.id),out=freshAdventureJournal();
+      const uniqueList=(v,allowed,max=allowed.length)=>{if(!Array.isArray(v)||v.length>max||new Set(v).size!==v.length||v.some(x=>!allowed.includes(x)))fail();return [...v];};
+      if(version<8){for(const c of TOWER_CATS)if(data.dungeonProgress[c].bossDefeated)out.monsters[c+':boss']={seen:true,kills:0,towerKills:0,legacyDefeated:true};return out;}
+      if(!object(input)||!object(input.monsters)||!Array.isArray(input.totals)||!Array.isArray(input.recent)||!Array.isArray(input.bests))fail();
+      out.serial=integer(input.serial);
+      if(Object.keys(input.monsters).length>20)fail();
+      for(const [id,m]of Object.entries(input.monsters)){
+        if(!ids.includes(id)||!object(m)||m.seen!==true)fail();
+        const kills=integer(m.kills),towerKills=integer(m.towerKills),legacyDefeated=bool(m.legacyDefeated);
+        if(towerKills>kills||(legacyDefeated&&(!id.endsWith(':boss')||!data.dungeonProgress[id.split(':')[0]].bossDefeated)))fail();
+        out.monsters[id]={seen:true,kills,towerKills,legacyDefeated};
+      }
+      const context=r=>{
+        if(!object(r)||!TOWER_CATS.includes(r.category)||!['dungeon','tower'].includes(r.arena)||!Object.hasOwn(DIFFICULTIES,r.difficulty))fail();
+        return {category:r.category,arena:r.arena,difficulty:r.difficulty};
+      };
+      if(input.totals.length>30)fail();const totalKeys=new Set();
+      for(const t of input.totals){
+        const row=context(t),key=journalTotalKey(row);if(totalKeys.has(key))fail();totalKeys.add(key);
+        for(const k of ['attempts','wins','defeats','escapes','improvements'])row[k]=integer(t[k]);
+        if(row.attempts!==row.wins+row.defeats+row.escapes||row.improvements>row.wins)fail();out.totals.push(row);
+      }
+      const normalizeRun=r=>{
+        const row={...context(r),id:integer(r.id,1),level:integer(r.level,1),floor:integer(r.floor),ticks:integer(r.ticks),damage:amount(r.damage),potions:integer(r.potions),gold:amount(r.gold),xp:amount(r.xp),endedAt:integer(r.endedAt)};
+        if(row.id>out.serial||row.endedAt>8640000000000000||!['victory','defeat','escape'].includes(r.outcome)||!Object.hasOwn(JOURNAL_REASONS,r.reason)||!['first','rules','floor','faster','none'].includes(r.bestKind))fail();
+        if((row.arena==='dungeon'&&row.floor!==0)||(row.arena==='tower'&&(row.floor<1||row.floor%5!==0||TOWER_CATS[Math.floor((row.floor-1)/5)%5]!==row.category)))fail();
+        for(const k of ['version','rules']){if(typeof r[k]!=='string'||!/^\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(r[k]))fail();row[k]=r[k];}
+        row.weapons=uniqueList(r.weapons,JOURNAL_WEAPONS).sort((a,b)=>JOURNAL_WEAPONS.indexOf(a)-JOURNAL_WEAPONS.indexOf(b));
+        row.weaponIds=uniqueList(r.weaponIds,gear.filter(id=>findItemById(id).type==='weapon'));
+        if(row.weapons.some(slot=>!row.weaponIds.some(id=>findItemById(id).weaponKind===slot))||row.weaponIds.some(id=>!row.weapons.includes(findItemById(id).weaponKind)))fail();
+        row.newMonsters=uniqueList(r.newMonsters,ids);row.newEquipment=uniqueList(r.newEquipment,gear);
+        row.outcome=r.outcome;row.reason=r.reason;row.bestKind=r.bestKind;row.firstVictory=bool(r.firstVictory);row.firstReward=bool(r.firstReward);
+        if(row.outcome!=='victory'&&(row.bestKind!=='none'||row.firstVictory||row.firstReward))fail();
+        if((row.outcome==='victory'&&row.reason!=='victory')||(row.outcome==='defeat'&&row.reason!=='defeat')||(row.outcome==='escape'&&!['exit','transition','saved'].includes(row.reason))||(row.firstReward&&row.arena!=='dungeon'))fail();
+        if(!out.monsters[row.category+':boss']||row.newMonsters.some(id=>!out.monsters[id])||row.newEquipment.some(id=>!data.rewardArchive.discovered.includes(id)))fail();
+        const total=out.totals.find(t=>journalTotalKey(t)===journalTotalKey(row));if(!total||!total[{victory:'wins',defeat:'defeats',escape:'escapes'}[row.outcome]])fail();
+        if(!Array.isArray(r.items)||r.items.length>gear.length*2)fail();const itemKeys=new Set();row.items=[];
+        for(const i of r.items){if(!object(i)||!gear.includes(i.id)||!['bag','inbox'].includes(i.destination))fail();const key=i.id+':'+i.destination;if(itemKeys.has(key))fail();itemKeys.add(key);row.items.push({id:i.id,destination:i.destination,count:integer(i.count,1)});}
+        if(!Array.isArray(r.materials)||r.materials.length>3)fail();const materialSlots=new Set();row.materials=[];
+        for(const m of r.materials){if(!object(m)||!JOURNAL_WEAPONS.includes(m.slot)||materialSlots.has(m.slot)||AWAKEN_DEFS[m.slot].matBoss!==row.category||row.arena!=='dungeon'||row.outcome!=='victory')fail();materialSlots.add(m.slot);row.materials.push({slot:m.slot,count:integer(m.count,1)});}
+        return row;
+      };
+      if(input.recent.length>20||input.bests.length>(gear.filter(id=>findItemById(id).type==='weapon').length+2)*30)fail();
+      out.recent=input.recent.map(normalizeRun);out.bests=input.bests.map(normalizeRun);
+      if(new Set(out.recent.map(r=>r.id)).size!==out.recent.length||new Set(out.bests.map(journalBestKey)).size!==out.bests.length||new Set(out.bests.map(r=>r.id)).size!==out.bests.length||out.bests.some(r=>r.outcome!=='victory'))fail();
+      for(const t of out.totals)for(const [outcome,key]of [['victory','wins'],['defeat','defeats'],['escape','escapes']])if(out.recent.filter(r=>journalTotalKey(r)===journalTotalKey(t)&&r.outcome===outcome).length>t[key])fail();
+      for(const c of TOWER_CATS){const m=out.monsters[c+':boss'];for(const arena of ['dungeon','tower']){const wins=out.totals.filter(t=>t.category===c&&t.arena===arena).reduce((n,t)=>n+t.wins,0);if(wins>(m?(arena==='tower'?m.towerKills:m.kills-m.towerKills):0))fail();}}
+      for(const best of out.bests){const recent=out.recent.find(r=>r.id===best.id);if(recent&&JSON.stringify(recent)!==JSON.stringify(best))fail();}
+      return out;
+    }
+
+    const JOURNAL_LORE={
+      slime:['젖은 바닥을 튀어 다니는 젤 생명체. 몸을 웅크리는 순간 다음 도약을 준비합니다.','광물을 흡수한 푸른 개체. 정예의 큰 몸과 넓어진 공격 범위를 먼저 확인하세요.','뜨거운 핵을 품은 붉은 개체. 산성 흔적을 남겨 오래 서 있을 자리를 줄입니다.','젤 왕좌를 지키는 소굴의 지배자. 몸을 납작하게 펴거나 크게 부풀리는 자세가 공격의 단서입니다.'],
+      wolf:['숲의 길을 순찰하는 사냥꾼. 머리를 낮추고 몸을 당긴 뒤 전방을 물어뜯습니다.','달빛 아래 숨는 검은 사냥꾼. 정예의 준비 동작 뒤 돌진 경로 옆으로 움직이세요.','무리를 격려하는 우두머리 개체. 포효와 도약을 함께 경계하세요.','둥지를 지키는 늑대왕. HP 50% 이하에서는 공격이 이어지므로 첫 공격 회피 뒤에도 다음 예고를 확인하세요.'],
+      zombie:['묘지를 떠도는 망자. 느리게 접근하지만 붙잡기 범위 안에 오래 머물면 위험합니다.','부서진 뼈가 다시 모인 병사. 칼을 드는 준비 자세 뒤 전방을 피하세요.','묘지의 갑옷 수호자. 방패를 든 동안과 내려찍기 뒤의 후딜을 구분하세요.','뼈 제단의 의식을 지휘하는 마법사. 낫·흡수·호위를 구분하고 부활 의식의 봉인석을 활용하세요.'],
+      ghost:['폐허에 남은 떠도는 영혼. 손을 뻗기 전의 자세와 순간이동 도착 위치를 확인하세요.','거울 파편을 따라 움직이는 망령. 환영과 본체의 모양을 구분하세요.','안개와 함께 나타나는 악령. 여러 위치의 공격은 한꺼번에 끝나지 않으므로 순서를 보세요.','영혼 문을 지키는 사령왕. 왕관과 가면을 가진 본체를 찾고, 고정된 탄막 틈과 회랑을 이용하세요.'],
+      demon:['성벽 안을 지키는 악마. 전방을 노리는 타격과 지면에 남는 불꽃을 경계하세요.','흑철 갑옷을 두른 기사. 방패와 검의 준비 자세를 구분하고 타격 뒤에 접근하세요.','군단을 지휘하는 장군. 넓어진 공격과 이어지는 낙인을 확인하세요.','흑철 왕좌의 주인. HP 70%·35%에서 단계가 바뀌며, 왕검 연격의 두 타격과 심판 핵 노출이 중요한 공격 기회입니다.']
+    };
+    const JOURNAL_BOSS_GUIDES={
+      slime:[
+        ['leap','몸을 부풀린 뒤 고정된 원으로 높이 도약합니다.','착지 원이 정해지면 옆으로 달려 원 밖으로 나오세요.','착지 뒤 몸을 다시 모으는 동안 접근해 공격하세요.'],
+        ['sweep','젤 몸체가 낮아지며 전방 부채꼴을 예고합니다.','부채꼴 옆이나 몸 뒤로 돌아가세요.','휩쓸기가 끝난 뒤 다음 예고 전에 공격하세요.'],
+        ['acid','여러 원이 생긴 뒤 산성 장판이 남습니다.','원을 벗어나고 남은 장판 위에 오래 서 있지 마세요.','장판 사이 빈 바닥에서 원거리 공격을 이어가세요.'],
+        ['split','몸이 갈라지며 작은 슬라임을 소환하고 핵이 노출됩니다.','소환 위치와 부하의 도약 예고를 피하세요.','핵 노출 동안 본체를 공격하면 추가 피해를 줄 수 있습니다.']
+      ],
+      wolf:[
+        ['rush','몸을 낮추고 직선 경로를 고정합니다.','선과 나란히 달리지 말고 옆으로 벗어나세요.','돌진이 멈춘 뒤 페릴이 몸을 돌릴 때 공격하세요.'],
+        ['claw','앞발을 들고 전방을 두 번 연속 베어냅니다.','첫 발톱만 피하고 들어가지 말고 두 번째 범위까지 확인하세요.','두 번째 발톱이 끝난 뒤 후딜에 공격하세요.'],
+        ['leap','몸을 당긴 뒤 고정된 착지 원으로 뛰어듭니다.','공중에 있는 페릴을 쫓지 말고 착지 원 밖으로 이동하세요.','착지 뒤 멈춰 있는 동안 공격하세요.'],
+        ['howl','고개를 들고 포효하며 무리를 부릅니다.','부하의 준비 동작과 본체의 다음 연계를 함께 보세요.','포효 뒤의 긴 동작 중 본체를 공격할 수 있습니다.']
+      ],
+      zombie:[
+        ['scythe','낫을 들어 전방의 넓은 부채꼴을 고정합니다.','낫이 향한 방향의 옆이나 리치 뒤로 이동하세요.','낫을 거두는 동안 공격하세요.'],
+        ['drain','고정된 직선 통로에 생명력 흡수를 준비합니다.','통로 옆으로 빠져나오세요. 흡수를 맞으면 실제 피해만큼 리치가 회복합니다.','통로 밖에서 공격하고, 흡수가 끝난 뒤 접근하세요.'],
+        ['summon','양손을 들고 호위의 등장 위치를 표시합니다.','소환 위치를 피해 호위와 본체가 겹치지 않도록 움직이세요.','소환 동작 뒤 본체의 후딜을 노리세요. 호위는 일반 보상을 주지 않습니다.'],
+        ['ritual','의식 문양·안전 원·봉인석을 만듭니다.','안전 원 안으로 이동하거나 봉인석을 파괴해 의식을 중단하세요.','의식이 끝나거나 중단된 뒤의 후딜에 공격하세요.']
+      ],
+      ghost:[
+        ['blink','그림자가 도착 위치를 알린 뒤 본체가 이동합니다.','도착 위치와 본체가 향한 방향을 확인하며 거리를 벌리세요.','이동을 마친 본체를 찾아 공격하세요.'],
+        ['mirror','거울 흔적과 함께 환영이 나타납니다.','왕관과 가면을 가진 본체를 구분하세요. 환영 처치는 도감 수를 늘리지 않습니다.','환영을 쫓지 말고 본체의 소환 후딜을 노리세요.'],
+        ['fan','손을 모아 고정 방향의 영혼 탄막을 준비합니다.','탄막의 틈을 찾아 선 사이로 이동하세요. 발사 후 목표를 따라 꺾지 않습니다.','틈을 유지한 채 본체를 공격하세요.'],
+        ['hands','바닥의 손 공격 위치가 차례로 표시됩니다.','첫 원이 끝나도 다음 원이 남습니다. 표시 순서에 따라 이동하세요.','마지막 손이 지나간 뒤 공격하세요.'],
+        ['corridor','가로 또는 세로의 안전 회랑을 남기고 바깥을 덮습니다.','밝은 경계 안쪽 통로로 들어가세요. 회랑 방향은 교대로 바뀝니다.','회랑 안에서 위치를 잡고 시전 후 후딜에 공격하세요.']
+      ],
+      demon:[
+        ['combo','왕검을 들고 전방을 두 차례 베어냅니다.','옆이나 뒤로 빠지고 두 번째 타격까지 기다리세요.','두 타격이 끝난 후 검을 거두는 동안 공격하세요.'],
+        ['rush','날개를 펴며 고정된 돌진선을 표시합니다.','돌진선 옆으로 달리세요. 끝점을 따라 도망가지 마세요.','돌진 종료 지점에서 멈춘 뒤 공격하세요.'],
+        ['fissure','지면에 연속된 균열 위치를 고정합니다.','균열 진행 방향의 옆으로 벗어나 다음 폭발 위치도 확인하세요.','마지막 균열이 지나간 뒤 접근하세요.'],
+        ['tempest','날개를 펼치고 틈이 있는 부채꼴 탄막을 준비합니다.','투사체 사이의 빈 통로로 이동하세요.','빈 통로에서 공격하고 발사 뒤의 후딜을 노리세요.'],
+        ['brand','여러 낙인 원을 미리 고정합니다.','첫 원만 피하지 말고 남은 원이 터지는 순서도 확인하세요.','마지막 낙인이 끝난 뒤 안전한 바닥에서 공격하세요.'],
+        ['judgment','넓은 심판 범위와 안전 원, 파괴 가능한 심판 핵이 나타납니다.','안전 원 안에 들어가거나 핵을 파괴해 심판을 중단하세요.','심판 뒤 핵 노출의 긴 후딜에는 본체가 추가 피해를 받습니다.']
+      ]
+    };
+    const freshJournalView=()=>({tab:'monsters',selected:null,origin:'pause',focus:null,preview:false,paused:true});
+    let journalView=freshJournalView();
+    function resetJournalView(){journalView=freshJournalView();}
+    function journalNode(tag,text='',className=''){const el=document.createElement(tag);el.textContent=text;if(className)el.className=className;return el;}
+    function journalParagraph(parent,text,className=''){const p=journalNode('p',text,className);parent.appendChild(p);return p;}
+    function journalButton(parent,text,action){const b=journalNode('button',text,'btn journal-action');b.type='button';b.onclick=action;parent.appendChild(b);return b;}
+    function journalTime(ticks){return (ticks/60).toFixed(2)+'초';}
+    function journalRunTitle(r){return dungeonDefs[r.category].boss.name+' · '+(r.arena==='tower'?'탑 '+r.floor+'층':'던전')+' · '+DIFFICULTIES[r.difficulty].label;}
+    function journalRunSummary(r){return JOURNAL_OUTCOMES[r.outcome]+' · '+journalTime(r.ticks)+' · 받은 피해 '+r.damage.toFixed(1)+' HP · 물약 '+r.potions+'개 · '+journalWeaponLabel(r);}
+    function journalBadge(r){return [r.firstVictory?'첫 승리':'',({first:'첫 기준 기록',rules:'새 버전 기준 기록',floor:'탑 최고층 갱신',faster:'개인 최고 갱신'})[r.bestKind]||''].filter(Boolean).join(' · ');}
+    function journalMonsterInfo(id){const [category,grade]=id.split(':'),index=grade==='boss'?3:Number(grade);return {id,category,grade,index,def:grade==='boss'?dungeonDefs[category].boss:dungeonDefs[category].tiers[index]};}
+    function journalPreviewModel(){
+      const data=freshAdventureJournal();for(const id of journalMonsterIds())data.monsters[id]={seen:true,kills:3,towerKills:1,legacyDefeated:false};
+      for(let n=1;n<=2;n++){
+        data.serial=n;const run={id:n,category:'slime',arena:'dungeon',floor:0,level:20,difficulty:'normal',version:GAME_VERSION,rules:JOURNAL_RULESET,ticks:n===1?1200:900,damage:n===1?60:24,potions:n===1?2:0,weapons:['sword'],weaponIds:['drop_slime_king_blade'],gold:300,xp:600,
+          items:[{id:'drop_slime_king_blade',destination:'bag',count:1}],materials:[],newMonsters:n===1?['slime:boss']:[],newEquipment:n===1?['drop_slime_king_blade']:[],firstReward:n===1,firstVictoryCandidate:n===1};
+        journalTotal(data,run).attempts++;finalizeJournalData(data,run,'victory','victory',1700000000000+n*60000);
+      }
+      return {data,discovered:journalGearCatalog().map(i=>i.id),preview:true};
+    }
+    function journalModel(){return journalView.preview&&adminMode.active?journalPreviewModel():{data:adventureJournal,discovered:rewardArchive.discovered,preview:false};}
+    function journalSelectOptions(id,options,value='all'){
+      const select=document.getElementById(id);select.replaceChildren();for(const [key,label]of options){const option=journalNode('option',label);option.value=key;select.appendChild(option);}select.value=options.some(o=>o[0]===value)?value:options[0][0];
+    }
+    function configureJournalFilters(){
+      journalSelectOptions('journal-category',[['all','모든 던전'],...TOWER_CATS.map(c=>[c,dungeonDefs[c].label])]);
+      const tab=journalView.tab;
+      journalSelectOptions('journal-state',tab==='monsters'?[['all','모든 발견 상태'],['seen','발견'],['unseen','미발견'],['defeated','처치 기록 있음']]:tab==='equipment'?[['all','모든 수집 상태'],['found','수집'],['missing','미수집']]:tab==='records'?[['all','모든 결과'],...Object.entries(JOURNAL_OUTCOMES)]:[['all','모든 목표'],['done','완료'],['todo','진행 중']]);
+      document.getElementById('journal-kind-label').classList.toggle('hidden',!['monsters','equipment'].includes(tab));
+      journalSelectOptions('journal-kind',tab==='equipment'?[['all','모든 장비'],['sword','검'],['bow','활'],['staff','지팡이'],['helmet','투구'],['armor','갑옷'],['pants','바지']]:[['all','모든 등급'],...['0','1','2','boss'].map((g,i)=>[g,JOURNAL_GRADES[i]])]);
+      document.getElementById('journal-record-filters').classList.toggle('hidden',tab!=='records');
+      journalSelectOptions('journal-difficulty',[['all','모든 난이도'],...Object.entries(DIFFICULTIES).map(([k,d])=>[k,d.label])]);
+      journalSelectOptions('journal-arena',[['all','던전·탑'],['dungeon','던전'],['tower','탑']]);
+      journalSelectOptions('journal-weapon',[['all','모든 사용 무기'],['sword','검'],['bow','활'],['staff','지팡이'],['mixed','혼합'],['none','미사용']]);
+      document.getElementById('journal-record-view').value='recent';document.getElementById('journal-search').value='';
+    }
+    function setJournalTab(tab){
+      if(!['monsters','equipment','records','goals'].includes(tab))return;
+      journalView.tab=tab;journalView.selected=null;configureJournalFilters();renderJournal();document.getElementById('journal-screen').scrollTop=0;
+    }
+    function journalTabKey(event){
+      const tabs=['monsters','equipment','records','goals'],index=tabs.indexOf(journalView.tab);let next;
+      if(event.key==='ArrowRight')next=(index+1)%4;else if(event.key==='ArrowLeft')next=(index+3)%4;else if(event.key==='Home')next=0;else if(event.key==='End')next=3;else return;
+      event.preventDefault();event.stopPropagation();setJournalTab(tabs[next]);document.getElementById('journal-tab-'+tabs[next]).focus();
+    }
+    window.openJournal=function(tab='monsters',recordId=null){
+      if(!isPlaying||GAMEPLAY_OVERLAYS.some(id=>!['pause-menu','admin-panel','combat-report-screen'].includes(id)&&overlayVisible(id)))return false;
+      const preview=journalView.preview&&adminMode.active;
+      journalView={...freshJournalView(),preview,origin:overlayVisible('admin-panel')?'admin':overlayVisible('combat-report-screen')?'combat':'pause',focus:document.activeElement,paused:isPaused};
+      closeSidePanel(false);releaseGameplayInput();hideItemTooltip();isPaused=true;
+      clearSessionTimeout(notifTimeout);notifTimeout=null;document.getElementById('top-notification').classList.remove('show');document.getElementById('journal-status').textContent='';
+      for(const id of ['pause-menu','admin-panel','combat-report-screen'])document.getElementById(id).classList.add('hidden');
+      document.getElementById('journal-screen').classList.remove('hidden');setJournalTab(tab);
+      if(recordId!==null){journalView.selected='recent:'+recordId;renderJournal();}
+      document.getElementById('journal-filter-box').open=!document.getElementById('game-stage').classList.contains('small-game');
+      document.getElementById('journal-close').focus({preventScroll:true});renderJournalResult();return true;
+    };
+    window.closeJournal=function(){
+      const {origin,focus,paused}=journalView;document.getElementById('journal-screen').classList.add('hidden');journalView.preview=false;releaseGameplayInput();isPaused=origin==='combat'?paused:true;
+      const id=origin==='admin'&&adminMode.active?'admin-panel':origin==='combat'&&combatReportMode?'combat-report-screen':'pause-menu';document.getElementById(id).classList.remove('hidden');
+      if(focus?.isConnected&&focus.getClientRects().length)focus.focus({preventScroll:true});else document.getElementById(id==='admin-panel'?'admin-resume':id==='combat-report-screen'?'combat-report-close':'journal-open').focus({preventScroll:true});
+    };
+    window.adminPreviewJournal=function(){if(!adminOnly())return;journalView.preview=true;openJournal('monsters');};
+    function journalBack(){journalView.selected=null;renderJournal();document.getElementById('journal-screen').scrollTop=0;document.querySelector('#journal-list button')?.focus({preventScroll:true});}
+    function selectJournalEntry(id){journalView.selected=id;renderJournal();if(document.getElementById('game-stage').classList.contains('small-game')){document.getElementById('journal-screen').scrollTop=0;document.getElementById('journal-back').focus({preventScroll:true});}}
+    function journalFilteredGoals(model){
+      const result=[];
+      for(const category of TOWER_CATS){
+        const boss=dungeonDefs[category].boss.name,first=model.preview||dungeonProgress[category].bossDefeated;
+        result.push({id:'first:'+category,category,title:boss+' 첫 승리',done:first,progress:first?'완료 · 기존 진행 승계 가능':'던전 보스 첫 처치',detail:'실제 던전의 첫 승리를 목표로 합니다. 탑·관리자 전투는 이 목표를 대신하지 않습니다.',action:'record:'+category});
+        const weapons=Object.keys(WEAPON_TRAITS).filter(id=>findItemById(id).category===category),found=weapons.filter(id=>model.discovered.includes(id)).length;
+        result.push({id:'gear:'+category,category,title:boss+' 대표 무기 수집',done:found===weapons.length,progress:found+'/'+weapons.length+'종',detail:weapons.map(id=>(model.discovered.includes(id)?'✓ ':'□ ')+findItemById(id).name).join('\n'),itemIds:weapons,action:found===weapons.length?'forge:'+category:'collection:'+weapons.find(id=>!model.discovered.includes(id))});
+        const count=model.data.totals.filter(t=>t.category===category).reduce((sum,t)=>sum+t.improvements,0);
+        result.push({id:'record:'+category,category,title:boss+' 개인 기록 갱신',done:count>0,progress:count+'회 갱신',detail:'같은 기준 버전·난이도·장소·사용 무기에서 두 번째 승리부터 시간을 줄여 보세요. 탑은 같은 층의 시간 단축 또는 더 높은 층의 승리로 갱신합니다. 혼합 기록은 단일 무기와 분리합니다.',action:'record:'+category});
+      }
+      const seen=Object.keys(model.data.monsters).length;result.push({id:'discover',category:null,title:'다섯 던전의 생명들',done:seen===20,progress:seen+'/20종 발견',detail:'실제 등장한 일반·정예·생존·보스를 발견하세요. 환영·소환체·의식 대상은 본종 수를 늘리지 않습니다.'});return result;
+    }
+    function renderJournal(){
+      const model=journalModel(),tab=journalView.tab,screen=document.getElementById('journal-screen');if(!screen)return;
+      const category=document.getElementById('journal-category').value,state=document.getElementById('journal-state').value,kind=document.getElementById('journal-kind').value,search=document.getElementById('journal-search').value.trim().toLocaleLowerCase();
+      const diff=document.getElementById('journal-difficulty').value,arena=document.getElementById('journal-arena').value,weapon=document.getElementById('journal-weapon').value;
+      const list=document.getElementById('journal-list'),detail=document.getElementById('journal-detail'),progress=document.getElementById('journal-progress');
+      for(const name of ['monsters','equipment','records','goals']){const b=document.getElementById('journal-tab-'+name);b.setAttribute('aria-selected',String(name===tab));b.tabIndex=name===tab?0:-1;}
+      document.getElementById('journal-content').setAttribute('aria-labelledby','journal-tab-'+tab);
+      document.getElementById('journal-context').textContent=model.preview?'관리자 미리보기 · 샘플 화면이며 저장·발견·일반 기록에 반영되지 않습니다.':adminMode.active?'관리자 격리 상태 · 테스트 전투는 일반 발견·기록을 추가하지 않습니다.':'현재 저장 슬롯의 개인 도감·기록 · 새 능력치 보너스는 없습니다.';
+      document.getElementById('journal-real-data').classList.toggle('hidden',!model.preview);
+      let entries=[];
+      if(tab==='monsters'){
+        entries=journalMonsterIds().map(id=>{const info=journalMonsterInfo(id),entry=model.data.monsters[id];return {...info,entry,title:entry?info.def.name:'미발견 · '+JOURNAL_GRADES[info.index],subtitle:dungeonDefs[info.category].label+' · '+JOURNAL_GRADES[info.index]+' · '+(entry?'처치 '+entry.kills+'회':'???')};})
+          .filter(e=>(category==='all'||e.category===category)&&(kind==='all'||e.grade===kind)&&(state==='all'||state==='seen'&&e.entry||state==='unseen'&&!e.entry||state==='defeated'&&e.entry?.kills>0));
+        progress.textContent='발견 '+Object.keys(model.data.monsters).length+'/20종 · 처치 횟수는 집계 시작 이후 던전+탑 기준';
+      }else if(tab==='equipment'){
+        entries=journalGearCatalog().map(item=>({id:item.id,item,category:item.category,title:item.name,found:model.discovered.includes(item.id),subtitle:(model.discovered.includes(item.id)?'수집':'미수집')+' · '+(item.category?dungeonDefs[item.category].label:'대장간')}))
+          .filter(e=>(category==='all'||e.category===category)&&(state==='all'||state==='found'&&e.found||state==='missing'&&!e.found)&&(kind==='all'||(e.item.weaponKind||e.item.type)===kind));
+        progress.textContent='장비 발견 '+model.discovered.length+'/'+journalGearCatalog().length+'종 · 발견 이력은 판매·교환 뒤에도 유지';
+      }else if(tab==='records'){
+        const best=document.getElementById('journal-record-view').value==='best',rows=best?model.data.bests:model.data.recent;
+        entries=rows.filter(r=>(category==='all'||r.category===category)&&(diff==='all'||r.difficulty===diff)&&(arena==='all'||r.arena===arena)&&(weapon==='all'||journalWeaponGroup(r)===weapon)&&(state==='all'||r.outcome===state))
+          .map(run=>({id:(best?'best:':'recent:')+run.id,run,title:journalRunTitle(run),subtitle:JOURNAL_OUTCOMES[run.outcome]+' · '+journalTime(run.ticks)+' · '+journalWeaponLabel(run)}));
+        const totals=model.data.totals.filter(t=>(category==='all'||t.category===category)&&(diff==='all'||t.difficulty===diff)&&(arena==='all'||t.arena===arena));const sum=key=>totals.reduce((n,t)=>n+t[key],0);
+        progress.textContent='누적(모든 무기) 도전 '+sum('attempts')+' · 승리 '+sum('wins')+' · 패배 '+sum('defeats')+' · 이탈 '+sum('escapes')+(activeBossRun&&!model.preview?' · 현재 시도 진행 중':'')+'\n'+(best?'장비별 단일 무기·혼합·미사용 분리 · 탑은 각 조건의 최고 클리어 층 기록':'최근 상세 최대20건 · 과거 전투는 집계 시작 전');
+      }else{
+        entries=journalFilteredGoals(model).filter(e=>(category==='all'||e.category===category)&&(state==='all'||state==='done'&&e.done||state==='todo'&&!e.done)).map(e=>({...e,subtitle:(e.done?'완료 · ':'진행 중 · ')+e.progress}));
+        progress.textContent='재도전 목표 · 완료해도 전투 능력치나 추가 재화는 지급하지 않습니다.';
+      }
+      entries=entries.filter(e=>(e.title+' '+e.subtitle).toLocaleLowerCase().includes(search));
+      document.getElementById('journal-count').textContent='현재 조건 '+entries.length+'개';list.replaceChildren();
+      if(!entries.some(e=>e.id===journalView.selected))journalView.selected=!screen.closest('.small-game')?entries[0]?.id||null:null;
+      for(const entry of entries){const button=journalNode('button','','journal-entry');button.type='button';button.dataset.journalId=entry.id;button.setAttribute('aria-pressed',String(entry.id===journalView.selected));button.appendChild(journalNode('strong',entry.title));button.appendChild(journalNode('span',entry.subtitle));button.onclick=()=>selectJournalEntry(entry.id);list.appendChild(button);}
+      if(!entries.length)journalParagraph(list,tab==='records'?'해당 조건의 기록이 없습니다. 실제 보스 전투부터 기록합니다.':'해당 조건의 항목이 없습니다. 검색어나 필터를 바꿔 보세요.');
+      detail.replaceChildren();const selected=entries.find(e=>e.id===journalView.selected);screen.classList.toggle('journal-detail-view',!!selected);
+      if(selected){const back=journalButton(detail,'← 목록으로',journalBack);back.id='journal-back';back.classList.add('journal-back');if(tab==='monsters')renderJournalMonster(detail,selected,model);else if(tab==='equipment')renderJournalEquipment(detail,selected,model);else if(tab==='records')renderJournalRun(detail,selected.run);else renderJournalGoal(detail,selected,model);}
+      else journalParagraph(detail,'목록에서 항목을 선택하세요.');
+    }
+    function journalCreaturePreview(target,id,seen){
+      const {category,grade,def}=journalMonsterInfo(id),boss=grade==='boss';
+      const actor={x:400,y:450,r:boss?60:grade==='1'?42:28,hp:100,maxHp:100,isBoss:boss,isElite:grade==='1',category,stageIndex:boss?2:Number(grade),name:seen?def.name:'',level:def.level,colors:def.colors,floatSeed:0,state:'idle',encounterStage:1,wolfPhase:1,slimePhase:1};
+      const preview=journalNode('canvas','','journal-creature');preview.width=360;preview.height=360;preview.setAttribute('aria-label',seen?def.name+' 모습':'미발견 몬스터 실루엣');preview.setAttribute('role','img');target.appendChild(preview);
+      const snapshot=ctx.getImageData(0,0,800,900);ctx.save();try{
+        ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';ctx.shadowBlur=0;ctx.clearRect(0,0,800,900);drawCreatureContact(actor);
+        if(category==='slime')drawSlime(actor,0,def.colors,false);else ({wolf:drawWolfMob,zombie:drawZombieMob,ghost:drawGhostMob,demon:drawDemonMob})[category](actor,0,false);
+        const p=preview.getContext('2d'),size=boss?280:grade==='1'?210:160;p.scale(2,2);p.drawImage(canvas,400-size/2,445-size/2,size,size,0,0,180,180);
+        if(!seen){p.globalCompositeOperation='source-in';p.fillStyle='#111827';p.fillRect(0,0,180,180);p.globalCompositeOperation='source-over';p.fillStyle='#94a3b8';p.font='bold 26px sans-serif';p.textAlign='center';p.fillText('?',90,98);}
+        p.globalCompositeOperation='destination-over';p.fillStyle='#263547';p.fillRect(0,0,180,180);p.globalCompositeOperation='source-over';
+      }finally{ctx.restore();ctx.putImageData(snapshot,0,0);}
+    }
+    function renderJournalMonster(detail,entry,model){
+      detail.appendChild(journalNode('h3',entry.title));journalCreaturePreview(detail,entry.id,!!entry.entry);
+      journalParagraph(detail,dungeonDefs[entry.category].label+' · '+JOURNAL_GRADES[entry.index]);
+      if(!entry.entry){journalParagraph(detail,'아직 만나지 못했습니다. 실제 전투에 등장하면 모습과 공략이 열립니다. 다른 등급의 발견은 이 항목을 자동으로 열지 않습니다.');journalButton(detail,'던전 목표 안내',()=>trackJournalGoal('record:'+entry.category));return;}
+      journalParagraph(detail,JOURNAL_LORE[entry.category][entry.index]);
+      journalParagraph(detail,'권장 Lv.'+entry.def.level+' · 처치 '+entry.entry.kills+'회 (던전 '+(entry.entry.kills-entry.entry.towerKills)+' / 탑 '+entry.entry.towerKills+')');
+      if(entry.entry.legacyDefeated)journalParagraph(detail,'기존 저장의 보스 처치 상태를 이어받았습니다. 과거 처치 횟수·시간·피해량은 집계 시작 전입니다.','journal-muted');
+      if(entry.grade==='boss'){
+        detail.appendChild(journalNode('h4','공격을 읽는 법'));
+        for(const [key,cue,avoid,opportunity]of JOURNAL_BOSS_GUIDES[entry.category]){
+          const attack=entry.category==='slime'?SLIME_ATTACKS[key]:entry.category==='wolf'?WOLF_ATTACKS[key]:ENCOUNTER_ATTACKS[entry.category][key];
+          const card=journalNode('section','','journal-guide');card.appendChild(journalNode('h4',attack.name));
+          journalParagraph(card,'준비 · '+cue);journalParagraph(card,'회피 · '+avoid);journalParagraph(card,'공격 기회 · '+opportunity);
+          journalParagraph(card,'보통 기본 예고 '+journalTime(attack.wind)+' · 기본 후딜 '+journalTime(attack.recover)+' · 쉬움 예고 ×'+DIFFICULTIES.easy.warning+' (단계 연계·핵 노출은 실제 예고를 우선 확인)','journal-muted');detail.appendChild(card);
+        }
+      }else journalParagraph(detail,'공통 대응 · 준비 자세와 바닥 예고를 확인하고 옆으로 이동한 뒤, 공격이 끝난 후 접근하세요. 정예 개체는 일반 개체보다 크게 강화되어 등장할 수 있습니다.');
+      journalParagraph(detail,entry.grade==='boss'?'보상 · 보스 장비 확률 드롭30% + 던전 첫 처치 선택권. 탑은 드롭만 지급하며 첫 선택권을 만들지 않습니다.':'보상 · 해당 던전의 일반 장비. 기본 드롭4%, 정예 개체15%. 소환체·환영·의식 대상은 일반 보상을 주지 않습니다.');
+      journalButton(detail,'이 던전 장비 보기',()=>{setJournalTab('equipment');document.getElementById('journal-category').value=entry.category;renderJournal();});journalButton(detail,'보스 재도전 목표 추적',()=>trackJournalGoal('record:'+entry.category));
+    }
+    function journalOwnedCount(id){
+      return inventory.filter(i=>i?.id===id).length+['helmet','armor','pants','sword','bow','staff'].filter(k=>equipped[k]?.id===id).length+rewardArchive.inbox.filter(i=>i.itemId===id).reduce((n,i)=>n+i.count,0);
+    }
+    function renderJournalEquipment(detail,entry,model){
+      const item=entry.item;detail.appendChild(journalNode('h3',item.name));const icon=itemIconEl(item,64);icon.setAttribute('aria-label',item.name+' 장비 외형');detail.appendChild(icon);
+      journalParagraph(detail,(entry.found?'수집 완료':'미수집')+' · 현재 보유 '+(model.preview?'미리보기':journalOwnedCount(item.id)+'개')+' · '+(itemGrade(item)?.name||'장비'));
+      journalParagraph(detail,item.desc||'장비 능력치는 가방의 비교 화면에서도 확인할 수 있습니다.');
+      const trait=WEAPON_TRAITS[item.id];if(trait){detail.appendChild(journalNode('h4',trait.name));journalParagraph(detail,trait.desc);}
+      if(item.category){
+        journalParagraph(detail,'출처 · '+dungeonDefs[item.category].label+(item.boss?' / '+dungeonDefs[item.category].boss.name+'의 드롭·첫 선택 보상·대장간 교환':' / 일반·정예 몬스터'));
+        if(item.boss){const all=bossRewardItems(item.category),found=all.filter(i=>model.discovered.includes(i.id)).length;journalParagraph(detail,'같은 보스 장비 수집 '+found+'/'+all.length+'종');journalButton(detail,'대장간 교환 경로 안내',()=>trackJournalGoal('forge:'+item.category));}
+      }else journalParagraph(detail,'출처 · 대장간 구매 ('+item.price+'G)');
+      if(!entry.found)journalButton(detail,'획득 경로를 목표로 추적',()=>trackJournalGoal('collection:'+item.id));
+      journalParagraph(detail,'발견 이력과 현재 보유량은 별개입니다. 판매·교환해도 수집 표시는 남습니다.','journal-muted');
+    }
+    function renderJournalRun(detail,run){
+      detail.appendChild(journalNode('h3',journalRunTitle(run)));journalParagraph(detail,journalRunSummary(run),'journal-highlight');
+      journalParagraph(detail,'도전 시작 Lv.'+run.level+' · 사용 장비 '+(run.weaponIds.length?run.weaponIds.map(id=>findItemById(id).name).join(' · '):'무기 미사용·맨손'));
+      const badge=journalBadge(run);if(badge)journalParagraph(detail,badge,'journal-highlight');
+      journalParagraph(detail,JOURNAL_REASONS[run.reason]+' · 게임 v'+run.version+' · 비교 기준 '+run.rules);
+      if(run.rules!==JOURNAL_RULESET)journalParagraph(detail,'이전 기준의 기록입니다. 현재 기준의 최고 기록과 시간을 비교하지 않으며, 같은 조건의 새 승리로 현재 기준 기록을 시작합니다.','journal-muted');
+      journalParagraph(detail,'기록 일시 · '+new Date(run.endedAt).toLocaleString('ko-KR'));
+      detail.appendChild(journalNode('h4','획득 보상'));journalParagraph(detail,run.gold+'G · 경험치 '+run.xp+(run.firstReward?' · 첫 처치 장비 선택권(보상 보관함)':''));
+      if(!run.items.length)journalParagraph(detail,'이 시도의 장비 드롭 없음');
+      for(const item of run.items)journalParagraph(detail,findItemById(item.id).name+' ×'+item.count+' · '+(item.destination==='bag'?'당시 가방 지급':'당시 보관함 보관'));
+      for(const material of run.materials)journalParagraph(detail,AWAKEN_DEFS[material.slot].matName+' ×'+material.count+' · '+weaponSlotLabels[material.slot]+' 각성 재료');
+      detail.appendChild(journalNode('h4','신규 발견'));const discovered=[...run.newMonsters.map(id=>journalMonsterInfo(id).def.name),...run.newEquipment.map(id=>findItemById(id).name)];journalParagraph(detail,discovered.length?discovered.join(' · '):'이 시도의 신규 발견 없음');
+      journalParagraph(detail,'시간은 전투가 실제 진행된 게임 틱만 계산합니다. 메뉴·포커스 이탈·재소환 대기는 포함하지 않습니다. 사용 장비는 성공한 평타·스킬 기준이며 같은 종류라도 장비를 바꿔 사용하면 혼합입니다. 단일 무기의 최고 기록은 장비별로 구분합니다. 성장·다른 장비·버프는 고정하지 않는 개인 기록입니다.','journal-muted');
+      if(run.arena==='tower')journalParagraph(detail,'탑 최고 기록은 같은 조건의 최고 클리어 층에서 보관하며, 같은 층에서만 시간을 비교합니다. 던전 기록·진행·첫 선택 보상과 분리됩니다.','journal-muted');
+      journalButton(detail,'보스 공략 보기',()=>{setJournalTab('monsters');journalView.selected=run.category+':boss';renderJournal();});journalButton(detail,'재도전 경로 추적',()=>trackJournalGoal('record:'+run.category));
+    }
+    function renderJournalGoal(detail,goal,model){
+      detail.appendChild(journalNode('h3',goal.title));journalParagraph(detail,(goal.done?'완료 · ':'진행 중 · ')+goal.progress,'journal-highlight');journalParagraph(detail,goal.detail);
+      journalParagraph(detail,'목표는 수집과 재도전을 돕는 개인 체크리스트입니다. 능력치·경험치·골드 보너스는 없습니다.','journal-muted');
+      if(goal.action)journalButton(detail,'관련 경로를 목표로 추적',()=>trackJournalGoal(goal.action));
+      if(goal.itemIds)journalButton(detail,'대표 장비 상세 보기',()=>{setJournalTab('equipment');document.getElementById('journal-category').value=goal.category;renderJournal();});
+      if(goal.id.startsWith('record:'))journalButton(detail,'개인 기록 보기',()=>{setJournalTab('records');document.getElementById('journal-category').value=goal.category;renderJournal();});
+    }
+    function validJournalObjective(id){
+      if(typeof id!=='string')return false;
+      if(id.startsWith('collection:'))return journalGearCatalog().some(item=>'collection:'+item.id===id);
+      return TOWER_CATS.some(c=>id==='record:'+c||id==='forge:'+c);
+    }
+    function journalTrackedGoal(){
+      const id=trackedObjective;if(!validJournalObjective(id))return null;
+      const [kind,value]=id.split(':'),item=kind==='collection'?findItemById(value):null,category=item?.category||(kind!=='collection'?value:null);
+      const locked=category==='demon'&&level<80?'마왕성 진입 Lv.80 필요':'';
+      if(kind==='forge')return {id,type:'교환 안내',title:dungeonDefs[category].boss.name+' 장비 교환',detail:'대장간에서 같은 보스의 잠금 해제 장비3개를 원하는 장비1개로 교환하세요.',progress:'대장간 교환 메뉴에서 재료·결과 확인',complete:false,locked:'',target:{map:'blacksmith_map',x:400,y:300,label:'대장간 보스 장비 교환'}};
+      if(kind==='record')return {id,type:'개인 기록',title:dungeonDefs[category].boss.name+' 재도전',detail:'던전 목표를 완료하고 보스방에서 새 시도에 도전하세요. 기록 확인은 도감·전투 기록 메뉴를 이용하세요.',progress:'현재 기준 '+JOURNAL_RULESET+' · 수치 보너스 없음',complete:false,locked,target:dungeonTarget(category,2,true)};
+      return {id,type:'장비 수집',title:item.name+' 수집',detail:item.boss?'보스 드롭·첫 선택 보상·대장간 교환으로 수집하세요.':category?'해당 던전의 일반·정예 몬스터 드롭으로 수집하세요.':'대장간에서 구매하세요.',progress:rewardArchive.discovered.includes(item.id)?'수집 완료':'미수집',complete:rewardArchive.discovered.includes(item.id),locked,target:category?dungeonTarget(category,item.boss?2:0,!!item.boss):{map:'blacksmith_map',x:400,y:300,label:'대장간'}};
+    }
+    function trackJournalGoal(id){
+      if(journalView.preview){document.getElementById('journal-status').textContent='관리자 미리보기에서는 실제 추적 목표를 바꾸지 않습니다.';return false;}
+      const before=trackedObjective;trackedObjective=id;const goal=journalTrackedGoal();
+      if(!goal||goal.locked||goal.complete){trackedObjective=before;document.getElementById('journal-status').textContent=goal?.locked||'이미 수집했거나 추적할 수 없는 목표입니다.';return false;}
+      refreshObjectiveUI(true);closeJournal();showTopNotification('📌 '+goal.title+' 경로를 추적합니다.');return true;
+    }
+    function renderJournalResult(){
+      const button=document.getElementById('journal-result-button');if(!button)return;
+      const show=isPlaying&&!adminMode.active&&journalResultTicks>0&&journalLastResult?.outcome==='victory'&&!activeBossRun&&!gameplayPaused()&&!presentationThreat()&&gameState!=='story';
+      button.classList.toggle('hidden',!show);if(show){button.textContent=(journalLastResult.firstVictory?'🏆 첫 승리':'📜 전투 결과')+' · '+journalTime(journalLastResult.ticks)+' · 보기';button.onclick=()=>openJournal('records',journalLastResult.id);}
+    }
 
     function updatePotionUI() {
       const listEl = document.getElementById('potion-shop-list');
@@ -5684,7 +6178,7 @@
       staff:{learned:'learnedStaff',defeated:()=>archmageDefeated,map:'mage_tower',label:'마법',master:'대마법사 에녹'}
     };
     function validObjectiveId(id) {
-      return id === 'tower' || questDefs.some(q=>'quest:'+q.id===id) || TOWER_CATS.some(c=>'dungeon:'+c===id) ||
+      return validJournalObjective(id) || id === 'tower' || questDefs.some(q=>'quest:'+q.id===id) || TOWER_CATS.some(c=>'dungeon:'+c===id) ||
         ['sword','bow','staff'].some(s=>'skill:'+s===id || 'awaken:'+s===id);
     }
     function tierProgressText(cat,stage) {
@@ -5738,6 +6232,7 @@
       }
       goals.push({id:'tower',type:'도전',title:'무한의 탑 도전',detail:'층을 클리어하고 위쪽 포탈로 올라가세요. 에녹의 귀환 이야기는 별도로 선택할 수 있습니다.',
         progress:`${towerFloor>0?'진행 중 '+towerFloor+'층':'진행 중인 층 없음'} · 최고 클리어 ${towerBestFloor}층`,locked:demonDefeated?'':'대마왕 처치 후 개방',complete:false,target:{map:'tower'}});
+      const journalGoal=journalTrackedGoal();if(journalGoal)goals.push(journalGoal);
       return goals;
     }
     function automaticObjective(goals) {
@@ -5864,7 +6359,7 @@
 
     function gainExp(amount) {
       const finalAmount = Math.round(amount * (1 + (activeBuffs.exp ? activeBuffs.exp.val/100 : 0)));
-      exp += finalAmount;
+      exp += finalAmount; journalCurrency(0,finalAmount);
       while(exp >= nextExp) {
         exp -= nextExp; level++; nextExp = expForLevel(level);
         statPoints += 2;
@@ -6041,6 +6536,7 @@
 
     // 물약 효과 적용(HP%/MP/버프)만 담당 — 인벤토리/핫바에서 아이템을 어떻게 제거할지는 호출부 책임.
     function applyConsumableEffect(item, lockNote) {
+      if(journalRunIsCurrent()&&['hp_percent','mp','buff'].includes(item.effect))activeBossRun.potions=journalCount(activeBossRun.potions);
       lockNote = lockNote || '';
       if (item.effect === 'hp_percent') {
         const heal = Math.round(maxHp * item.val / 100);
@@ -6723,6 +7219,7 @@
         if (isPlaying || openSidePanel!==null || overlayVisible('settings-modal')) { e.preventDefault(); if (!e.repeat) handleEscape(); }
         return;
       }
+      if (overlayVisible('journal-screen') && e.code==='Tab') {trapFocus(document.getElementById('journal-screen'),e);return;}
       if (overlayVisible('reward-screen') && e.code==='Tab') {trapFocus(document.getElementById('reward-screen'),e);return;}
       if (overlayVisible('admin-panel') && e.code==='Tab') { trapFocus(document.getElementById('admin-panel'),e);return; }
       if (overlayVisible('combat-report-screen') && e.code==='Tab') { trapFocus(document.getElementById('combat-report-screen'),e); return; }
@@ -7190,7 +7687,7 @@
       if (ultCooldown[slot] > 0) return;
       if (!adminFreeMana() && mp < def.mp) { showTopNotification("마나가 부족합니다!"); return; }
       if(!adminFreeMana())mp -= def.mp;
-      ultCooldown[slot] = def.cooldown;
+      ultCooldown[slot] = def.cooldown; journalWeaponUsed(slot);
       playSfx('skill');
       const ang = Math.atan2(mouseY - player.y, mouseX - player.x);
 
@@ -8282,6 +8779,7 @@
         if(!adminFreeMana())mp -= def.mp;
         skills.cooldowns[key] = def.cooldown;
       }
+      journalWeaponUsed('sword');
       const ang = Math.atan2(mouseY - player.y, mouseX - player.x);
       // 팔 모션 — 스킬마다 다른 자세를 잡는다
       startSwing(key === 'e' ? (awk ? 'draw' : 'thrust')
@@ -8445,7 +8943,7 @@
       if (key === 'q') {
         // 토글형 스킬: 쿨다운/마나 소모 없이 즉시 전환 (마나는 발사할 때마다 소모)
         if (skills.cooldowns.q > 0) return;
-        skills.cooldowns.q = def.cooldown;
+        skills.cooldowns.q = def.cooldown; journalWeaponUsed('bow');
         bowState.homingActive = !bowState.homingActive;
         // [각성] 유도 화살이 적중 시 소폭 폭발하고, 켜져 있는 동안 치명타 확률이 오른다
         showTopNotification(bowState.homingActive
@@ -8457,7 +8955,7 @@
       if (skills.cooldowns[key] > 0) return;
       if (!adminFreeMana() && mp < def.mp) { showTopNotification("마나가 부족합니다!"); return; }
       if(!adminFreeMana())mp -= def.mp;
-      skills.cooldowns[key] = def.cooldown;
+      skills.cooldowns[key] = def.cooldown; journalWeaponUsed('bow');
       const ang = Math.atan2(mouseY - player.y, mouseX - player.x);
       // 스킬마다 서 있는 모양이 다르다 (각성 전에는 전부 기본 사격 자세)
       startSwing(!awk ? 'shoot'
@@ -8596,6 +9094,7 @@
         if(!adminFreeMana())mp -= def.mp;
         skills.cooldowns[key] = def.cooldown;
       }
+      journalWeaponUsed('staff');
       const ang = Math.atan2(mouseY - player.y, mouseX - player.x);
       // 스킬마다 서 있는 모양이 다르다 (각성 전에는 전부 기본 시전 자세)
       startSwing(!awk ? 'cast'
@@ -11478,6 +11977,7 @@
         difficulty,
         trackedObjective,
         rewardArchive:JSON.parse(JSON.stringify(rewardArchive)),
+        adventureJournal:journalSnapshot(),
         savedAt: Date.now(),
         towerBestFloor, towerFloor,
         level, exp, nextExp, gold, hp, maxHp, mp, maxMp,
@@ -11664,6 +12164,7 @@
         };
       }
       data.rewardArchive=normalizeRewardArchive(input.rewardArchive,version,data);
+      data.adventureJournal=normalizeAdventureJournal(input.adventureJournal,version,data);
       if (input.activeWeaponSlot === undefined && legacyWeapon) data.activeWeaponSlot = findItemById(legacyWeapon).weaponKind;
       return data;
     }
@@ -11701,6 +12202,7 @@
       clearTimeout(timer); sessionTimers.delete(timer);
     }
     function resetSessionRuntime() {
+      resetAdventureJournalRuntime();
       resetAdminMetrics();lootNotices=[];renderLootFeed();
       damageLog = []; lastDeath = null; retryTicket = null; combatReportMode = null;
       isPlaying = false; isPaused = true;
@@ -11745,7 +12247,7 @@
     function resetSessionPresentation() {
       closeSidePanel(false);
       for (const id of ['start-screen','save-screen','help-screen','story-screen','clear-screen','pause-menu','settings-modal',
-        'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal','admin-panel','combat-report-screen','objective-screen','reward-screen','weapon-trait-hud','loot-feed',
+        'guild-ui','blacksmith-ui','potion-ui','npc-modal','alert-modal','tower-choice-modal','admin-panel','combat-report-screen','objective-screen','journal-screen','journal-result-button','reward-screen','weapon-trait-hud','loot-feed',
         'battle-summary','status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator','item-tooltip']) {
         document.getElementById(id).classList.add('hidden');
       }
@@ -11769,6 +12271,7 @@
         activeWeaponSlot,lockedSlots,lockedEquipment,activeQuests,dungeonProgress,currentDungeon,npcFlags,awakenState,
         demonDefeated,minjeDefeated,elfQueenDefeated,archmageDefeated,trackedObjective} = data);
       rewardArchive=JSON.parse(JSON.stringify(data.rewardArchive));
+      adventureJournal=journalClone(data.adventureJournal);
       player.x = data.player.x; player.y = data.player.y; player.facing = data.player.facing;
       player.faceDir = data.player.facing === 'left' ? -1 : 1;
       equipped = prepared.equipped; inventory = prepared.inventory; hotbar = prepared.hotbar;
@@ -12010,7 +12513,7 @@
     };
 
     // 입력은 현재 가장 위의 메뉴에만 전달한다. 모달이 열려 있으면 게임 시간도 멈춘다.
-    const GAMEPLAY_OVERLAYS = ['reward-screen','pause-menu','settings-modal','save-screen','help-screen','npc-modal',
+    const GAMEPLAY_OVERLAYS = ['journal-screen','reward-screen','pause-menu','settings-modal','save-screen','help-screen','npc-modal',
       'alert-modal','tower-choice-modal','admin-panel','combat-report-screen','objective-screen','guild-ui','blacksmith-ui','potion-ui','start-screen','clear-screen','story-screen'];
     function overlayVisible(id) { return !document.getElementById(id).classList.contains('hidden'); }
     function hasGameplayOverlay() { return GAMEPLAY_OVERLAYS.some(overlayVisible); }
@@ -12029,7 +12532,7 @@
       if (!isPlaying) return;
       isPaused = true;
       // 저장/설정 화면을 덮지 않는다. 닫으면 기존 일시정지 메뉴로 돌아간다.
-      if (!overlayVisible('save-screen') && !overlayVisible('settings-modal') && !overlayVisible('objective-screen') && !overlayVisible('combat-report-screen') && !overlayVisible('admin-panel') && !overlayVisible('reward-screen')) {
+      if (!overlayVisible('save-screen') && !overlayVisible('settings-modal') && !overlayVisible('objective-screen') && !overlayVisible('combat-report-screen') && !overlayVisible('admin-panel') && !overlayVisible('reward-screen') && !overlayVisible('journal-screen')) {
         document.getElementById('pause-menu').classList.remove('hidden');
       }
     }
@@ -12052,6 +12555,7 @@
         document.getElementById('tower-choice-modal').classList.add('hidden');
         player.y = Math.min(875,player.y+60); portalCooldown = 60; return;
       }
+      if (overlayVisible('journal-screen')) {closeJournal();return;}
       if (overlayVisible('reward-screen')) {closeRewardScreen();return;}
       if (overlayVisible('admin-panel')) { closeAdminPanel(); return; }
       if (overlayVisible('combat-report-screen')) { closeCombatReport(); return; }
@@ -12122,7 +12626,7 @@
     }
     function initializeResponsiveLayout() {
       const stage=document.getElementById('game-stage');
-      for (const id of [...GAMEPLAY_OVERLAYS,'battle-summary','admin-badge','status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','top-notification','autosave-indicator','sfx-toggle-btn','version-badge']) stage.appendChild(document.getElementById(id));
+      for (const id of [...GAMEPLAY_OVERLAYS,'journal-result-button','battle-summary','admin-badge','status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','top-notification','autosave-indicator','sfx-toggle-btn','version-badge']) stage.appendChild(document.getElementById(id));
       document.body.appendChild(document.getElementById('item-tooltip'));
       for (const button of document.querySelectorAll('[data-close-panel]')) button.addEventListener('click',()=>closeSidePanel());
       for (const button of document.querySelectorAll('#panel-controls button')) button.addEventListener('click',()=>toggleSidePanel(button.getAttribute('aria-controls')));
@@ -12139,7 +12643,7 @@
       releaseGameplayInput();
       const menu = document.getElementById('pause-menu');
       if (menu.classList.contains('hidden')) {
-        if (overlayVisible('settings-modal') || overlayVisible('save-screen') || overlayVisible('objective-screen') || overlayVisible('combat-report-screen') || overlayVisible('admin-panel') || overlayVisible('reward-screen')) return;
+        if (overlayVisible('journal-screen') || overlayVisible('settings-modal') || overlayVisible('save-screen') || overlayVisible('objective-screen') || overlayVisible('combat-report-screen') || overlayVisible('admin-panel') || overlayVisible('reward-screen')) return;
         menu.classList.remove('hidden');
         isPaused = true;
       } else {
@@ -12227,6 +12731,8 @@
     };
 
     function beginStory(script, onComplete) {
+      finishJournalRun('escape','transition');
+      document.getElementById('journal-screen').classList.add('hidden');document.getElementById('journal-result-button').classList.add('hidden');
       stopGameLoop(); stopStoryPlayback();clearWeaponTraits();clearCombatPresentation();lootNotices=[];renderLootFeed();
       isPlaying = false; isPaused = true; keys = {};
       for(const id of ['loot-feed','weapon-trait-hud','battle-summary','status-hud','quest-hud','dungeon-hud','boss-hud','skill-hud','buff-hud','autosave-indicator'])document.getElementById(id).classList.add('hidden');
@@ -12396,6 +12902,7 @@
     // ---------- 서브맵 진입/복귀 스택 (포탈 위치 기억) ----------
     let returnStack = [];
     function enterSubMap(newState, entryX, entryY, msg) {
+      finishJournalRun('escape','exit');
       clearWeaponTraits();
       returnStack.push({ state: gameState, x: player.x, y: player.y });
       gameState = newState;
@@ -12404,6 +12911,7 @@
       if (msg) showTopNotification(msg);
     }
     function exitSubMap(fallbackState, fx, fy) {
+      finishJournalRun('escape','exit');
       clearWeaponTraits();
       const prev = returnStack.pop();
       if (prev) {
@@ -12493,6 +13001,7 @@
       }
 
       frameCount++; loopStats.gameSteps++;
+      tickAdventureJournal();
       tickCombatPresentation();tickWeaponTraits();tickEncounterRuntime();tickSlimeZonesOnce();slimeImpacts=slimeImpacts.filter(f=>--f.life>0);wolfEffects=wolfEffects.filter(f=>--f.life>0);
       if(combatReportMode==='death')return;
       const t = frameCount / 60;
@@ -13679,7 +14188,7 @@
             ctx.fillText(`⏳ ${bossDef.name} 재소환까지: ${secs}초`, 400, 460); ctx.textAlign='left';
           } else if (dungeonProgress[cat].bossDefeated) {
             // 쿨타임이 다 돌아왔는데 아직 보스가 없는 상태 -> 이 방에서 바로 자동 재소환
-            enemies = [createDungeonBoss(cat)]; captureRetry('dungeon');
+            enemies = [createDungeonBoss(cat)]; observeJournalEnemies(); captureRetry('dungeon');
             showTopNotification(`⚔️ ${bossDef.name}이(가) 다시 나타났다!`, 3000);
           }
         }
@@ -13833,7 +14342,7 @@
       drawObjectiveGuide();
       refreshCombatFeedback();
       if(!(enemies.some(en=>en.category==='slime'&&en.isBoss)))drawSlimeGround();
-      drawBattleReadability();drawCombatWarnings();renderLootFeed();
+      drawBattleReadability();drawCombatWarnings();renderLootFeed();renderJournalResult();
       drawAdminMetrics();
     }
 

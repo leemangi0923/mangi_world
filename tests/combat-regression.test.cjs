@@ -98,7 +98,7 @@ test('victory and save loading invalidate retry and runtime history',()=>run(asy
     applyPlayerDamage(1,'적');damageEnemy(enemies[0],999999,false);const afterVictory=retryTicket;
     const save=getSaveData();applySaveData(save);return {afterVictory,logs:damageLog.length,ticket:retryTicket,death:lastDeath,mode:combatReportMode,version:getSaveData().version};
   });
-  assert.deepEqual(result,{afterVictory:null,logs:0,ticket:null,death:null,mode:null,version:7});
+  assert.deepEqual(result,{afterVictory:null,logs:0,ticket:null,death:null,mode:null,version:8});
 },options));
 
 test('history pauses combat, traps focus and returns to pause without revoking active retry',()=>run(async page=>{
