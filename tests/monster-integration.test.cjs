@@ -31,6 +31,8 @@ for(const cat of ['zombie','ghost','demon'])test(cat+' every damaging boss patte
   clearBattleRuntime();difficulty='normal';statAgi=cat==='demon'?30:10;recalcAllStats();hp=maxHp=5000;enterDungeonStage(cat,2,true,false);const en=enemies[0];en.x=350;en.y=400;player.x=480;player.y=400;portalCooldown=99999;beginEncounterAttack(en,key);const a=en.encounterAttack;
   const dangerous=(x,y)=>{
    if(def.shape==='choreo'){
+    if(key==='blades'&&a.bladePoints.some(p=>Math.hypot(x-p.x,y-p.y)<55))return true;
+    if(key==='wall'&&Math.abs(y-a.wallY)<50&&Math.abs(x-a.gapX)>a.gapWidth/2-30)return true;
     if(key==='descent'&&Math.hypot(x-a.x,y-a.y)<80)return true;
     for(let t=0;t<def.active;t+=3)for(const part of demonSegments(en,a,t)){
      if(!part.hot)continue;

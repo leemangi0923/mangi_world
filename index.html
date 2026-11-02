@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v6.0.0</title>
+  <title>만기 월드 (Mangi World) - v6.1.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -350,7 +350,7 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
-        <h4>📌 v6.0.0 패치 노트</h4><p>대마왕 신규3기술: 지옥의 용광로 · 왕검의 처형 · 군주의 강림. 하급 악마의 발톱·불꽃 모션을 개편했습니다. 관리자 패턴 재생은 민첩30·속도 버프 없음으로 설정됩니다.</p>
+        <h4>📌 v6.1.0 패치 노트</h4><p>대마왕6기술 완성: 흑익의 검우 · 용혈의 숨결 · 흑염의 성벽 추가. 검우 엄폐→숨결, 성벽→왕검 연계와 암흑 기사·악마 장군을 개편했습니다. 관리자 패턴 재생은 민첩30·속도 버프 없음으로 설정됩니다.</p>
         • 🚪 던전/탑 이탈 시 남던 적 공격·예고 정리<br>
         • 📌 다음 목표 창 접기·펼치기와 표시 상태 기억<br>
         • 👁️ 쉬움은 전체 공격 안내, 보통/어려움은 필수 범위만 표시<br><br>
@@ -713,7 +713,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v6.0.0</div>
+      <div id="version-badge">v6.1.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -777,7 +777,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v6.0.0 : 대마왕 용광로 · 왕검의 처형 · 군주의 강림</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v6.1.0 : 대마왕6기술 완성 · 검우 엄폐 · 흑염 성벽</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -802,7 +802,7 @@
       <div id="battle-summary" class="hidden" aria-label="현재 전투 상황" style="position:absolute;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:360px;padding:5px 8px;border:1px solid #64748b;border-radius:6px;background:rgba(10,15,26,.9);font-size:12px;text-align:center;pointer-events:none;z-index:22;"></div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v6.0.0</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v6.1.0</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
@@ -846,7 +846,7 @@
         <details><summary>장비 특성·보상 테스트</summary><p>테스트 보관함·선택 보상·장비는 관리자 저장에만 반영됩니다.</p><button class="btn" onclick="adminPrepareRewards()">첫 보상·보관함 테스트</button><label>특성 무기<select id="admin-trait-weapon"></select></label><button class="btn" onclick="adminPrepareTrait()">선택 특성 평타 테스트 준비</button><p id="admin-trait-inspection"></p></details>
         <details><summary>2차 배경·연출 미리보기</summary><div class="admin-grid"><label>던전<select id="visual-category" onchange="adminVisualPreview()"><option value="slime">슬라임</option><option value="wolf">늑대</option><option value="zombie">묘지</option><option value="ghost">폐허</option><option value="demon">마왕성</option></select></label><label>구역<select id="visual-grade" onchange="adminVisualPreview()"><option value="0">일반</option><option value="1">정예</option><option value="2">생존</option><option value="boss">보스 방</option></select></label></div><button class="btn" onclick="adminVisualPreview()">배경·몸체 미리보기</button><p id="visual-caption"></p><canvas id="visual-preview" width="400" height="450" style="max-width:100%;height:auto;cursor:default;"></canvas></details>
         <details><summary>도감·전투 기록 확인</summary><p>몬스터20종·장비·개인 기록·도전 목표의 읽기 전용 샘플입니다. 일반 진행과 기록은 바꾸지 않습니다.</p><button id="admin-journal-preview" class="btn" onclick="adminPreviewJournal()">도감·기록 미리보기</button><button class="btn" onclick="openJournal('records')">현재 격리 기록 확인</button></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v6.0.0: 대마왕의 지옥의 용광로·왕검의 처형·군주의 강림과 하급 악마를 개편했습니다. 위의 마왕성 패턴 재생은 민첩30·속도 버프 없음으로 설정합니다. 나머지 새3기술과 마왕성 전체 개편은2차입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v6.1.0: 대마왕의 지옥의 용광로·왕검의 처형·군주의 강림과 하급 악마를 개편했습니다. 위의 마왕성 패턴 재생은 민첩30·속도 버프 없음으로 설정합니다. 검우·숨결·성벽과 연계2개, 세 체력 단계와 마왕성 몬스터 개편을 완료했습니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
 
       <section id="journal-screen" class="hidden" role="dialog" aria-modal="true" aria-labelledby="journal-title">
@@ -1401,7 +1401,7 @@
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v6.0.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
+      document.getElementById('admin-metrics').textContent=`v6.1.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
       const traitSelect=document.getElementById('admin-trait-weapon');if(!traitSelect.options.length)for(const [id,def] of Object.entries(WEAPON_TRAITS)){const opt=document.createElement('option');opt.value=id;opt.textContent=findItemById(id).name+' · '+def.name;traitSelect.appendChild(opt);}
       document.getElementById('admin-trait-inspection').textContent='특성 발동 '+weaponTraitState.procs+'회 · 충전 '+weaponTraitState.count+' · 예약 '+weaponTraitState.pending.length+' · 보관 '+rewardArchive.inbox.reduce((n,e)=>n+e.count,0)+'개';
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
@@ -4002,12 +4002,15 @@
     // Fixed-tick encounters: immutable warnings, bounded owned objects, render-only drawing.
     const ENCOUNTER_ATTACKS = {
       demon:{
+        blades:{name:'흑익의 검우',wind:105,active:150,recover:120,shape:'choreo',essential:true},
+        breath:{name:'용혈의 숨결',wind:120,active:120,recover:120,shape:'choreo',essential:true},
+        wall:{name:'흑염의 성벽',wind:110,active:150,recover:110,shape:'choreo',essential:true},
         furnace:{name:'지옥의 용광로',wind:120,active:180,recover:150,shape:'choreo',essential:true},
         execution:{name:'왕검의 처형',wind:80,active:90,recover:110,shape:'choreo'},
         descent:{name:'군주의 강림',wind:100,active:112,recover:125,shape:'choreo',essential:true},
         bite:{name:'악마의 발톱',wind:50,active:12,recover:60,shape:'cone',radius:94,arc:1.05},
         ember:{name:'용혈 불꽃',wind:62,active:48,recover:75,shape:'choreo'},
-        cleave:{name:'흑기사 강타',wind:72,active:14,recover:85,shape:'cone',radius:145,arc:1.1},
+        cleave:{name:'흑철 가르기',wind:72,active:90,recover:85,shape:'choreo'},
         bulwark:{name:'흑철 방패',wind:40,active:48,recover:75,shape:'guard'},
         combo:{name:'왕검 연격',wind:80,active:68,recover:108,shape:'combo',radius:185},
         rush:{name:'파멸 질주',wind:78,active:28,recover:105,shape:'line'},
@@ -4035,12 +4038,12 @@
         ritual: {name:'부활 의식',wind:150,active:1,recover:150,shape:'safe',safeR:86}
       }
     };
-    let encounterHazards=[], encounterShots=[], encounterEffects=[], encounterDebugHitboxes=false;
-    function clearEncounterRuntime(){encounterHazards=[];encounterShots=[];encounterEffects=[];ghostDecoys=[];ghostZones=[];demonZones=[];}
+    let encounterHazards=[], encounterShots=[], encounterEffects=[], demonWalls=[], encounterDebugHitboxes=false;
+    function clearEncounterRuntime(){demonWalls=[];encounterHazards=[];encounterShots=[];encounterEffects=[];ghostDecoys=[];ghostZones=[];demonZones=[];}
     const encounterCurrent=en=>!!en && en.hp>0 && enemies.includes(en) && COMBAT_STATES.includes(gameState) && combatReportMode!=='death';
     const encounterStage=en=>!en.isBoss?1:en.hp/en.maxHp<=.35?3:en.hp/en.maxHp<=(en.category==='demon'?.7:.65)?2:1;
     function encounterEffect(en,kind,x=en.x,y=en.y,r=en.r){
-      encounterEffects.push({x,y,r,category:en.category,isBoss:en.isBoss,color:en.colors.hi,kind,snapshot:kind==='death'?{x:0,y:0,r:en.r,colors:{...en.colors},isBoss:en.isBoss,isRitualSeal:en.isRitualSeal,isJudgmentSeal:en.isJudgmentSeal,stageIndex:en.stageIndex,encounterStage:en.encounterStage,encounterFacing:en.encounterFacing,floatSeed:en.floatSeed}:null,left:kind==='death'?48:28,max:kind==='death'?48:28});
+      encounterEffects.push({x,y,r,category:en.category,isBoss:en.isBoss,color:en.colors.hi,kind,snapshot:kind==='death'?{x:0,y:0,r:en.r,colors:{...en.colors},isBoss:en.isBoss,isRitualSeal:en.isRitualSeal,isJudgmentSeal:en.isJudgmentSeal,isDemonBlade:en.isDemonBlade,landed:en.landed,stageIndex:en.stageIndex,encounterStage:en.encounterStage,encounterFacing:en.encounterFacing,floatSeed:en.floatSeed}:null,left:kind==='death'?48:28,max:kind==='death'?48:28});
       if(encounterEffects.length>48)encounterEffects.shift();
       if(['strike','fissure','flame','hand'].includes(kind)){playSfx(en.category==='demon'?'heavyImpact':'hit');impact(en.isBoss?5:2,en.isBoss?1:0,0);}
       if(['release','summon','interrupt'].includes(kind))playSfx('soulCast');
@@ -4049,7 +4052,7 @@
     function beginEncounterAttack(en,key){
       const def=ENCOUNTER_ATTACKS[en.category]?.[key];if(!def||!encounterCurrent(en))return false;
       // Forced replay replaces only this actor's previous cast and its owned warnings.
-      enemies=enemies.filter(e=>!e.isEncounterObject||e.encounterOwner!==en);
+      enemies=enemies.filter(e=>!e.isEncounterObject||e.encounterOwner!==en||e.isDemonBlade);
       encounterHazards=encounterHazards.filter(z=>z.owner!==en);
       const scale=en.isBoss?1:en.isElite?.82:.7,angle=Math.atan2(player.y-en.y,player.x-en.x);
       const wind=Math.ceil(def.wind*difficultyProfile().warning);
@@ -4061,7 +4064,7 @@
       // Melee slams cannot remotely strike the whole arena.
       if(def.shape==='circle'){const reach=en.isBoss?240:125,d=Math.hypot(a.x-en.x,a.y-en.y);if(d>reach){a.x=en.x+Math.cos(angle)*reach;a.y=en.y+Math.sin(angle)*reach;}}
       if(en.category==='demon'){
-        if(['furnace','execution','descent','bite','ember'].includes(key))prepareDemonChoreography(en,a);
+        if(['furnace','execution','descent','bite','ember','blades','breath','wall','cleave'].includes(key))prepareDemonChoreography(en,a);
         a.secondAt=Math.ceil(36*difficultyProfile().warning);
         if(key==='rush'){
           const reach=en.isBoss?340:200,d=Math.min(reach,Math.hypot(player.x-en.x,player.y-en.y)+75);
@@ -4113,7 +4116,7 @@
     function encounterShape(en,a){return {...a,shape:ENCOUNTER_ATTACKS[en.category][a.key].shape};}
     function encounterChoices(en){
       if(en.category==='zombie')return en.isBoss?(en.encounterStage===3?['scythe','drain','ritual','summon']:en.encounterStage===2?['scythe','summon','drain']:['scythe','drain']):en.stageIndex===0?['grab']:en.stageIndex===1?['slash']:['crush','guard','slash'];
-      if(en.category==='demon')return en.isBoss?(en.encounterStage===3?['execution','brand','fissure','tempest','furnace','descent']:en.encounterStage===2?['execution','fissure','tempest','descent']:['execution','descent']):en.stageIndex===0?['bite','ember']:en.stageIndex===1?['cleave','bulwark']:['combo','fissure','brand'];
+      if(en.category==='demon')return en.isBoss?(en.encounterStage===3?['blades','breath','wall','execution','descent','furnace']:en.encounterStage===2?['blades','breath','wall','execution','descent']:['execution','descent','blades']):en.stageIndex===0?['bite','ember']:en.stageIndex===1?['cleave','bulwark']:['blades','wall'];
       if(en.category==='ghost')return en.isBoss?(en.encounterStage===3?['blink','fan','mirror','hands','corridor']:en.encounterStage===2?['blink','fan','mirror','hands']:['blink','fan','hands']):en.stageIndex===0?['touch']:en.stageIndex===1?['blink','fan']:['hands','fan'];
       return [];
     }
@@ -4129,7 +4132,9 @@
         const busy=enemies.filter(e=>!e.isBoss&&!e.isEncounterObject&&e.encounterAttack&&e.encounterAttack.phase!=='recovery').length;
         if(en.encounterIdle<=0&&(en.isBoss||busy<2)){
           const choices=encounterChoices(en);en.encounterSequence=en.encounterSequence||0;
-          if(choices.length)beginEncounterAttack(en,choices[en.encounterSequence++%choices.length]);
+          if(choices.length){let key=choices[en.encounterSequence++%choices.length];
+            if(en.category==='demon'&&en.isBoss&&en.encounterStage>=2&&en.demonFollowup){if(key!==en.demonFollowup)en.encounterSequence--;key=en.demonFollowup;en.demonFollowup=null;}
+            beginEncounterAttack(en,key);}
         }
         return;
       }
@@ -4145,8 +4150,9 @@
         tickEncounterAttack(en,a);
         if(!encounterCurrent(en))return;
         a.elapsed++;
-        if(--a.left<=0){enterAttackPhase(en,a,'recovery',ENCOUNTER_ATTACKS[en.category][a.key].recover,'encounter');en.damageReduction=0;enemies=enemies.filter(e=>!e.isEncounterObject||e.encounterOwner!==en);}
-      }else if(a.phase==='recovery'&&--a.left<=0){en.encounterAttack=null;en.state='idle';en.encounterIdle=en.isBoss?36:50;en.damageReduction=0;}
+        if(--a.left<=0){enterAttackPhase(en,a,'recovery',ENCOUNTER_ATTACKS[en.category][a.key].recover,'encounter');en.damageReduction=0;enemies=enemies.filter(e=>!e.isEncounterObject||e.encounterOwner!==en||e.isDemonBlade);}
+      }else if(a.phase==='recovery'&&--a.left<=0){if(en.category==='demon'&&en.isBoss&&en.encounterStage>=2)en.demonFollowup=a.key==='blades'?'breath':a.key==='wall'?'execution':null;
+        en.encounterAttack=null;en.state='idle';en.encounterIdle=en.isBoss?36:50;en.damageReduction=0;}
     }
     function tickEncounterAttack(en,a){
       const def=ENCOUNTER_ATTACKS[en.category][a.key],base=en.isBoss?24+en.level*.45:8+en.level*.45;
@@ -4169,7 +4175,7 @@
     function removeEncounterOwner(en){
       enemies=enemies.filter(e=>e.encounterOwner!==en);
       encounterHazards=encounterHazards.filter(z=>z.owner!==en);encounterShots=encounterShots.filter(s=>s.owner!==en);
-      ghostDecoys=ghostDecoys.filter(d=>d.encounterOwner!==en);
+      ghostDecoys=ghostDecoys.filter(d=>d.encounterOwner!==en);demonWalls=demonWalls.filter(w=>w.owner!==en);
     }
     function emitEncounterFan(en,a,offsets,speed,damage,radius=9){
       for(const offset of offsets){if(encounterShots.length>=24)break;const angle=a.angle+offset;
@@ -4178,6 +4184,7 @@
     }
     function tickEncounterRuntime(){
       if((adminMode.active&&adminMode.freezeAI)||!COMBAT_STATES.includes(gameState)||combatReportMode==='death')return;
+      tickDemonTerrain();
       encounterEffects=encounterEffects.filter(f=>--f.left>0);
       ghostDecoys=ghostDecoys.filter(d=>--d.life>0&&encounterCurrent(d.encounterOwner));
       encounterHazards=encounterHazards.filter(z=>encounterCurrent(z.owner));
@@ -4231,6 +4238,7 @@
     }
     function drawEncounterRuntime(){
       if(!COMBAT_STATES.includes(gameState))return;
+      drawDemonTerrain();
       ctx.save();for(const shot of encounterShots){ctx.fillStyle=shot.color;ctx.strokeStyle='#f5f3ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(shot.x,shot.y,shot.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(shot.x,shot.y);ctx.lineTo(shot.x-shot.vx*5,shot.y-shot.vy*5);ctx.stroke();}ctx.restore();
       ctx.save();for(const f of encounterEffects){if(accessibility.effects===0)continue;const p=1-f.left/f.max;ctx.globalAlpha=(1-p)*accessibility.effects;ctx.strokeStyle=f.color;ctx.fillStyle=f.color;ctx.lineWidth=3;
         if(f.kind==='death'){if(f.snapshot){ctx.save();ctx.translate(f.x,f.y+25*p*p);ctx.rotate(p*(f.isBoss?.4:1.1));ctx.scale(1+p*.1,Math.max(.1,1-p*.65));({zombie:drawZombieMob,ghost:drawGhostMob,demon:drawDemonMob})[f.category](f.snapshot,frameCount/60);ctx.restore();ctx.globalAlpha=(1-p)*accessibility.effects;}for(let i=0;i<9;i++){const angle=i*Math.PI*2/9;ctx.save();ctx.translate(f.x+Math.cos(angle)*f.r*p,f.y+Math.sin(angle)*f.r*p+40*p*p);ctx.rotate(angle+p*4);ctx.fillRect(-4,-3,8*(1-p),6);ctx.restore();}}
@@ -4246,7 +4254,7 @@
       if(cat==='demon'){statAgi=30;delete activeBuffs.speed;recalcAllStats();}
       en.hp=en.maxHp*({1:1,2:.55,3:.25}[stage]||1);beginEncounterAttack(en,key);openAdminPanel();adminMessage('패턴 준비: '+en.name+' · '+ENCOUNTER_ATTACKS[cat][key].name);
     };
-    window.updateEncounterPatternOptions=function(){const select=document.getElementById('encounter-pattern');select.replaceChildren();for(const [key,def] of Object.entries(ENCOUNTER_ATTACKS[document.getElementById('encounter-family').value]||{})){if(['grab','slash','crush','guard','touch','bite','ember','cleave','bulwark'].includes(key)|| (document.getElementById('encounter-family').value==='demon'&&['combo','rush','judgment'].includes(key)))continue;const opt=document.createElement('option');opt.value=key;opt.textContent=def.name;select.appendChild(opt);}};
+    window.updateEncounterPatternOptions=function(){const select=document.getElementById('encounter-pattern');select.replaceChildren();for(const [key,def] of Object.entries(ENCOUNTER_ATTACKS[document.getElementById('encounter-family').value]||{})){if(['grab','slash','crush','guard','touch','bite','ember','cleave','bulwark'].includes(key)|| (document.getElementById('encounter-family').value==='demon'&&['combo','rush','judgment','fissure','tempest','brand'].includes(key)))continue;const opt=document.createElement('option');opt.value=key;opt.textContent=def.name;select.appendChild(opt);}};
     function updateZombieBossAI(en){tickEncounterActor(en);}
 
     // ===== 사령왕: 환영 분신 / 그림자 손아귀 =====
@@ -4271,11 +4279,96 @@
     function updateGhostBossAI(en){tickEncounterActor(en);}
 
     // Cast-local geometry: simulation owns damage, drawing only reads these poses.
+    function prepareDemonStage2(en,a){
+      if(a.key==='furnace'){
+        a.salvage=enemies.filter(e=>e.isDemonBlade&&e.encounterOwner===en&&e.landed).slice(0,3).map(e=>({x:e.x,y:e.y}));
+        enemies=enemies.filter(e=>!e.isDemonBlade||e.encounterOwner!==en);demonWalls=demonWalls.filter(w=>w.owner!==en);
+      }
+      if(a.key==='blades'){
+        enemies=enemies.filter(e=>!e.isDemonBlade||e.encounterOwner!==en);
+        a.bladePoints=Array.from({length:en.isBoss?3:2},(_,i)=>({x:slimeClamp(a.x-Math.sin(a.angle)*(i-(en.isBoss?1:.5))*130,80,720),y:slimeClamp(a.y+Math.cos(a.angle)*(i-(en.isBoss?1:.5))*130,170,775),delay:i*36}));
+      }
+      if(a.key==='wall'){
+        demonWalls=demonWalls.filter(w=>w.owner!==en);
+        a.wallY=slimeClamp(a.y+35,245,710);a.gapX=en.isBoss?slimeClamp(a.x,180,620):400;a.gapWidth=180;
+        a.wallEnds=en.isBoss?[55,745]:[Math.max(55,a.gapX-250),Math.min(745,a.gapX+250)];
+        a.wallTarget={x:a.gapX,y:slimeClamp(a.wallY+(en.y<a.wallY?70:-70),175,760)};
+      }
+      a.reach=en.isBoss?430:190;
+    }
+    function demonStage2Segments(en,a,t){
+      if(a.key!=='breath')return [];
+      const angle=a.angle-.55+1.1*slimeClamp((t-20)/90,0,1),start=demonPoint(a,35,0,angle);let length=a.reach;
+      // Only landed, living iron blocks the flame. No remote or phantom shelter.
+      for(const b of enemies.filter(e=>e.isDemonBlade&&e.encounterOwner===en&&e.landed&&e.hp>0)){
+        const dx=b.x-a.origin.x,dy=b.y-a.origin.y,along=dx*Math.cos(angle)+dy*Math.sin(angle),side=-dx*Math.sin(angle)+dy*Math.cos(angle);
+        const blockRadius=b.r+26;
+        if(along>45&&Math.abs(side)<blockRadius)length=Math.min(length,Math.max(36,along-Math.sqrt(blockRadius*blockRadius-side*side)));
+      }
+      return [{kind:'fire',i:0,start,end:demonPoint(a,length,0,angle),r:26,hot:t>=20&&t<116}];
+    }
+    function tickDemonStage2(en,a,base){
+      if(a.key==='blades'&&a.elapsed===0){
+        for(const p of a.bladePoints){if(enemies.filter(e=>e.isDemonBlade).length>=4)break;
+          const blade=createDungeonMob('demon',0,p.x,p.y);Object.assign(blade,{r:20,hp:60,maxHp:60,isEncounterObject:true,isDemonBlade:true,encounterOwner:en,bladeCast:a,bladeDelay:p.delay,fall:25,life:1100,landed:false,exp:0,gold:0,name:'흑익의 검 깃털',bladeDamage:base*.8});enemies.push(blade);
+        }
+      }
+      if(a.key==='wall'&&a.elapsed===0&&demonWalls.length<2)demonWalls.push({owner:en,y:a.wallY,gapX:a.gapX,gapWidth:a.gapWidth,ends:a.wallEnds,life:620,age:0,damage:base*.65,hit:false});
+      if(a.key==='wall'&&a.elapsed>=40){const p=slimeClamp((a.elapsed-40)/100,0,1);en.x=a.fromX+(a.wallTarget.x-a.fromX)*p;en.y=a.fromY+(a.wallTarget.y-a.fromY)*p;}
+      if(a.key==='execution'&&a.elapsed===89)demonWalls=demonWalls.filter(w=>w.owner!==en);
+    }
+    function tickDemonTerrain(){
+      for(const b of enemies.filter(e=>e.isDemonBlade)){
+        if(!encounterCurrent(b.encounterOwner)){enemies=enemies.filter(e=>e!==b);continue;}
+        if(b.bladeDelay>0){if(b.bladeCast?.interrupted||b.encounterOwner.encounterAttack!==b.bladeCast){enemies=enemies.filter(e=>e!==b);continue;}if(b.encounterOwner.frozenTimer>0||b.encounterOwner.suspended>0)continue;b.bladeDelay--;continue;}
+        b.life--;
+        if(!b.landed&&--b.fall<=0){b.landed=true;if(Math.hypot(player.x-b.x,player.y-b.y)<=b.r+16)encounterDamage(b.encounterOwner,b.bladeDamage,'흑익의 검우');if(!COMBAT_STATES.includes(gameState))return;}
+        if(b.life<=0)enemies=enemies.filter(e=>e!==b);
+      }
+      demonWalls=demonWalls.filter(w=>w.life>0&&encounterCurrent(w.owner));
+      for(const w of demonWalls.slice()){
+        w.life--;w.age++;
+        if(w.age>24&&!w.hit&&Math.abs(player.y-w.y)<30&&player.x>=w.ends[0]-16&&player.x<=w.ends[1]+16&&Math.abs(player.x-w.gapX)>w.gapWidth/2-16){w.hit=true;encounterDamage(w.owner,w.damage,'흑염의 성벽');if(!COMBAT_STATES.includes(gameState))return;}
+      }
+    }
+    function drawDemonBlade(b){
+      ctx.save();const h=b.landed?0:Math.max(0,b.fall||25)*5;
+      ctx.fillStyle='rgba(255,141,62,.25)';ctx.beginPath();ctx.ellipse(b.x,b.y+12,27,12,0,0,Math.PI*2);ctx.fill();
+      ctx.translate(b.x,b.y-h);ctx.fillStyle=b.landed?'#65545d':'#aaa0a6';ctx.strokeStyle='#ffcd91';ctx.lineWidth=3;
+      ctx.beginPath();ctx.moveTo(0,18);ctx.lineTo(-18,-24);ctx.lineTo(-12,-72);ctx.lineTo(0,-91);ctx.lineTo(12,-72);ctx.lineTo(18,-24);ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.strokeStyle='#ff6d32';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(0,6);ctx.lineTo(0,-73);ctx.stroke();ctx.fillStyle='#c6a16a';ctx.fillRect(-26,-65,52,6);ctx.restore();
+    }
+    function drawDemonTerrain(){
+      if(!COMBAT_STATES.includes(gameState))return;
+      for(const w of demonWalls){
+        ctx.save();ctx.strokeStyle='#f59e57';ctx.lineWidth=2;
+        for(const [lo,hi] of [[w.ends[0],w.gapX-w.gapWidth/2],[w.gapX+w.gapWidth/2,w.ends[1]]]){
+          ctx.fillStyle='#421a24';ctx.fillRect(lo,w.y-13,Math.max(0,hi-lo),26);
+          for(let x=lo;x<hi;x+=22){const h=(w.age<24?20:48)+Math.sin(w.age*.12+x)*9;const g=ctx.createLinearGradient(x,w.y-h,x,w.y+12);g.addColorStop(0,'#ffcd74');g.addColorStop(.4,'#ed6737');g.addColorStop(1,'#5c1830');ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(x,w.y+12);ctx.quadraticCurveTo(x+21,w.y-h*.3,x+12,w.y-h);ctx.quadraticCurveTo(x-5,w.y-h*.2,x,w.y+12);ctx.fill();}
+        }
+        // A physical arch frames the traversable gap in every effects setting.
+        ctx.strokeStyle='#b99078';ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(w.gapX-90,w.y+10);ctx.lineTo(w.gapX-90,w.y-45);ctx.quadraticCurveTo(w.gapX,w.y-100,w.gapX+90,w.y-45);ctx.lineTo(w.gapX+90,w.y+10);ctx.stroke();ctx.restore();
+      }
+    }
+    function drawDemonStage2Guide(en,a){
+      ctx.save();ctx.strokeStyle='#e8bd76';ctx.lineWidth=2;ctx.setLineDash([7,6]);
+      if(a.key==='blades'&&a.phase==='windup')for(const p of a.bladePoints){ctx.beginPath();ctx.arc(p.x,p.y,36,0,Math.PI*2);ctx.stroke();}
+      if(a.key==='wall'&&a.phase==='windup'){for(const [lo,hi] of [[a.wallEnds[0],a.gapX-90],[a.gapX+90,a.wallEnds[1]]]){ctx.strokeRect(lo-16,a.wallY-30,Math.max(0,hi-lo)+32,60);}}
+      if(a.key==='breath'&&a.phase==='windup'){for(const off of [-.55,.55]){const p=demonPoint(a,a.reach,0,a.angle+off);ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.lineTo(p.x,p.y);ctx.stroke();}}
+      ctx.restore();
+    }
+    function drawDemonStage2Pose(en,a){
+      if(a.key==='blades'&&a.phase==='windup')for(const p of a.bladePoints)drawDemonBlade({...p,fall:25,landed:false});
+      if(a.key==='breath'){
+        ctx.save();ctx.fillStyle=a.phase==='windup'?'#ffb55b':'#fff2a1';ctx.beginPath();ctx.ellipse(en.x,en.y-en.r*.63,en.r*.2,en.r*.12,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#e9753e';ctx.lineWidth=3;for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.lineTo(en.x+en.r*.4*side,en.y-en.r*.35);ctx.lineTo(en.x+en.r*.17*side,en.y-en.r*.65);ctx.stroke();}ctx.restore();
+      }
+    }
+
     function prepareDemonChoreography(en,a){
-      a.origin={x:en.x,y:en.y};a.iron=[];
+      a.origin={x:en.x,y:en.y};a.iron=[];prepareDemonStage2(en,a);
       if(a.key==='furnace')for(let i=0;i<3;i++){
         const angle=a.angle+[Math.PI,-1.35,1.35][i];
-        a.iron.push({x:slimeClamp(en.x+Math.cos(angle)*245,65,735),y:slimeClamp(en.y+Math.sin(angle)*245,150,785),delay:i*36});
+        const used=a.salvage?.[i];a.iron.push({x:used?.x??slimeClamp(en.x+Math.cos(angle)*245,65,735),y:used?.y??slimeClamp(en.y+Math.sin(angle)*245,150,785),delay:i*36});
       }
       if(a.key==='descent'){
         const d=Math.min(220,Math.hypot(a.x-en.x,a.y-en.y));
@@ -4284,16 +4377,16 @@
     }
     function demonPoint(a,d,side=0,angle=a.angle){return {x:a.origin.x+Math.cos(angle)*d-Math.sin(angle)*side,y:a.origin.y+Math.sin(angle)*d+Math.cos(angle)*side};}
     function demonSegments(en,a,time){
-      const t=Math.max(0,time),segments=[];
+      const t=Math.max(0,time),segments=demonStage2Segments(en,a,t);
       if(a.key==='furnace'){
         a.iron.forEach((piece,i)=>{
           const p=slimeClamp((t-piece.delay)/54,0,1);
           segments.push({kind:'iron',i,x:piece.x+(a.origin.x-piece.x)*p,y:piece.y+(a.origin.y-piece.y)*p,r:22,hot:t>=piece.delay&&t<piece.delay+54});
         });
         if(t>=140)segments.push({kind:'heat',i:3,start:demonPoint(a,-45),end:demonPoint(a,-285),r:43,hot:true});
-      }else if(a.key==='execution'){
+      }else if(['execution','cleave'].includes(a.key)){
         const thrust=slimeClamp(t/22,0,1),drag=slimeClamp((t-35)/35,0,1),back=slimeClamp((t-70)/20,0,1),angle=a.angle+drag*.8;
-        segments.push({kind:'sword',i:t<35?0:1,start:demonPoint(a,25,0,angle),end:demonPoint(a,55+155*thrust-150*back,0,angle),r:13,hot:t<24||(t>=40&&t<82)});
+        segments.push({kind:'sword',i:t<35?0:1,start:demonPoint(a,25,0,angle),end:demonPoint(a,40+(en.isBoss?170:100)*thrust-(en.isBoss?150:80)*back,0,angle),r:13,hot:t<24||(t>=40&&t<82)});
       }else if(a.key==='descent'&&t>=54){
         const p=slimeClamp((t-54)/40,0,1),center={...a,origin:{x:a.x,y:a.y}};
         for(const side of [-1,1]){const angle=a.angle+side*(1.45-p*.95);segments.push({kind:'wing',i:side,start:demonPoint(center,36,0,angle),end:demonPoint(center,165,0,angle),r:16,hot:t<94});}
@@ -4309,6 +4402,7 @@
       return Math.hypot(player.x-start.x-dx*p,player.y-start.y-dy*p)<=r+16;
     }
     function tickDemonChoreography(en,a,base){
+      tickDemonStage2(en,a,base);if(!encounterCurrent(en))return;
       if(a.key==='descent'&&a.elapsed<54){const p=(a.elapsed+1)/54;en.x=a.fromX+(a.x-a.fromX)*p;en.y=a.fromY+(a.y-a.fromY)*p;}
       if(a.key==='descent'&&a.elapsed===54&&Math.hypot(player.x-a.x,player.y-a.y)<=64){a.hits.push('wingImpact');encounterDamage(en,base,ENCOUNTER_ATTACKS.demon.descent.name);if(!encounterCurrent(en))return;}
       const previous=demonSegments(en,a,a.elapsed-1);
@@ -4324,7 +4418,9 @@
     }
     function drawDemonChoreographyGuide(en,a){
       if(a.phase==='recovery')return;
+      drawDemonStage2Guide(en,a);
       ctx.save();ctx.lineWidth=2;ctx.strokeStyle='#fbbf24';ctx.setLineDash([8,7]);
+      if(['execution','cleave'].includes(a.key)&&difficulty==='easy'){for(const t of [0,22,40,60,80])for(const part of demonSegments(en,a,t)){const dx=part.end.x-part.start.x,dy=part.end.y-part.start.y;traceEncounterShape({shape:'line',fromX:part.start.x,fromY:part.start.y,angle:Math.atan2(dy,dx),length:Math.hypot(dx,dy),width:part.r});ctx.stroke();}}
       if(a.key==='furnace'){
         for(const p of a.iron){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(a.origin.x,a.origin.y);ctx.stroke();}
         const rear=demonPoint(a,-285);traceEncounterShape({shape:'line',fromX:demonPoint(a,-45).x,fromY:demonPoint(a,-45).y,angle:a.angle+Math.PI,length:240,width:43});ctx.stroke();
@@ -4332,8 +4428,9 @@
       ctx.restore();
     }
     function drawDemonChoreography(en){
-      const a=en.encounterAttack;if(!a||!['furnace','execution','descent','bite','ember'].includes(a.key))return;
+      const a=en.encounterAttack;if(!a||!['furnace','execution','descent','bite','ember','blades','breath','wall','cleave'].includes(a.key))return;
       const wind=a.phase==='windup',recover=a.phase==='recovery';
+      drawDemonStage2Pose(en,a);
       const time=wind?0:recover?ENCOUNTER_ATTACKS.demon[a.key].active:a.elapsed;
       ctx.save();ctx.lineCap='round';
       if(a.key==='furnace'){
@@ -4344,6 +4441,7 @@
         const glow=ctx.createRadialGradient(en.x,en.y-r*.2,2,en.x,en.y-r*.2,r*.35);glow.addColorStop(0,'#fff7c2');glow.addColorStop(.4,'#ffb02e');glow.addColorStop(1,'#8a1725');ctx.fillStyle=glow;ctx.beginPath();ctx.ellipse(en.x,en.y-r*.2,r*(.16+open*.1),r*.38,0,0,Math.PI*2);ctx.fill();
       }
       if(!recover)for(const part of demonSegments(en,a,time)){
+        if(a.key==='breath'&&(wind||time<20))continue;
         if(part.kind==='iron'){
           const piece=a.iron[part.i];if(time>=piece.delay+54&&!wind)continue;
           ctx.strokeStyle='#8e7980';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(en.x,en.y-en.r*.5);ctx.lineTo(part.x,part.y);ctx.stroke();
@@ -4354,6 +4452,7 @@
           ctx.strokeStyle=fire?'#a52a26':part.kind==='wing'?'#4c2638':'#3b2935';ctx.lineWidth=r*2;ctx.beginPath();ctx.moveTo(start.x,start.y);ctx.lineTo(end.x,end.y);ctx.stroke();
           ctx.strokeStyle=fire?'#ff9d35':'#e9c5a0';ctx.lineWidth=fire?r:Math.max(3,r*.7);ctx.stroke();
           ctx.strokeStyle='#fff0bc';ctx.lineWidth=fire?5:2;ctx.stroke();
+          if(fire){ctx.save();ctx.translate(start.x,start.y);ctx.rotate(Math.atan2(end.y-start.y,end.x-start.x));const length=Math.hypot(end.x-start.x,end.y-start.y);ctx.fillStyle='#ffc161';for(let x=12;x<length-15;x+=23){const sway=Math.sin(time*.22+x)*r*.3;ctx.beginPath();ctx.moveTo(x,0);ctx.quadraticCurveTo(x+7,sway-r*.7,x+20,sway);ctx.quadraticCurveTo(x+7,sway+r*.7,x,0);ctx.fill();}ctx.restore();}
           if(!fire){ctx.save();ctx.translate(end.x,end.y);ctx.rotate(Math.atan2(end.y-start.y,end.x-start.x));ctx.fillStyle='#f0d2ac';ctx.beginPath();ctx.moveTo(14,0);ctx.lineTo(-12,-r);ctx.lineTo(-12,r);ctx.closePath();ctx.fill();ctx.restore();}
         }
       }
@@ -4361,7 +4460,7 @@
     }
 
     function tickDemonAttack(en,a,base){
-      if(['furnace','execution','descent','bite','ember'].includes(a.key)){tickDemonChoreography(en,a,base);return;}
+      if(['furnace','execution','descent','bite','ember','blades','breath','wall','cleave'].includes(a.key)){tickDemonChoreography(en,a,base);return;}
       if(a.key==='combo'){
         const index=a.elapsed===0?0:a.elapsed===a.secondAt?1:-1;
         if(index>=0){const shape={...encounterShape(en,a),shape:'cone',radius:a.radius+(index?28:0),arc:index?1.3:1};encounterStrike(en,a,index,shape,base+(index?8:0));encounterEffect(en,'strike',en.x,en.y,shape.radius);}
@@ -5409,28 +5508,29 @@
     }
 
     function drawDemonMob(en,t,showGuide=true){
+      if(en.isDemonBlade){drawDemonBlade(en);return;}
       if(en.isJudgmentSeal){ctx.save();ctx.translate(en.x,en.y);ctx.rotate(Math.sin(t*2)*.12);ctx.fillStyle='#3b1220';ctx.strokeStyle='#fde68a';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,-30);ctx.lineTo(20,0);ctx.lineTo(0,27);ctx.lineTo(-20,0);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#fb923c';ctx.beginPath();ctx.arc(0,0,10,0,Math.PI*2);ctx.fill();ctx.restore();return;}
       if(showGuide)drawEncounterGuide(en);
       const r=en.r,c=en.colors,boss=en.isBoss,knight=!boss&&en.stageIndex===1,general=!boss&&en.stageIndex===2,a=en.encounterAttack;
       const stage=en.encounterStage||1,p=a?slimeClamp(1-a.left/a.duration,0,1):0,cast=a?.phase==='windup',active=a?.phase==='active',recovery=a?.phase==='recovery';
       const facing=Math.cos(en.encounterFacing||0)<0?-1:1,walk=en.encounterMoving?Math.sin(t*5+en.floatSeed)*.16:Math.sin(t*1.5)*.018;
-      const heavy=['fissure','judgment','furnace','execution'].includes(a?.key),wings=(boss||general||!knight),spread=cast&&['tempest','judgment','furnace','descent'].includes(a?.key)?1.25:recovery?.8:1;
+      const heavy=['fissure','judgment','furnace','execution','breath','wall'].includes(a?.key),wings=(boss||general||!knight),spread=cast&&['tempest','judgment','furnace','descent','blades','breath','wall'].includes(a?.key)?1.25:recovery?.8:1;
       ctx.save();ctx.translate(en.x,en.y+(cast&&heavy?5:a?.key==='descent'&&active?-Math.sin(Math.min(1,a.elapsed/54)*Math.PI)*75:0));ctx.scale(facing,1);
       if(boss&&a?.key==='furnace'&&recovery){ctx.translate(0,r*.18);ctx.scale(1,.82);}
       const polygon=(points,fill,stroke)=>{ctx.fillStyle=fill;ctx.beginPath();for(let i=0;i<points.length;i++)i?ctx.lineTo(points[i][0]*r,points[i][1]*r):ctx.moveTo(points[i][0]*r,points[i][1]*r);ctx.closePath();ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}};
-      if(wings){for(const side of [-1,1]){ctx.save();ctx.scale(side*spread,1);const size=boss?1:general?.8:.5;ctx.scale(size,size);ctx.translate(0,Math.sin(t*2)*4);polygon([[.32,-.52],[.78,-1.1],[1.52,-1.55],[1.83,-.3],[1.33,-.52],[1.16,.24],[.77,-.18],[.56,.48],[.32,.05]],stage>=2?'#4a1629':'#351d2d','#8e5462');ctx.strokeStyle=stage>=2?'#d57668':'#91505d';ctx.lineWidth=2;for(const point of [[1.83,-.3],[1.16,.24],[.56,.48]]){ctx.beginPath();ctx.moveTo(.34*r,-.5*r);ctx.lineTo(1.52*r,-1.55*r);ctx.lineTo(point[0]*r,point[1]*r);ctx.stroke();}if(stage>=2){polygon([[1.1,-.28],[1.18,-.05],[1.05,.06]],'#1c1019');}ctx.restore();}}
+      if(wings){for(const side of [-1,1]){ctx.save();ctx.scale(side*spread,1);const size=boss?1:general?.8:.5;ctx.scale(size,size);ctx.translate(0,Math.sin(t*2)*4);polygon([[.32,-.52],[.78,-1.1],[1.52,-1.55],[1.83,-.3],[1.33,-.52],[1.16,.24],[.77,-.18],[.56,.48],[.32,.05]],stage>=2?'#4a1629':'#351d2d','#8e5462');ctx.strokeStyle=stage===3?'#ffbd71':stage>=2?'#d57668':'#91505d';ctx.lineWidth=2;for(const point of [[1.83,-.3],[1.16,.24],[.56,.48]]){ctx.beginPath();ctx.moveTo(.34*r,-.5*r);ctx.lineTo(1.52*r,-1.55*r);ctx.lineTo(point[0]*r,point[1]*r);ctx.stroke();}if(stage>=2){polygon([[1.1,-.28],[1.18,-.05],[1.05,.06]],'#1c1019');}ctx.restore();}}
       ctx.strokeStyle='#9e4548';ctx.lineWidth=r*.12;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-r*.35,r*.3);ctx.quadraticCurveTo(-r*1.2,r*.75,-r*.9,-r*.05);ctx.stroke();polygon([[-.9,-.23],[-1.04,0],[-.79,-.02]],'#d29570');
       const limb=(sx,sy,kx,ky,ex,ey,width,color)=>{ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(sx*r,sy*r);ctx.lineTo(kx*r,ky*r);ctx.lineTo(ex*r,ey*r);ctx.stroke();ctx.fillStyle='#818087';ctx.beginPath();ctx.arc(kx*r,ky*r,width*.52,0,Math.PI*2);ctx.fill();};
       for(const side of [-1,1]){const step=walk*side;limb(side*.22,.15,side*.3+step,.48,side*.4-step,.95,r*.24,knight?'#42434b':'#401c29');polygon([[side*.2,.4],[side*.43,.4],[side*.5,.75],[side*.24,.79]],'#5b5261','#8d8190');ctx.fillStyle='#18141e';ctx.beginPath();ctx.ellipse((side*.4-step)*r,r*.98,r*.24,r*.12,0,0,Math.PI*2);ctx.fill();}
       const armor=ctx.createLinearGradient(-r*.5,-r*.6,r*.6,r*.4);armor.addColorStop(0,'#65606d');armor.addColorStop(.45,boss?'#302c3c':c.base);armor.addColorStop(1,'#171724');polygon([[-.6,-.55],[-.36,-.76],[.35,-.76],[.6,-.55],[.44,.25],[0,.4],[-.44,.25]],armor,'#95808b');
-      polygon([[-.45,-.57],[0,-.4],[.45,-.57],[.35,-.03],[0,.17],[-.35,-.03]],stage===3?'#5a1825':'#4a3847','#9c6570');
+      polygon([[-.45,-.57],[0,-.4],[.45,-.57],[.35,-.03],[0,.17],[-.35,-.03]],stage===3?'#210e18':'#4a3847','#9c6570');
       if(stage>=2){ctx.strokeStyle='#fb923c';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.34,-r*.46);ctx.lineTo(-r*.13,-r*.22);ctx.lineTo(-r*.25,r*.05);ctx.moveTo(r*.3,-r*.48);ctx.lineTo(r*.1,-r*.23);ctx.lineTo(r*.2,r*.1);ctx.stroke();}
-      ctx.fillStyle=stage===3?'#fde68a':'#f97316';ctx.beginPath();ctx.moveTo(0,-r*.38);ctx.lineTo(r*(stage===3?.19:.1),-r*.12);ctx.lineTo(0,r*.1);ctx.lineTo(-r*(stage===3?.19:.1),-r*.12);ctx.closePath();ctx.fill();
+      ctx.fillStyle=stage===3?'#fde68a':'#f97316';ctx.beginPath();ctx.moveTo(0,-r*.38);ctx.lineTo(r*(stage===3?.29:.1),-r*.12);ctx.lineTo(0,r*.1);ctx.lineTo(-r*(stage===3?.29:.1),-r*.12);ctx.closePath();ctx.fill();
       let swordRotation=cast?(heavy?-1.15:-.8):recovery?.5:.15;
       if(active){if(a?.key==='combo'){const second=a.elapsed>=(a.secondAt||36);swordRotation=(second?1:-1)*(1.3-Math.min(1,(a.elapsed-(second?a.secondAt:0))/14)*2.5);}else if(heavy)swordRotation=1.1;}
       limb(-.48,-.48,-.72,-.05,-.68,.25,r*.22,'#6c4a56');limb(.48,-.48,.76,cast?-.7:-.1,.95,cast?-.95:.15,r*.23,'#845b63');
       for(const side of [-1,1])polygon([[side*.4,-.74],[side*.75,-.77],[side*.9,-.47],[side*.51,-.37]],'#74616d','#b6938e');
-      if(!boss||!['execution','furnace'].includes(a?.key)){ctx.save();ctx.translate(r*.95,r*(cast?-.95:.15));ctx.rotate(swordRotation);polygon([[-.055,0],[-.14,-.97],[0,-1.3],[.14,-.97],[.055,0]],boss?'#d6b9a3':'#abb5c5','#fff0d1');ctx.strokeStyle=stage>=2?'#f97316':'#8d3946';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,-r*.2);ctx.lineTo(0,-r*1.1);ctx.stroke();ctx.fillStyle='#be975c';ctx.fillRect(-r*.25,0,r*.5,r*.08);ctx.fillStyle='#33202a';ctx.fillRect(-r*.05,r*.07,r*.1,r*.25);ctx.restore();}
+      if(!boss||!['execution','cleave','furnace'].includes(a?.key)){ctx.save();ctx.translate(r*.95,r*(cast?-.95:.15));ctx.rotate(swordRotation);polygon([[-.055,0],[-.14,-.97],[0,-1.3],[.14,-.97],[.055,0]],boss?'#d6b9a3':'#abb5c5','#fff0d1');ctx.strokeStyle=stage>=2?'#f97316':'#8d3946';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,-r*.2);ctx.lineTo(0,-r*1.1);ctx.stroke();ctx.fillStyle='#be975c';ctx.fillRect(-r*.25,0,r*.5,r*.08);ctx.fillStyle='#33202a';ctx.fillRect(-r*.05,r*.07,r*.1,r*.25);ctx.restore();}
       if(knight){polygon([[-.65,-.28],[-.23,-.18],[-.25,.44],[-.61,.66],[-.95,.34],[-.94,-.2]],'#333746','#a7a7b6');ctx.strokeStyle='#a16a83';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-r*.59,-r*.15);ctx.lineTo(-r*.59,r*.45);ctx.moveTo(-r*.83,r*.04);ctx.lineTo(-r*.36,r*.04);ctx.stroke();}
       ctx.fillStyle=knight?'#5b5a66':'#8d4445';ctx.beginPath();ctx.roundRect(-r*.27,-r*1.04,r*.54,r*.5,r*.12);ctx.fill();
       if(knight||boss)polygon([[-.3,-.98],[0,-1.17],[.3,-.98],[.19,-.65],[0,-.58],[-.19,-.65]],'#353343','#ae8792');
@@ -5728,7 +5828,7 @@
     const POTION_BUY_QTYS = [1, 3, 10, 64];
 
     // The journal observes existing combat events; it never supplies combat or reward values.
-    const GAME_VERSION='6.0.0', JOURNAL_RULESET='6.0.0';
+    const GAME_VERSION='6.1.0', JOURNAL_RULESET='6.1.0';
     const JOURNAL_WEAPONS=['sword','bow','staff'];
     const JOURNAL_GRADES=['일반','정예','생존','보스'];
     const JOURNAL_OUTCOMES={victory:'승리',defeat:'패배',escape:'중도 이탈'};
@@ -5931,9 +6031,9 @@
       demon:[
         ['execution','왕검을 낮춰 찌르고 지면을 끌어 올립니다.','칼끝이 고정한 방향 옆으로 빠진 뒤 회수 반대편으로 이동하세요.','검을 들어 올리고 자세를 되찾는 동안 반격하세요.'],
         ['descent','날개를 펴고 착지 지점을 고정합니다.','착지 경계 밖으로 이동하고 접혀 오는 양 날개의 발톱도 피하세요.','날개를 땅에서 뽑는 동안 접근해 공격하세요.'],
-        ['fissure','지면에 연속된 균열 위치를 고정합니다.','균열 진행 방향의 옆으로 벗어나 다음 폭발 위치도 확인하세요.','마지막 균열이 지나간 뒤 접근하세요.'],
+        ['wall','왕검의 자국에서 흑염 벽이 솟고 열린 아치로 접근합니다.','열린 아치 또는 안전한 쪽에서 다음 왕검의 방향을 읽으세요.','아치 진입과 왕검 회수가 끝나면 반격하세요.'],
         ['tempest','날개를 펼치고 틈이 있는 부채꼴 탄막을 준비합니다.','투사체 사이의 빈 통로로 이동하세요.','빈 통로에서 공격하고 발사 뒤의 후딜을 노리세요.'],
-        ['brand','여러 낙인 원을 미리 고정합니다.','첫 원만 피하지 말고 남은 원이 터지는 순서도 확인하세요.','마지막 낙인이 끝난 뒤 안전한 바닥에서 공격하세요.'],
+        ['breath','턱과 흉부에 열이 모인 뒤 업화가 방향을 쓸어갑니다.','박힌 검 뒤에서 엄폐하거나 보스의 측면으로 이동하세요.','열을 식히는 동안 접근해 공격하세요.'],
         ['furnace','흉갑과 사슬을 펼치고 세 흑철 덩어리를 순차 회수합니다.','사슬 경로를 피하고 몸 앞쪽으로 접근하세요. 뒤쪽으로 열이 분출됩니다.','과열되어 무릎을 꿇은 동안 노출된 흉부에 추가 피해를 주세요.']
       ]
     };
