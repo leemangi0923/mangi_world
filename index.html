@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v5.7.0</title>
+  <title>만기 월드 (Mangi World) - v5.7.1</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -299,6 +299,11 @@
     #game-stage.small-game #journal-back {display:block;} #game-stage.small-game #journal-tabs {gap:3px;} #game-stage.small-game #journal-tabs button {font-size:11px;min-height:34px;}
     #game-stage.small-game .journal-filters label {min-width:90px;} #game-stage.small-game #journal-result-button {font-size:11px;bottom:32px;}
     body[data-large-ui] #journal-screen :is(p,label,input,select,.journal-entry strong,.journal-entry span,#journal-tabs button) {font-size:calc(12px * var(--ui-scale));}
+    .objective-hud-heading {display:flex;align-items:center;justify-content:space-between;gap:10px;color:#fde047;font-weight:bold;}
+    #objective-hud-toggle {pointer-events:auto;cursor:pointer;min-height:28px;padding:3px 7px;font:inherit;border:1px solid #d1af50;border-radius:5px;background:#263449;color:#fde68a;flex-shrink:0;}
+    #quest-hud.objective-collapsed #objective-hud-body {display:none;}
+    #quest-hud.objective-collapsed {width:160px;max-width:100%;}
+    body[data-large-ui] #objective-hud-toggle {font-size:calc(11px * var(--ui-scale));}
   </style>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -345,6 +350,10 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
+        <h4>📌 v5.7.1 패치 노트</h4>
+        • 🚪 던전/탑 이탈 시 남던 적 공격·예고 정리<br>
+        • 📌 다음 목표 창 접기·펼치기와 표시 상태 기억<br>
+        • 👁️ 쉬움은 전체 공격 안내, 보통/어려움은 필수 범위만 표시<br><br>
         <h4>📌 v5.7.0 패치 노트</h4>
         • 📚 몬스터20종 발견·공략과 장비 수집 도감<br>
         • 🏆 보스별 시간·피해·물약·사용 무기·보상·신규 발견 기록<br>
@@ -704,7 +713,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v5.7.0</div>
+      <div id="version-badge">v5.7.1</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -743,9 +752,9 @@
       </div>
 
       <div class="quest-hud hidden" id="quest-hud">
-        <div style="font-weight:bold; color:#fde047; margin-bottom:2px;">📌 다음 목표</div>
-        <div id="quest-hud-text" style="white-space:pre-line;"></div>
-        <button class="btn" id="objective-open" style="pointer-events:auto; padding:4px 8px; font-size:11px; margin-top:5px;" onclick="openObjectiveScreen()">목표 선택</button>
+        <div class="objective-hud-heading"><span>📌 다음 목표</span><button id="objective-hud-toggle" type="button" aria-expanded="true" aria-controls="objective-hud-body" aria-label="다음 목표 접기" onclick="toggleObjectiveHUD()">접기</button></div>
+        <div id="objective-hud-body"><div id="quest-hud-text" style="white-space:pre-line;"></div>
+        <button class="btn" id="objective-open" style="pointer-events:auto; padding:4px 8px; font-size:11px; margin-top:5px;" onclick="openObjectiveScreen()">목표 선택</button></div>
       </div>
 
       <div class="quest-hud hidden" id="dungeon-hud">
@@ -768,7 +777,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v5.7.0 : 몬스터·장비 도감 · 개인 전투 기록 · 재도전 목표</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v5.7.1 : 이탈 공격 정리 · 목표창 접기 · 난이도별 공격 안내</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -793,7 +802,7 @@
       <div id="battle-summary" class="hidden" aria-label="현재 전투 상황" style="position:absolute;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:360px;padding:5px 8px;border:1px solid #64748b;border-radius:6px;background:rgba(10,15,26,.9);font-size:12px;text-align:center;pointer-events:none;z-index:22;"></div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v5.7.0</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v5.7.1</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
@@ -837,7 +846,7 @@
         <details><summary>장비 특성·보상 테스트</summary><p>테스트 보관함·선택 보상·장비는 관리자 저장에만 반영됩니다.</p><button class="btn" onclick="adminPrepareRewards()">첫 보상·보관함 테스트</button><label>특성 무기<select id="admin-trait-weapon"></select></label><button class="btn" onclick="adminPrepareTrait()">선택 특성 평타 테스트 준비</button><p id="admin-trait-inspection"></p></details>
         <details><summary>2차 배경·연출 미리보기</summary><div class="admin-grid"><label>던전<select id="visual-category" onchange="adminVisualPreview()"><option value="slime">슬라임</option><option value="wolf">늑대</option><option value="zombie">묘지</option><option value="ghost">폐허</option><option value="demon">마왕성</option></select></label><label>구역<select id="visual-grade" onchange="adminVisualPreview()"><option value="0">일반</option><option value="1">정예</option><option value="2">생존</option><option value="boss">보스 방</option></select></label></div><button class="btn" onclick="adminVisualPreview()">배경·몸체 미리보기</button><p id="visual-caption"></p><canvas id="visual-preview" width="400" height="450" style="max-width:100%;height:auto;cursor:default;"></canvas></details>
         <details><summary>도감·전투 기록 확인</summary><p>몬스터20종·장비·개인 기록·도전 목표의 읽기 전용 샘플입니다. 일반 진행과 기록은 바꾸지 않습니다.</p><button id="admin-journal-preview" class="btn" onclick="adminPreviewJournal()">도감·기록 미리보기</button><button class="btn" onclick="openJournal('records')">현재 격리 기록 확인</button></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v5.7.0: 몬스터20종·장비 도감, 개인 전투 기록과 재도전 목표를 추가했습니다. 실제 플레이 밸런스 조정은 이후에 진행합니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v5.7.1: 던전 이탈 공격 정리, 다음 목표 접기, 난이도별 공격 안내를 적용했습니다. 쉬움에서 전체 안내를, 보통·어려움에서 필수 범위만 표시합니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
 
       <section id="journal-screen" class="hidden" role="dialog" aria-modal="true" aria-labelledby="journal-title">
@@ -1151,18 +1160,18 @@
     function updateDifficultyUI(){
       for(const id of ['difficulty-setting','admin-difficulty'])document.getElementById(id).value=difficulty;
       const select=document.getElementById('difficulty-setting');select.disabled=isPlaying&&COMBAT_STATES.includes(gameState);
-      document.getElementById('difficulty-description').textContent=`현재 ${difficultyProfile().label} · 받는 피해 ×${difficultyProfile().incoming} · 적 체력 ×${difficultyProfile().hp} · 공격 예고 ×${difficultyProfile().warning}. 경험치·골드·드롭 확률은 난이도에 따라 달라지지 않습니다.`;
+      document.getElementById('difficulty-description').textContent=`현재 ${difficultyProfile().label} · 받는 피해 ×${difficultyProfile().incoming} · 적 체력 ×${difficultyProfile().hp} · 공격 예고 ×${difficultyProfile().warning}. ${difficulty==='easy'?'모든 공격의 범위·이름·남은 시간을 표시합니다.':'공격 이름·남은 시간은 숨기고, 장판·안전지대 등 필수 범위만 표시합니다.'} 경험치·골드·드롭 확률은 난이도에 따라 달라지지 않습니다.`;
     }
     function drawBattleReadability(){
       const summary=document.getElementById('battle-summary');
       const active=COMBAT_STATES.includes(gameState)&&gameState!=='training';summary.classList.toggle('hidden',!active);if(!active)return;
       ctx.save();ctx.textAlign='center';ctx.font='bold 13px sans-serif';
       const boss=enemies.find(en=>en.isBoss),warn=enemies.some(enemyIsWarning);
-      setTextIfChanged(summary,`${difficultyProfile().label} · ${boss&&ENCOUNTER_ATTACKS[boss.category]?(boss.name+' '+(boss.encounterStage||1)+'단계 · '+(boss.category==='demon'&&boss.encounterAttack?.key==='judgment'&&boss.encounterAttack.phase==='recovery'?'핵 노출 · ':'')):''}${boss?.category==='wolf'?'페릴 '+(boss.hp/boss.maxHp<=.5?'2':'1')+'단계 · ':''}${boss?.category==='slime'?'킹 '+(boss.hp/boss.maxHp<=.6?'2':'1')+'단계 · '+(boss.coreExposed?'핵 노출 · ':''):''}${boss?'보스 HP '+Math.ceil(Math.max(0,boss.hp)/boss.maxHp*100)+'%':'남은 적 '+enemies.length} · ${warn?'⚠ 시전 예고 — 범위를 확인하세요':'이동하며 공격 기회를 찾으세요'}`);
+      setTextIfChanged(summary,`${difficultyProfile().label} · ${boss&&ENCOUNTER_ATTACKS[boss.category]?(boss.name+' '+(boss.encounterStage||1)+'단계 · '+(boss.category==='demon'&&boss.encounterAttack?.key==='judgment'&&boss.encounterAttack.phase==='recovery'?'핵 노출 · ':'')):''}${boss?.category==='wolf'?'페릴 '+(boss.hp/boss.maxHp<=.5?'2':'1')+'단계 · ':''}${boss?.category==='slime'?'킹 '+(boss.hp/boss.maxHp<=.6?'2':'1')+'단계 · '+(boss.coreExposed?'핵 노출 · ':''):''}${boss?'보스 HP '+Math.ceil(Math.max(0,boss.hp)/boss.maxHp*100)+'%':'남은 적 '+enemies.length} · ${difficulty==='easy'&&warn?'⚠ 시전 예고 — 범위를 확인하세요':'적의 동작을 보고 공격 기회를 찾으세요'}`);
       summary.style.color=warn?'#fde68a':'#e2e8f0';
       // The compact summary sits over the arena; keep safety shapes unobstructed during danger.
       summary.dataset.danger=String(presentationThreat());
-      for(const en of enemies)if(enemyIsWarning(en)&&en.stateTimer>0){ctx.fillStyle='#fde68a';ctx.fillText('! '+(en.stateTimer/60).toFixed(1)+'초',en.x,en.y-(en.r||24)-25);}
+      for(const en of enemies)if(enemyWarningDetails(en)&&enemyIsWarning(en)&&en.stateTimer>0){ctx.fillStyle='#fde68a';ctx.fillText('! '+(en.stateTimer/60).toFixed(1)+'초',en.x,en.y-(en.r||24)-25);}
       ctx.restore();
     }
     window.adminChangeDifficulty=function(){if(!adminOnly())return;const value=document.getElementById('admin-difficulty').value;if(!Object.hasOwn(DIFFICULTIES,value))return;adminResetBattle();setDifficulty(value);adminMessage('테스트 난이도를 변경하고 전투를 초기화했습니다. 일반 진행의 난이도는 복귀 시 복구됩니다.');};
@@ -1392,7 +1401,7 @@
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v5.7.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
+      document.getElementById('admin-metrics').textContent=`v5.7.1 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
       const traitSelect=document.getElementById('admin-trait-weapon');if(!traitSelect.options.length)for(const [id,def] of Object.entries(WEAPON_TRAITS)){const opt=document.createElement('option');opt.value=id;opt.textContent=findItemById(id).name+' · '+def.name;traitSelect.appendChild(opt);}
       document.getElementById('admin-trait-inspection').textContent='특성 발동 '+weaponTraitState.procs+'회 · 충전 '+weaponTraitState.count+' · 예약 '+weaponTraitState.pending.length+' · 보관 '+rewardArchive.inbox.reduce((n,e)=>n+e.count,0)+'개';
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
@@ -2700,7 +2709,20 @@
       const hurt=combatVisuals.findLast(f=>f.kind==='hit'&&f.target===en);
       if(hurt&&accessibility.effects>0){ctx.globalAlpha=hurt.left/hurt.max*accessibility.effects;ctx.strokeStyle='#f8e7c4';ctx.lineWidth=2;ctx.beginPath();ctx.arc(en.x,en.y,r*.85,-2.5,-.5);ctx.stroke();}ctx.restore();
     }
+    function liveEnemyWarning(en){
+      return COMBAT_STATES.includes(gameState)&&enemies.includes(en)&&en.hp>0&&!en.ghostIllusion;
+    }
+    function enemyWarningDetails(en){return difficulty==='easy'&&liveEnemyWarning(en);}
+    function enemyWarningRange(en,attack){
+      if(!liveEnemyWarning(en)||!attack)return false;
+      if(difficulty==='easy')return true;
+      // Ground hazards, off-body landings and arena safety mechanics must remain readable.
+      if(en.category==='slime')return attack.key==='acid'||(en.isBoss&&attack.key==='leap');
+      if(en.category==='wolf')return en.isBoss&&attack.key==='leap';
+      return ({zombie:['drain','ritual'],ghost:['hands','corridor'],demon:['fissure','brand','judgment']})[en.category]?.includes(attack.key)||false;
+    }
     function drawCombatWarnings(){
+      if(!COMBAT_STATES.includes(gameState))return;
       for(const en of enemies){if(en.hp<=0)continue;if(en.slimeAttack)drawSlimeAttackGuide(en);if(en.wolfAttack)drawWolfGuide(en);if(en.encounterAttack)drawEncounterGuide(en);}
       for(const [zones,color] of [[minjeZones,'#fde68a'],[elfZones,'#a7f3d0'],[archmageZones,'#c4b5fd']])if(zones.length)drawZoneArray(zones,color,'rgba(160,174,200,.08)');
       // Puddles persist independently of their caster. Draw their boundaries above particles.
@@ -2881,7 +2903,7 @@
       if (player.frozenTimer > 0) states.push(`빙결 ${(player.frozenTimer/60).toFixed(1)}초`);
       if (player.knockbackTimer > 0) states.push(`밀려남 ${(player.knockbackTimer/60).toFixed(1)}초`);
       const drain = enemies.find(en=>en.encounterAttack?.key==='drain'&&en.encounterAttack.phase==='active'&&encounterContains(encounterShape(en,en.encounterAttack),player.x,player.y));
-      if (drain) states.push(`생명력 흡수 위험 ${(Math.max(0,drain.encounterAttack.left)/60).toFixed(1)}초 · 범위를 벗어나세요`);
+      if (drain) states.push(difficulty==='easy'?`생명력 흡수 위험 ${(Math.max(0,drain.encounterAttack.left)/60).toFixed(1)}초 · 범위를 벗어나세요`:'위험 지역을 벗어나세요');
       const hit = damageLog.at(-1);
       if (hit && frameCount-hit.tick < 180) states.push(`${hit.source} · -${hit.amount.toFixed(1)} HP`);
       if (!states.length) return;
@@ -2904,6 +2926,13 @@
       if (damageLog.length > 8) damageLog.shift();
       updateHUD();
       return true;
+    }
+    function clearDungeonEnemyRuntime(){
+      for(const en of enemies){en.slimeAttack=null;en.wolfAttack=null;en.encounterAttack=null;}
+      enemies=[];projectiles=[];pendingSpawns=[];floatingTexts=[];
+      slimeZones=[];slimeImpacts=[];slimeZoneTickFrame=-1;wolfEffects=[];minjeZones=[];elfZones=[];archmageZones=[];
+      clearEncounterRuntime();clearWeaponTraits();clearCombatPresentation();respawnTimer=0;periodicSpawnTimer=0;
+      document.getElementById('boss-hud').classList.add('hidden');document.getElementById('battle-summary').classList.add('hidden');
     }
     function clearBattleRuntime() {
       finishJournalRun('escape','transition');
@@ -3207,19 +3236,21 @@
 
     function exitTower() {
       finishJournalRun('escape','exit');
-      slimeZones=[];slimeImpacts=[];slimeZoneTickFrame=-1;wolfEffects=[];clearEncounterRuntime();clearWeaponTraits();clearCombatPresentation();
+      clearDungeonEnemyRuntime();
       const prev = returnStack.pop();
       projectiles = []; portalCooldown = 60;
       // towerFloor는 초기화하지 않는다 — 실수로 나간 경우에도 다음 입장 때 이어서 할 수 있게 유지.
       // (사망으로 인한 초기화는 respawnPlayerAtInn에서 별도로 처리)
       gameState = prev ? prev.state : 'portal_room';
       player.x = prev ? prev.x : 150; player.y = prev ? prev.y : 220;
+      if(gameState!=='dungeon')currentDungeon={category:null,stage:0,isBoss:false};
+      updateQuestHUD();
     }
 
     // 던전 내부 하단 출구 포탈 전용: 이전 단계(또는 이전 지역)로 정확히 복귀
     function exitDungeonPortal(fallbackState, fx, fy) {
       finishJournalRun('escape','exit');
-      slimeZones=[];slimeImpacts=[];slimeZoneTickFrame=-1;wolfEffects=[];clearEncounterRuntime();clearWeaponTraits();clearCombatPresentation();
+      clearDungeonEnemyRuntime();
       const prev = returnStack.pop();
       projectiles = []; portalCooldown = 60;
       if (prev && prev.dungeon) {
@@ -3238,6 +3269,8 @@
       } else {
         gameState = fallbackState; player.x = fx; player.y = fy;
       }
+      if(gameState!=='dungeon')currentDungeon={category:null,stage:0,isBoss:false};
+      updateQuestHUD();
     }
 
     function checkDungeonTierUnlock() {
@@ -3715,6 +3748,7 @@
     }
 
     function drawZoneArray(zones, ringColor, fillColor) {
+      if(!COMBAT_STATES.includes(gameState))return;
       zones.forEach(z => {
         const prog = 1 - z.timer / z.totalTimer;
         ctx.save();
@@ -3737,6 +3771,7 @@
 
     // 보스별 부가 이펙트(존/분신)를 한 곳에서 그리기 위한 디스패처 — 던전/무한의 탑 보스룸 양쪽에서 공통 호출
     function drawBossExtras(en, t) {
+      if(!liveEnemyWarning(en))return;
       if (en.category === 'slime') drawSlimeGround();
       else if (en.category === 'ghost') {
         ghostDecoys.forEach(d=>drawGhostMob(d,t));
@@ -3834,23 +3869,24 @@
       }else if(a.phase==='recovery'&&--a.left<=0){en.slimeAttack=null;en.coreExposed=false;en.state='idle';en.slimeIdle=en.isBoss?42:55;}
     }
     function drawSlimeAttackGuide(en){
-      const a=en.slimeAttack;if(!a)return;const def=SLIME_ATTACKS[a.key];
+      const a=en.slimeAttack;if(!a||!liveEnemyWarning(en))return;const def=SLIME_ATTACKS[a.key],showRange=enemyWarningRange(en,a),details=enemyWarningDetails(en);
       ctx.save();ctx.lineWidth=2;ctx.strokeStyle=a.phase==='windup'?'#fde68a':'#fb923c';ctx.fillStyle='rgba(251,191,36,.13)';
-      if(a.phase==='windup'||(a.phase==='active'&&(a.key==='leap'||(slimeDebugHitboxes&&adminMode.active)))){
+      if(showRange&&(a.phase==='windup'||(a.phase==='active'&&(a.key==='leap'||(slimeDebugHitboxes&&adminMode.active))))){
         ctx.beginPath();if(def.shape==='circle')ctx.arc(a.x,a.y,a.radius+16,0,Math.PI*2);
         else if(def.shape==='cone'){ctx.moveTo(en.x,en.y);ctx.arc(en.x,en.y,a.radius+16,a.angle-Math.PI*.45,a.angle+Math.PI*.45);ctx.closePath();}
         else if(def.shape==='line'){const radius=en.r+16;ctx.save();ctx.translate(a.fromX,a.fromY);ctx.rotate(a.angle);ctx.roundRect(-radius,-radius,86.4+2*radius,2*radius,radius);ctx.restore();}
         else ctx.arc(en.x,en.y,en.r+12,0,Math.PI*2);ctx.fill();ctx.stroke();
-        ctx.fillStyle='#fef3c7';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText(`${def.name} · ${(a.left/60).toFixed(1)}초`,en.x,en.y-en.r-20);
+        ctx.fillStyle='#fef3c7';ctx.font='bold 13px sans-serif';ctx.textAlign='center';if(details)ctx.fillText(`${def.name} · ${(a.left/60).toFixed(1)}초`,en.x,en.y-en.r-20);
       }
-      if(a.phase==='active'&&a.key==='sweep'){ctx.globalAlpha=a.left/a.duration;ctx.fillStyle='rgba(134,239,172,.3)';ctx.strokeStyle='#bef264';ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.arc(en.x,en.y,a.radius,a.angle-Math.PI*.45,a.angle+Math.PI*.45);ctx.closePath();ctx.fill();ctx.stroke();}
+      if(showRange&&a.phase==='active'&&a.key==='sweep'){ctx.globalAlpha=a.left/a.duration;ctx.fillStyle='rgba(134,239,172,.3)';ctx.strokeStyle='#bef264';ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.arc(en.x,en.y,a.radius,a.angle-Math.PI*.45,a.angle+Math.PI*.45);ctx.closePath();ctx.fill();ctx.stroke();}
       ctx.restore();
     }
     function drawSlimeGround(){
+      if(!COMBAT_STATES.includes(gameState))return;
       drawZoneArray(slimeZones.filter(z=>!z.slimeAcid),'#dc2626','rgba(74,222,74,.18)');
       ctx.save();for(const z of slimeZones.filter(z=>z.slimeAcid)){
         ctx.fillStyle=z.timer>0?'rgba(190,242,100,.13)':'rgba(101,163,13,.5)';ctx.strokeStyle=z.timer>0?'#fde68a':'#bef264';ctx.lineWidth=2;
-        ctx.beginPath();ctx.arc(z.x,z.y,z.r+16,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#fef9c3';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText(z.timer>0?(z.timer/60).toFixed(1)+'초':'산성',z.x,z.y);if(z.timer>0&&z.timer<18){ctx.fillStyle='#a3e635';ctx.beginPath();ctx.ellipse(z.x,z.y-z.timer*9,5,12,0,0,Math.PI*2);ctx.fill();}else if(z.timer<=0){ctx.strokeStyle='#d9f99d';for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(z.x+Math.sin(i*2+z.activeLeft*.03)*z.r*.5,z.y+Math.cos(i*3)*z.r*.3,3,0,Math.PI*2);ctx.stroke();}}
+        ctx.beginPath();ctx.arc(z.x,z.y,z.r+16,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#fef9c3';ctx.font='12px sans-serif';ctx.textAlign='center';if(difficulty==='easy')ctx.fillText(z.timer>0?(z.timer/60).toFixed(1)+'초':'산성',z.x,z.y);if(z.timer>0&&z.timer<18){ctx.fillStyle='#a3e635';ctx.beginPath();ctx.ellipse(z.x,z.y-z.timer*9,5,12,0,0,Math.PI*2);ctx.fill();}else if(z.timer<=0){ctx.strokeStyle='#d9f99d';for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(z.x+Math.sin(i*2+z.activeLeft*.03)*z.r*.5,z.y+Math.cos(i*3)*z.r*.3,3,0,Math.PI*2);ctx.stroke();}}
       }
       for(const f of slimeImpacts){const p=1-f.life/f.max;ctx.globalAlpha=(1-p)*accessibility.effects;if(f.kind==='death'){ctx.fillStyle=f.color;ctx.beginPath();ctx.ellipse(f.x,f.y+12,f.r*(1+p*.4),Math.max(1,f.r*.6*(1-p)),0,0,Math.PI*2);ctx.fill();if(f.heavy){ctx.save();ctx.translate(f.x+28*p,f.y-f.r+f.r*p);ctx.rotate(p*2);ctx.fillStyle='#eab308';ctx.fillRect(-15,-5,30,9);ctx.restore();}}ctx.strokeStyle=f.kind==='death'?'#d8b4fe':'#bef264';ctx.lineWidth=4*(1-p)+1;ctx.beginPath();ctx.ellipse(f.x,f.y,f.r*(.4+p),Math.max(1,f.r*.38*(.4+p)),0,0,Math.PI*2);ctx.stroke();for(let i=0;i<8;i++){const ang=i*Math.PI/4;ctx.fillStyle='#bbf7d0';ctx.beginPath();ctx.arc(f.x+Math.cos(ang)*f.r*p,f.y+Math.sin(ang)*f.r*.5*p-25*Math.sin(p*Math.PI),Math.max(1,5*(1-p)),0,Math.PI*2);ctx.fill();}}
       ctx.restore();
@@ -3935,21 +3971,22 @@
       }else if(a.phase==='recovery'&&--a.left<=0){if(en.isBoss&&en.hp/en.maxHp<=.5&&a.key==='rush')en.wolfFollow='leap';en.wolfAttack=null;en.state='idle';en.wolfIdle=en.wolfFollow?20:en.isBoss?36:65;}
     }
     function drawWolfGuide(en){
-      const a=en.wolfAttack;if(!a)return;const def=WOLF_ATTACKS[a.key],active=a.phase==='active';
+      const a=en.wolfAttack;if(!a||!liveEnemyWarning(en))return;const def=WOLF_ATTACKS[a.key],active=a.phase==='active',showRange=enemyWarningRange(en,a),details=enemyWarningDetails(en);
       ctx.save();ctx.lineWidth=2;ctx.strokeStyle='#fde68a';ctx.fillStyle='rgba(251,191,36,.12)';
       const second=active&&a.key==='claw'&&a.left>12;
-      if(a.phase==='windup'||(active&&(a.key==='leap'||second||(wolfDebugHitboxes&&adminMode.active)))){
+      if(showRange&&(a.phase==='windup'||(active&&(a.key==='leap'||second||(wolfDebugHitboxes&&adminMode.active))))){
         ctx.beginPath();
         if(a.key==='rush'){const r=en.r*.65+16;ctx.save();ctx.translate(a.fromX,a.fromY);ctx.rotate(a.angle);ctx.roundRect(-r,-r,Math.hypot(a.x-a.fromX,a.y-a.fromY)+2*r,r*2,r);ctx.restore();}
         else if(a.key==='leap')ctx.arc(a.x,a.y,def.radius*a.scale+16,0,Math.PI*2);
         else if(a.key==='howl'){for(const point of en.isBoss?a.spawnPoints:[{x:en.x,y:en.y}]){ctx.moveTo(point.x+25,point.y);ctx.arc(point.x,point.y,25,0,Math.PI*2);}}
         else {ctx.moveTo(en.x,en.y);ctx.arc(en.x,en.y,(def.radius+(second?24:0))*a.scale+16,a.angle-Math.PI*(second?.5:.4),a.angle+Math.PI*(second?.5:.4));ctx.closePath();}
-        ctx.fill();ctx.stroke();ctx.fillStyle='#fff1b8';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText((a.key==='howl'&&!en.isBoss?'무리 포효':def.name)+(second?' · 후속 타격 준비':'')+' · '+(a.left/60).toFixed(1)+'초',en.x,en.y-en.r-30);
+        ctx.fill();ctx.stroke();ctx.fillStyle='#fff1b8';ctx.font='bold 13px sans-serif';ctx.textAlign='center';if(details)ctx.fillText((a.key==='howl'&&!en.isBoss?'무리 포효':def.name)+(second?' · 후속 타격 준비':'')+' · '+(a.left/60).toFixed(1)+'초',en.x,en.y-en.r-30);
       }
-      if(active&&a.flash>0){const secondStrike=a.strikeIndex===1,rad=(def.radius+(secondStrike?24:0))*a.scale;ctx.globalAlpha=a.flash/7;ctx.strokeStyle='#e0f2fe';ctx.lineWidth=5;for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(en.x,en.y,Math.max(5,rad-i*9),a.angle-(secondStrike?.5:.4)*Math.PI,a.angle+(secondStrike?.5:.4)*Math.PI);ctx.stroke();}}
+      if(showRange&&active&&a.flash>0){const secondStrike=a.strikeIndex===1,rad=(def.radius+(secondStrike?24:0))*a.scale;ctx.globalAlpha=a.flash/7;ctx.strokeStyle='#e0f2fe';ctx.lineWidth=5;for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(en.x,en.y,Math.max(5,rad-i*9),a.angle-(secondStrike?.5:.4)*Math.PI,a.angle+(secondStrike?.5:.4)*Math.PI);ctx.stroke();}}
       ctx.restore();
     }
     function drawWolfEffects(){
+      if(!COMBAT_STATES.includes(gameState))return;
       ctx.save();for(const f of wolfEffects){const p=1-f.life/f.max;ctx.globalAlpha=(1-p)*accessibility.effects;
         if(f.kind==='howl'||f.kind==='land'){ctx.strokeStyle=f.kind==='howl'?'#bae6fd':'#c8ad86';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(f.x,f.y,f.r*(.5+p*2),Math.max(1,f.r*.4*(.5+p*2)),0,0,Math.PI*2);ctx.stroke();}
         else if(f.kind==='death'){ctx.fillStyle=f.color;ctx.beginPath();ctx.ellipse(f.x,f.y+f.r*.4,f.r*(1+p*.25),Math.max(1,f.r*.35*(1-p)),0,0,Math.PI*2);ctx.fill();}
@@ -4161,32 +4198,33 @@
       }else ctx.arc(s.x,s.y,(s.radius||25)+16,0,Math.PI*2);
     }
     function drawEncounterGuide(en){
-      const a=en.encounterAttack;if(!a)return;const def=ENCOUNTER_ATTACKS[en.category][a.key];
+      const a=en.encounterAttack;if(!a||!liveEnemyWarning(en))return;const def=ENCOUNTER_ATTACKS[en.category][a.key],showRange=enemyWarningRange(en,a),details=enemyWarningDetails(en);
       ctx.save();ctx.strokeStyle=a.phase==='windup'?'#fde68a':'#fb7185';ctx.fillStyle='rgba(251,191,36,.12)';ctx.lineWidth=2;
-      if(a.phase==='windup'||a.phase==='active'){
+      if(showRange&&(a.phase==='windup'||a.phase==='active')){
         const shape=encounterShape(en,a);
         if(!['summon','guard','blink','fan','sequence','combo'].includes(def.shape)){traceEncounterShape(shape);ctx.fill('evenodd');ctx.stroke();}
         if(def.shape==='fan')for(const offset of (en.category==='demon'?(a.key==='tempest'?[-.9,-.6,-.3,0,.3,.6,.9]:[-.35,0,.35]):en.isBoss?[-.56,-.28,0,.28,.56]:[-.4,0,.4])){ctx.beginPath();ctx.moveTo(a.fromX,a.fromY);ctx.lineTo(a.fromX+Math.cos(a.angle+offset)*600,a.fromY+Math.sin(a.angle+offset)*600);ctx.stroke();}
         if(def.shape==='blink'){ctx.setLineDash([6,5]);ctx.beginPath();ctx.arc(a.x,a.y,en.r+18,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(en.x,en.y);ctx.lineTo(a.x,a.y);ctx.stroke();}
         if(def.shape==='combo'){
           const second=a.phase==='active'&&a.elapsed>0;traceEncounterShape({...a,shape:'cone',radius:a.radius+(second?28:0),arc:second?1.3:1});ctx.fill();ctx.stroke();
-          ctx.fillStyle='#fef3c7';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText(second?(a.elapsed<=a.secondAt?'2차 베기 예고':'검 회수'):'1차 → 2차 베기',en.x,en.y+en.r+48);
+          ctx.fillStyle='#fef3c7';ctx.font='bold 13px sans-serif';ctx.textAlign='center';if(details)ctx.fillText(second?(a.elapsed<=a.secondAt?'2차 베기 예고':'검 회수'):'1차 → 2차 베기',en.x,en.y+en.r+48);
         }
         if(def.shape==='sequence')for(let i=0;i<a.points.length;i++){
-          const gap=a.key==='fissure'?18:24;if(a.phase==='active'&&a.elapsed>i*gap)continue;const point=a.points[i];traceEncounterShape({shape:'circle',...point,radius:a.radius});ctx.fill();ctx.stroke();ctx.fillStyle='#fef3c7';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText(String(i+1),point.x,point.y);
+          const gap=a.key==='fissure'?18:24;if(a.phase==='active'&&a.elapsed>i*gap)continue;const point=a.points[i];traceEncounterShape({shape:'circle',...point,radius:a.radius});ctx.fill();ctx.stroke();ctx.fillStyle='#fef3c7';ctx.font='bold 13px sans-serif';ctx.textAlign='center';if(details)ctx.fillText(String(i+1),point.x,point.y);
         }
-        if(def.shape==='corridor'){ctx.strokeStyle='#6ee7b7';const vertical=Math.abs(Math.sin(a.angle))>.5;ctx.beginPath();if(vertical){ctx.moveTo(a.safeX,130);ctx.lineTo(a.safeX,815);}else{ctx.moveTo(50,a.safeY);ctx.lineTo(750,a.safeY);}ctx.stroke();ctx.fillStyle='#a7f3d0';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('안전 통로 · 초록 선으로',a.safeX,a.safeY);}
+        if(def.shape==='corridor'){ctx.strokeStyle='#6ee7b7';const vertical=Math.abs(Math.sin(a.angle))>.5;ctx.beginPath();if(vertical){ctx.moveTo(a.safeX,130);ctx.lineTo(a.safeX,815);}else{ctx.moveTo(50,a.safeY);ctx.lineTo(750,a.safeY);}ctx.stroke();ctx.fillStyle='#a7f3d0';ctx.font='bold 13px sans-serif';ctx.textAlign='center';if(details)ctx.fillText('안전 통로 · 초록 선으로',a.safeX,a.safeY);}
         if(a.key==='scythe'&&en.isBoss){traceEncounterShape({...a,shape:'beam',length:en.r+18+3.2*180,width:12});ctx.stroke();}
-        if(def.shape==='summon')for(const p of a.spawnPoints){ctx.beginPath();ctx.arc(p.x,p.y,30,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#fef3c7';ctx.fillText('소환',p.x-12,p.y+4);}
-        if(def.shape==='safe'){ctx.strokeStyle='#6ee7b7';ctx.beginPath();ctx.arc(a.safeX,a.safeY,a.safeR-16,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#a7f3d0';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText(a.key==='judgment'?'안전 · 또는 심판 핵 파괴':'안전 · 또는 봉인석 파괴',a.safeX,a.safeY+a.safeR+16);}
+        if(def.shape==='summon')for(const p of a.spawnPoints){ctx.beginPath();ctx.arc(p.x,p.y,30,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#fef3c7';if(details)ctx.fillText('소환',p.x-12,p.y+4);}
+        if(def.shape==='safe'){ctx.strokeStyle='#6ee7b7';ctx.beginPath();ctx.arc(a.safeX,a.safeY,a.safeR-16,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#a7f3d0';ctx.font='bold 13px sans-serif';ctx.textAlign='center';if(details)ctx.fillText(a.key==='judgment'?'안전 · 또는 심판 핵 파괴':'안전 · 또는 봉인석 파괴',a.safeX,a.safeY+a.safeR+16);}
         if(def.shape==='guard'){ctx.strokeStyle='#93c5fd';ctx.beginPath();ctx.arc(en.x,en.y,en.r+16,0,Math.PI*2);ctx.stroke();}
       }
       ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillStyle=a.phase==='recovery'?'#a7f3d0':'#fef3c7';
-      ctx.fillText(`${a.interrupted?'시전 중단':def.name} · ${{windup:'준비',active:'공격',recovery:'빈틈'}[a.phase]} ${(a.left/60).toFixed(1)}초`,en.x,en.y+en.r+32);
-      if(encounterDebugHitboxes&&adminMode.active&&a.phase==='active'&&!['summon','guard','blink','fan','sequence','combo'].includes(def.shape)){ctx.strokeStyle='#f472b6';traceEncounterShape(encounterShape(en,a));ctx.stroke();}
+      if(details)ctx.fillText(`${a.interrupted?'시전 중단':def.name} · ${{windup:'준비',active:'공격',recovery:'빈틈'}[a.phase]} ${(a.left/60).toFixed(1)}초`,en.x,en.y+en.r+32);
+      if(showRange&&encounterDebugHitboxes&&adminMode.active&&a.phase==='active'&&!['summon','guard','blink','fan','sequence','combo'].includes(def.shape)){ctx.strokeStyle='#f472b6';traceEncounterShape(encounterShape(en,a));ctx.stroke();}
       ctx.restore();
     }
     function drawEncounterRuntime(){
+      if(!COMBAT_STATES.includes(gameState))return;
       ctx.save();for(const shot of encounterShots){ctx.fillStyle=shot.color;ctx.strokeStyle='#f5f3ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(shot.x,shot.y,shot.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(shot.x,shot.y);ctx.lineTo(shot.x-shot.vx*5,shot.y-shot.vy*5);ctx.stroke();}ctx.restore();
       ctx.save();for(const f of encounterEffects){if(accessibility.effects===0)continue;const p=1-f.left/f.max;ctx.globalAlpha=(1-p)*accessibility.effects;ctx.strokeStyle=f.color;ctx.fillStyle=f.color;ctx.lineWidth=3;
         if(f.kind==='death'){if(f.snapshot){ctx.save();ctx.translate(f.x,f.y+25*p*p);ctx.rotate(p*(f.isBoss?.4:1.1));ctx.scale(1+p*.1,Math.max(.1,1-p*.65));({zombie:drawZombieMob,ghost:drawGhostMob,demon:drawDemonMob})[f.category](f.snapshot,frameCount/60);ctx.restore();ctx.globalAlpha=(1-p)*accessibility.effects;}for(let i=0;i<9;i++){const angle=i*Math.PI*2/9;ctx.save();ctx.translate(f.x+Math.cos(angle)*f.r*p,f.y+Math.sin(angle)*f.r*p+40*p*p);ctx.rotate(angle+p*4);ctx.fillRect(-4,-3,8*(1-p),6);ctx.restore();}}
@@ -4557,13 +4595,13 @@
       ctx.beginPath(); ctx.ellipse(en.x, en.y + 32, 26, 9, 0, 0, Math.PI*2); ctx.fill();
 
       // 예열/공격 이펙트
-      if (en.state === 'spin_wind' || en.state === 'spin_hit') {
+      if ((enemyWarningDetails(en)&&en.state === 'spin_wind') || en.state === 'spin_hit') {
         const prog = en.state === 'spin_wind' ? Math.max(0,Math.min(1,1-en.stateTimer/34)) : 1;
         ctx.strokeStyle = `rgba(239,68,68,${en.state==='spin_hit' ? 0.7 : 0.3 + prog*0.4})`;
         ctx.lineWidth = en.state === 'spin_hit' ? 6 : 2;
         ctx.beginPath(); ctx.arc(en.x, en.y, 110 * (en.state==='spin_hit' ? 1 : prog), 0, Math.PI*2); ctx.stroke();
       }
-      if (en.state === 'iai_wind') {
+      if (enemyWarningDetails(en)&&en.state === 'iai_wind') {
         const prog = Math.max(0,Math.min(1,1-en.stateTimer/50));
         ctx.save();
         ctx.globalAlpha = prog;
@@ -4772,6 +4810,7 @@
     }
 
     function drawElfZones(t) {
+      if(!COMBAT_STATES.includes(gameState))return;
       elfZones.forEach(z => {
         const prog = Math.max(0,Math.min(1,1-z.timer/(z.totalTimer||36)));
         ctx.save();
@@ -4788,7 +4827,7 @@
       ctx.fillStyle = 'rgba(0,0,0,0.3)';
       ctx.beginPath(); ctx.ellipse(en.x, en.y + 30, 24, 8, 0, 0, Math.PI*2); ctx.fill();
 
-      if (en.state === 'snipe_aim') {
+      if (enemyWarningDetails(en)&&en.state === 'snipe_aim') {
         ctx.save();
         ctx.globalAlpha = Math.max(0,Math.min(1,1-en.stateTimer/45));
         ctx.strokeStyle = '#fde047'; ctx.lineWidth = 2; ctx.setLineDash([6,5]);
@@ -4981,6 +5020,7 @@
     }
 
     function drawArchmageZones(t) {
+      if(!COMBAT_STATES.includes(gameState))return;
       archmageZones.forEach(z => {
         const isMeteor = z.type === 'meteor';
         const prog = Math.max(0,Math.min(1,1-z.timer/(z.totalTimer || (isMeteor ? 52 : 18))));
@@ -5094,10 +5134,10 @@
         ctx.fillStyle = '#fde047'; ctx.font = 'bold 13px Noto Sans KR'; ctx.textAlign = 'center';
         ctx.strokeStyle='#101927';ctx.lineWidth=3;const nameX=Math.max(95,Math.min(705,en.x)),nameY=Math.max(101,en.y-labelTop-26);ctx.strokeText(`👑 ${en.name} Lv.${en.level}`,nameX,nameY,210);ctx.fillText(`👑 ${en.name} Lv.${en.level}`,nameX,nameY,210);
         ctx.textAlign = 'left';
-        if (en.state === 'telegraph') {
+        if (enemyWarningDetails(en)&&en.state === 'telegraph') {
           ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 3;
           ctx.beginPath(); ctx.arc(en.x, en.y, en.r*1.3 + Math.sin(t*20)*4, 0, Math.PI*2); ctx.stroke();
-        } else if (en.state === 'split_summon' || en.state === 'skeleton_summon' || en.state === 'phantom_clones') {
+        } else if (enemyWarningDetails(en)&&(en.state === 'split_summon' || en.state === 'skeleton_summon' || en.state === 'phantom_clones')) {
           ctx.strokeStyle = 'rgba(74,222,128,0.7)'; ctx.lineWidth = 3;
           ctx.beginPath(); ctx.arc(en.x, en.y, en.r*1.2 + Math.sin(t*12)*6, 0, Math.PI*2); ctx.stroke();
         } else if (en.state === 'mark_leap_wait') {
@@ -5115,13 +5155,13 @@
           ctx.moveTo(en.x, en.y);
           ctx.lineTo(en.x + Math.cos(en.drainAngle)*280, en.y + Math.sin(en.drainAngle)*280);
           ctx.stroke();
-        } else if (en.state === 'd8_wind') {
+        } else if (enemyWarningDetails(en)&&en.state === 'd8_wind') {
           ctx.strokeStyle = 'rgba(168,85,247,0.6)'; ctx.lineWidth = 3;
           ctx.beginPath(); ctx.arc(en.x, en.y, en.r*1.2, 0, Math.PI*2); ctx.stroke();
         } else if (en.state === 'd4_dash') {
           ctx.strokeStyle = 'rgba(239,68,68,0.5)'; ctx.lineWidth = 4;
           ctx.beginPath(); ctx.arc(en.x, en.y, en.r*1.15, 0, Math.PI*2); ctx.stroke();
-        } else if (en.state === 'd9_telegraph') {
+        } else if (enemyWarningDetails(en)&&en.state === 'd9_telegraph') {
           ctx.save();
           ctx.strokeStyle = 'rgba(239,68,68,0.8)'; ctx.lineWidth = 4;
           ctx.setLineDash([12, 10]);
@@ -5587,7 +5627,7 @@
     const POTION_BUY_QTYS = [1, 3, 10, 64];
 
     // The journal observes existing combat events; it never supplies combat or reward values.
-    const GAME_VERSION='5.7.0', JOURNAL_RULESET='5.7.0';
+    const GAME_VERSION='5.7.1', JOURNAL_RULESET='5.7.0';
     const JOURNAL_WEAPONS=['sword','bow','staff'];
     const JOURNAL_GRADES=['일반','정예','생존','보스'];
     const JOURNAL_OUTCOMES={victory:'승리',defeat:'패배',escape:'중도 이탈'};
@@ -6298,6 +6338,15 @@
       return {text:'이동 조건을 확인하고 현재 전투나 메뉴를 마치세요.',point:null};
     }
     function setTextIfChanged(element,text) { if(element.textContent!==text)element.textContent=text; }
+    let objectiveHudCollapsed=(()=>{try{return localStorage.getItem('mangiworld_objective_collapsed')==='1';}catch{return false;}})();
+    function updateObjectiveHUDCollapse(){
+      const hud=document.getElementById('quest-hud'),toggle=document.getElementById('objective-hud-toggle');
+      hud.classList.toggle('objective-collapsed',objectiveHudCollapsed);toggle.setAttribute('aria-expanded',String(!objectiveHudCollapsed));toggle.setAttribute('aria-label','다음 목표 '+(objectiveHudCollapsed?'펼치기':'접기'));setTextIfChanged(toggle,objectiveHudCollapsed?'펼치기':'접기');
+    }
+    window.toggleObjectiveHUD=function(){
+      objectiveHudCollapsed=!objectiveHudCollapsed;updateObjectiveHUDCollapse();
+      try{localStorage.setItem('mangiworld_objective_collapsed',objectiveHudCollapsed?'1':'0');}catch{}
+    };
     function refreshObjectiveUI(force=false) {
       if(!force&&objectiveRefreshMap===gameState&&frameCount-objectiveRefreshFrame<12)return;
       objectiveRefreshFrame=frameCount;objectiveRefreshMap=gameState;
@@ -6306,7 +6355,7 @@
       const goal=currentObjective(goals),nav=objectiveNavigation(goal);
       objectiveGuide={map:gameState,...nav};
       const text=goal?`${trackedObjective?'추적':'자동 안내'} · [${goal.type}] ${goal.title}\n${goal.progress}\n${goal.detail}\n📍 ${nav.text}`:'목표를 선택하세요.';
-      setTextIfChanged(document.getElementById('quest-hud-text'),text);
+      setTextIfChanged(document.getElementById('quest-hud-text'),text);updateObjectiveHUDCollapse();
       document.getElementById('quest-hud').classList.remove('hidden');
       const current=gameState==='dungeon'?`${dungeonDefs[currentDungeon.category].label} · ${currentDungeon.isBoss?'보스':(currentDungeon.stage+1)+'구역'}\n${currentDungeon.isBoss?dungeonDefs[currentDungeon.category].boss.name:tierProgressText(currentDungeon.category,currentDungeon.stage)}`:gameState==='tower'?`무한의 탑 ${towerFloor}층 · 남은 적 ${towerMobsRemaining}마리`:'';
       document.getElementById('dungeon-hud').classList.toggle('hidden',!current);
@@ -14094,6 +14143,7 @@
             exitDungeonPortal('portal_room', 150, 220);
             showTopNotification("포탈 방으로 돌아왔습니다.");
           }
+          return;
         }
 
         if (!isBoss) {
@@ -14202,6 +14252,7 @@
         if (portalCooldown === 0 && Math.hypot(player.x - 400, player.y - 850) < 50) {
           exitTower();
           showTopNotification("포탈 방으로 돌아왔습니다.");
+          return;
         }
 
         ctx.fillStyle = '#fde047'; ctx.font="bold 18px Noto Sans KR"; ctx.textAlign='center';
