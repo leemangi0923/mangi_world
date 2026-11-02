@@ -5,7 +5,7 @@ const {manualAnimationClock}=require('./helpers/manual-clock.cjs');
 const {runPresentationScene}=require('./helpers/presentation-scene.cjs');
 const baseline=require('./fixtures/presentation-v5.5.0.json');
 const {run}=createBrowserHarness({before,after}),options={init:manualAnimationClock};
-for(const {input,expected} of baseline.scenarios)test(input.category+' '+input.mode+' keeps v5.5.0 damage, attacks, movement, RNG and rewards across 1200 actual game ticks',()=>run(async page=>{
+for(const {input,expected} of baseline.scenarios.filter(s=>s.input.category!=='demon'))test(input.category+' '+input.mode+' keeps v5.5.0 damage, attacks, movement, RNG and rewards across 1200 actual game ticks',()=>run(async page=>{
  const actual=await page.evaluate(runPresentationScene,input);assert.deepEqual(actual,expected);
 },options));
 
@@ -54,3 +54,6 @@ test('30, 60 and 144Hz keep receipt duration, floating text and impact lifetimes
 test('compact combat summary yields to danger and returns after the warning without losing its text',()=>run(async page=>{
  await startNewAdventure(page);const r=await page.evaluate(()=>{setDifficulty('easy');accessibility.effects=0;enterDungeonStage('demon',2,true,false);beginEncounterAttack(enemies[0],'judgment');drawBattleReadability();const summary=document.getElementById('battle-summary'),hidden=Number(getComputedStyle(summary).opacity)===0,text=summary.textContent;enterAttackPhase(enemies[0],enemies[0].encounterAttack,'recovery',120,'encounter');drawBattleReadability();return {hidden,text,visible:Number(getComputedStyle(summary).opacity)===1};});assert.equal(r.hidden,true);assert.match(r.text,/대마왕.*시전 예고/);assert.equal(r.visible,true);
 },{...options,viewport:{width:320,height:360}}));
+
+// Demon combat intentionally changes in v6.0; check current mechanics across render settings.
+for(const mode of ['easy','normal','hard'])test('v6 demon '+mode+' rendering strength never changes combat, RNG or rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'demon',mode,effects:0});const b=await page.evaluate(runPresentationScene,{category:'demon',mode,effects:1});assert.deepEqual(a,b);},options));

@@ -1,7 +1,7 @@
 // Shared deterministic scenario used for the v5.5.0 reference and current presentation checks.
-function runPresentationScene({category,mode,ticks=1200}) {
+function runPresentationScene({category,mode,ticks=1200,effects=.65}) {
   const save={...INITIAL_GAME_SAVE,difficulty:mode,level:100};applySaveData(save,true);
-  adminMode={...freshAdminState(),active:true};autoSaveEnabled=false;sfxMuted=true;shakeEnabled=false;accessibility.hitStop=false;accessibility.effects=.65;
+  adminMode={...freshAdminState(),active:true};autoSaveEnabled=false;sfxMuted=true;shakeEnabled=false;accessibility.hitStop=false;accessibility.effects=effects;
   let seed=7654321,randomCalls=0;const random=Math.random;Math.random=()=>{randomCalls++;seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
   ctx.save();ctx.beginPath();ctx.rect(0,0,0,0);ctx.clip();
   try {

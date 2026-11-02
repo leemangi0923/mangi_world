@@ -28,8 +28,16 @@ for(const cat of ['zombie','ghost','demon'])test(cat+' every damaging boss patte
  const results=[];accessibility.hitStop=false;ctx.save();ctx.beginPath();ctx.rect(0,0,0,0);ctx.clip();
  try{for(const [key,def] of Object.entries(ENCOUNTER_ATTACKS[cat])){
   if(['grab','slash','crush','guard','touch','bite','ember','cleave','bulwark','blink','mirror','summon'].includes(key))continue;
-  clearBattleRuntime();difficulty='normal';hp=maxHp=5000;enterDungeonStage(cat,2,true,false);const en=enemies[0];en.x=350;en.y=400;player.x=480;player.y=400;portalCooldown=99999;beginEncounterAttack(en,key);const a=en.encounterAttack;
+  clearBattleRuntime();difficulty='normal';statAgi=cat==='demon'?30:10;recalcAllStats();hp=maxHp=5000;enterDungeonStage(cat,2,true,false);const en=enemies[0];en.x=350;en.y=400;player.x=480;player.y=400;portalCooldown=99999;beginEncounterAttack(en,key);const a=en.encounterAttack;
   const dangerous=(x,y)=>{
+   if(def.shape==='choreo'){
+    if(key==='descent'&&Math.hypot(x-a.x,y-a.y)<80)return true;
+    for(let t=0;t<def.active;t+=3)for(const part of demonSegments(en,a,t)){
+     if(!part.hot)continue;
+     if(part.kind==='iron'){if(Math.hypot(x-part.x,y-part.y)<part.r+30)return true;}
+     else if(encounterContains({shape:'line',fromX:part.start.x,fromY:part.start.y,angle:Math.atan2(part.end.y-part.start.y,part.end.x-part.start.x),length:Math.hypot(part.end.x-part.start.x,part.end.y-part.start.y),width:part.r+14},x,y))return true;
+    }return false;
+   }
    if(def.shape==='safe'||def.shape==='corridor'||def.shape==='beam'||def.shape==='cone'||def.shape==='line'){
     if(encounterContains(encounterShape(en,a),x,y))return true;
     if(key==='scythe')return encounterContains({...a,shape:'line',length:650,width:12},x,y);
