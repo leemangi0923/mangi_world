@@ -1,6 +1,6 @@
 {
   "name": "mangi-world",
-  "version": "6.5.0",
+  "version": "6.5.1",
   "private": true,
   "description": "Standalone HTML canvas RPG with browser regression tests",
   "scripts": {
