@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>만기 월드 (Mangi World) - v6.5.1</title>
+  <title>만기 월드 (Mangi World) - v6.6.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -350,7 +350,7 @@
 
       <p class="binding-guide" id="current-binding-guide" style="font-size:11px;"></p>
       <div class="changelog-box">
-        <h4>📌 v6.5.1 패치 노트</h4><p>페릴의 새6기술 완성: 수렵의 올가미 · 맞사냥 · 포식자의 반격과 연계2개. 검은·알파 늑대와 숲 생존 구역을 개편했습니다. 민첩15 기준입니다.</p>
+        <h4>📌 v6.6.0 패치 노트</h4><p>리치 로드의 백골 대성당 · 죽음의 낫, 회수 · 사슬 관과 일반 좀비의 손 공격을 개편했습니다. 민첩20 기준입니다. 나머지3기술과 묘지 마감은8차입니다.</p>
         • 🚪 던전/탑 이탈 시 남던 적 공격·예고 정리<br>
         • 📌 다음 목표 창 접기·펼치기와 표시 상태 기억<br>
         • 👁️ 쉬움은 전체 공격 안내, 보통/어려움은 필수 범위만 표시<br><br>
@@ -713,7 +713,7 @@
     <div id="game-stage">
     <div id="game-container">
       <div id="top-notification">알림 메시지</div>
-      <div id="version-badge">v6.5.1</div>
+      <div id="version-badge">v6.6.0</div>
       <button id="sfx-toggle-btn" onclick="toggleSfxMute()" style="position:absolute; bottom:8px; right:80px; background:rgba(0,0,0,0.7); color:#fde047; border:1px solid #eab308; border-radius:6px; padding:4px 10px; font-size:14px; cursor:pointer; z-index:20;"></button>
 
       <div id="alert-modal" class="hidden">
@@ -777,7 +777,7 @@
 
       <div id="start-screen">
         <div class="main-title">만기 월드</div>
-        <p style="color:#94a3b8; margin-bottom:25px;">v6.5.1 : 페릴6기술 완성 · 열린 올가미 · 맞사냥 · 반격 자세</p>
+        <p style="color:#94a3b8; margin-bottom:25px;">v6.6.0 : 리치 로드 · 백골 대성당 · 돌아오는 낫 · 사슬 관</p>
         <button class="btn" onclick="ensureAudioCtx(); openSaveScreen()">게임 시작</button>
         <button class="btn" style="background:#1e293b; color:#fff; border:2px solid #eab308; margin-top:10px;" onclick="openHelpScreen()">도움말</button>
         <button class="btn" onclick="openSettingsModal()">설정</button>
@@ -802,7 +802,7 @@
       <div id="battle-summary" class="hidden" aria-label="현재 전투 상황" style="position:absolute;bottom:92px;left:50%;transform:translateX(-50%);width:90%;max-width:360px;padding:5px 8px;border:1px solid #64748b;border-radius:6px;background:rgba(10,15,26,.9);font-size:12px;text-align:center;pointer-events:none;z-index:22;"></div>
       <button id="admin-badge" class="btn hidden" onclick="openAdminPanel()" style="position:absolute;top:8px;right:8px;z-index:105;padding:6px 10px;font-size:11px;background:#7c2d12;color:#fff;border:2px solid #fbbf24;">ADMIN · 도구</button>
       <section id="admin-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="admin-title" style="position:absolute;inset:0;z-index:110;background:#0b1220;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:auto;">
-        <h2 id="admin-title">관리자 테스트 도구 · v6.5.1</h2>
+        <h2 id="admin-title">관리자 테스트 도구 · v6.6.0</h2>
         <p>일반 저장은 보호 중입니다. 종료·새로고침 시 진입 전 진행으로 돌아갑니다. 전투 위치는 마을로 복구됩니다.</p>
         <p id="admin-status" role="status" aria-live="polite"></p>
         <div class="admin-actions"><button id="admin-resume" class="btn" onclick="resumeAdminPlay()">이 상태로 플레이</button><button class="btn" onclick="closeAdminPanel()">일시정지로 돌아가기</button><button class="btn" onclick="exitAdminMode()">관리자 종료·원래 진행 복귀</button></div>
@@ -837,7 +837,7 @@
         <details><summary>슬라임 킹 패턴·판정 실험실</summary><label>패턴<select id="slime-pattern"><option value="burrow">핵의 잠행</option><option value="sever">갈라진 왕의 심장</option><option value="crown">왕관 박격</option><option value="bloom">끓는 젤 분출 (빨강 학습용)</option><option value="tide">왕관해일</option><option value="catapult">점탄성 투석기</option><option value="maces">두 개의 젤 철퇴</option><option value="spring">탄성 튀어오르기 (초록 학습용)</option><option value="leap">왕의 낙하</option><option value="sweep">젤리 휩쓸기</option><option value="acid">산성 비</option><option value="split">분열·핵 노출</option><option value="dash">돌진 (일반 학습용)</option></select></label><label>체력 단계<select id="slime-phase"><option value="1">1단계</option><option value="2">2단계</option></select></label><label><input type="checkbox" onchange="if(adminOnly())slimeDebugHitboxes=this.checked;">활성 판정 표시</label><div class="admin-actions"><button class="btn" onclick="adminSlimePattern()">패턴 새로 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button></div><p id="slime-inspection"></p></details>
         <details><summary>보스 패턴·판정 실험실 — 리치·사령왕·대마왕</summary>
           <label>던전<select id="encounter-family" onchange="updateEncounterPatternOptions()"><option value="zombie">망자의 묘지 · 리치 로드</option><option value="ghost">저주받은 폐허 · 사령왕</option><option value="demon">마왕성 내부 · 대마왕</option></select></label>
-          <div class="admin-grid"><label>패턴<select id="encounter-pattern"><option value="scythe">영혼 낫</option><option value="drain">생명력 흡수</option><option value="summon">망자의 호위</option><option value="ritual">부활 의식</option></select></label><label>체력 단계<select id="encounter-phase"><option value="1">1단계</option><option value="2">2단계</option><option value="3">3단계</option></select></label></div>
+          <div class="admin-grid"><label>패턴<select id="encounter-pattern"><option value="cathedral">백골 대성당</option><option value="reap">죽음의 낫, 회수</option><option value="coffin">사슬 관</option><option value="grasp">썩은 팔의 추적 (일반 좀비)</option><option value="scythe">영혼 낫</option><option value="drain">생명력 흡수</option><option value="summon">망자의 호위</option><option value="ritual">부활 의식</option></select></label><label>체력 단계<select id="encounter-phase"><option value="1">1단계</option><option value="2">2단계</option><option value="3">3단계</option></select></label></div>
           <label><input type="checkbox" id="encounter-hitboxes" onchange="if(adminOnly())encounterDebugHitboxes=this.checked"> 공격 판정 표시</label>
           <button class="btn" onclick="adminEncounterPattern()">선택 패턴 준비</button><button class="btn" onclick="adminSlimeStep()">한 틱 진행</button>
           <p id="encounter-inspection" aria-live="polite">보스 전투를 준비하세요.</p>
@@ -846,7 +846,7 @@
         <details><summary>장비 특성·보상 테스트</summary><p>테스트 보관함·선택 보상·장비는 관리자 저장에만 반영됩니다.</p><button class="btn" onclick="adminPrepareRewards()">첫 보상·보관함 테스트</button><label>특성 무기<select id="admin-trait-weapon"></select></label><button class="btn" onclick="adminPrepareTrait()">선택 특성 평타 테스트 준비</button><p id="admin-trait-inspection"></p></details>
         <details><summary>2차 배경·연출 미리보기</summary><div class="admin-grid"><label>던전<select id="visual-category" onchange="adminVisualPreview()"><option value="slime">슬라임</option><option value="wolf">늑대</option><option value="zombie">묘지</option><option value="ghost">폐허</option><option value="demon">마왕성</option></select></label><label>구역<select id="visual-grade" onchange="adminVisualPreview()"><option value="0">일반</option><option value="1">정예</option><option value="2">생존</option><option value="boss">보스 방</option></select></label></div><button class="btn" onclick="adminVisualPreview()">배경·몸체 미리보기</button><p id="visual-caption"></p><canvas id="visual-preview" width="400" height="450" style="max-width:100%;height:auto;cursor:default;"></canvas></details>
         <details><summary>도감·전투 기록 확인</summary><p>몬스터20종·장비·개인 기록·도전 목표의 읽기 전용 샘플입니다. 일반 진행과 기록은 바꾸지 않습니다.</p><button id="admin-journal-preview" class="btn" onclick="adminPreviewJournal()">도감·기록 미리보기</button><button class="btn" onclick="openJournal('records')">현재 격리 기록 확인</button></details>
-        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v6.5.1: 페릴의 새6기술·연계2개와 검은/알파 늑대·숲 생존 구역을 완성했습니다. 페릴 실험실에서 대상과 패턴을 골라 민첩15·속도 버프 없음으로 재생할 수 있습니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
+        <details><summary>업데이트 확인·NPC 외형 미리보기</summary><p>v6.6.0: 리치 로드의 새3기술·기둥 파괴/잔해·관 충돌과 일반 좀비의 실제 손 공격을 적용했습니다. 보스 패턴 실험실의 묘지는 민첩20·속도 버프 없음으로 재생합니다. 나머지3기술과 스켈레톤/기사·묘지 생존 마감은8차입니다.</p><div style="max-width:100%;overflow:auto;"><canvas id="admin-preview" width="500" height="120" style="width:500px;height:120px;cursor:default;background:#1e293b;"></canvas></div><p>몬스터·보스 외형과 패턴은 위의 전투 테스트에서 확인하세요. 이후 그래픽 변경도 이 미리보기에 반영됩니다.</p></details>
       </section>
 
       <section id="journal-screen" class="hidden" role="dialog" aria-modal="true" aria-labelledby="journal-title">
@@ -1401,7 +1401,7 @@
       for(const [id,value] of Object.entries(values))document.getElementById(id).value=value;
       for(const name of ADMIN_FLAG_NAMES)document.getElementById('admin-flag-'+name).checked=adminMode[name];
       const seconds=adminMode.damageStart===null?0:Math.max(1,(frameCount-adminMode.damageStart)/60);
-      document.getElementById('admin-metrics').textContent=`v6.5.1 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
+      document.getElementById('admin-metrics').textContent=`v6.6.0 · ${mapLabel(gameState)} · Lv.${level} · HP ${Math.ceil(hp)}/${maxHp} · MP ${Math.ceil(mp)}/${maxMp}\n적 ${enemies.length} · 투사체 ${projectiles.length+encounterShots.length} · 실제 피해 ${adminMode.damageTotal.toFixed(1)} · 명중 ${adminMode.damageHits}회 · DPS ${seconds?(adminMode.damageTotal/seconds).toFixed(1):'0.0'}\n게임 틱 ${frameCount} · 화면 표시 ${loopStats.presentations}회 · 최대 따라잡기 ${loopStats.maxSteps}틱\n이론 평타 DPS (비치명·단일·전탄 명중·난사 제외): ${weaponBalanceSummary()}`;
       const traitSelect=document.getElementById('admin-trait-weapon');if(!traitSelect.options.length)for(const [id,def] of Object.entries(WEAPON_TRAITS)){const opt=document.createElement('option');opt.value=id;opt.textContent=findItemById(id).name+' · '+def.name;traitSelect.appendChild(opt);}
       document.getElementById('admin-trait-inspection').textContent='특성 발동 '+weaponTraitState.procs+'회 · 충전 '+weaponTraitState.count+' · 예약 '+weaponTraitState.pending.length+' · 보관 '+rewardArchive.inbox.reduce((n,e)=>n+e.count,0)+'개';
       if(!document.getElementById('admin-item').options.length)filterAdminItems();
@@ -2724,6 +2724,7 @@
       if(difficulty==='easy')return true;
       if(en.category==='demon'&&ENCOUNTER_ATTACKS.demon[attack.key]?.essential)return true;
       // Ground hazards, off-body landings and arena safety mechanics must remain readable.
+      if(en.category==='zombie'&&ENCOUNTER_ATTACKS.zombie[attack.key]?.essential)return true;
       if(en.category==='slime')return SLIME_ATTACKS[attack.key]?.essential||attack.key==='acid'||(en.isBoss&&attack.key==='leap');
       if(en.category==='wolf')return WOLF_ATTACKS[attack.key]?.essential||(en.isBoss&&attack.key==='leap');
       return ({zombie:['drain','ritual'],ghost:['hands','corridor'],demon:['fissure','brand','judgment']})[en.category]?.includes(attack.key)||false;
@@ -3299,6 +3300,7 @@
       // 이미 죽어서 목록에서 빠진 적은 무시한다.
       // 광역기는 적 목록의 사본을 돌기 때문에(도중에 죽어도 건너뛰지 않으려고)
       // 같은 프레임에 죽은 적이 사본에 남아 다시 들어올 수 있다.
+      if(en.isLichPillar&&(!encounterCurrent(en.encounterOwner)||en.encounterOwner.encounterAttack!==en.lichCast||!enemies.includes(en)))return;
       if((en.isWolfRoot||en.isWolfPartner)&&(!enemies.includes(en)||!liveEnemyWarning(en.wolfOwner)||en.wolfOwner.wolfAttack!==en.wolfCast))return;
       if(en.isSlimeAux&&!enemies.includes(en))return;
       if(en.isSlimePart){if(!liveEnemyWarning(en.slimeOwner))return;en=en.slimeOwner;}
@@ -3312,6 +3314,7 @@
       const reduction = en.damageReduction || 0;
       let finalDmg = reduction > 0 ? dmg * (1 - reduction) : dmg;
       if(en.category==='slime'&&en.coreExposed)finalDmg*=1.35;
+      if(en.category==='zombie'&&en.encounterAttack?.key==='cathedral'&&en.encounterAttack.phase==='recovery')finalDmg*=1.25;
       if(en.category==='demon'&&['judgment','furnace'].includes(en.encounterAttack?.key)&&en.encounterAttack.phase==='recovery')finalDmg*=1.25;
       // 각성 검 [일섬]의 방어 약화 — 지속 시간 동안 받는 피해가 증폭된다
       if (en.vulnTimer > 0) finalDmg *= 1.25;
@@ -3345,6 +3348,7 @@
       if (combatReportMode === 'death') return;
       const idx = enemies.indexOf(en);
       if (idx === -1) return;
+      if(en.isLichPillar){enemies.splice(idx,1);if(en.encounterOwner?.encounterAttack===en.lichCast){en.lichCast.broken[en.side]=true;addLichRubble(en.encounterOwner,en.x,en.y);encounterEffect(en.encounterOwner,'interrupt',en.x,en.y,25);}return;}
       if(en.isWolfRoot){enemies.splice(idx,1);if(en.wolfOwner?.wolfAttack===en.wolfCast){en.wolfCast.rootBroken=true;wolfEffect(en.wolfOwner,'dust',en.x,en.y);createFloatingText(en.x,en.y-30,'뿌리 풀림','#d9f99d');}return;}
       if(en.isSlimeAux){enemies.splice(idx,1);if(en.isSlimeCrown&&en.slimeOwner?.slimeAttack===en.slimeCast){const a=en.slimeCast,owner=en.slimeOwner;a.interrupted=true;a.interruptBonus=60;if(a.phase==='recovery'){a.recoverFrom={x:owner.x,y:owner.y};enterAttackPhase(owner,a,'recovery',Math.min(205,a.left+60),'slime');owner.coreExposed=true;}createFloatingText(owner.x,owner.y-65,'왕관 파괴 · 회수 지연','#fde68a');slimeImpact(en.x,en.y,25,'break');}return;}
       observeJournalEnemy(en);journalEnemyDefeated(en);
@@ -4489,6 +4493,10 @@
         corridor:{name:'영혼 회랑',wind:126,active:1,recover:155,shape:'corridor',safeR:100}
       },
       zombie: {
+        cathedral:{name:'백골 대성당',wind:120,active:365,recover:155,shape:'lich',essential:true},
+        reap:{name:'죽음의 낫, 회수',wind:100,active:190,recover:140,shape:'lich'},
+        coffin:{name:'사슬 관',wind:120,active:130,recover:130,shape:'lich',essential:true},
+        grasp:{name:'썩은 팔의 추적',wind:52,active:70,recover:70,shape:'lich'},
         grab: {name:'썩은 손 붙잡기',wind:48,active:10,recover:58,shape:'cone',radius:90,arc:1.0},
         slash: {name:'뼈칼 베기',wind:52,active:12,recover:62,shape:'cone',radius:112,arc:1.15},
         crush: {name:'기사 내려찍기',wind:68,active:14,recover:82,shape:'circle',radius:72},
@@ -4499,8 +4507,137 @@
         ritual: {name:'부활 의식',wind:150,active:1,recover:150,shape:'safe',safeR:86}
       }
     };
-    let encounterHazards=[], encounterShots=[], encounterEffects=[], demonWalls=[], encounterDebugHitboxes=false;
-    function clearEncounterRuntime(){demonWalls=[];encounterHazards=[];encounterShots=[];encounterEffects=[];ghostDecoys=[];ghostZones=[];demonZones=[];}
+    let encounterHazards=[], encounterShots=[], encounterEffects=[], demonWalls=[], lichRubble=[], encounterDebugHitboxes=false;
+    // Lich structures and weapons share fixed-tick poses with their colliders.
+    const isLichChoreography=a=>!!a&&ENCOUNTER_ATTACKS.zombie[a.key]?.shape==='lich';
+    function lichDistance(point,from,to){const dx=to.x-from.x,dy=to.y-from.y,d=dx*dx+dy*dy,p=d?slimeClamp(((point.x-from.x)*dx+(point.y-from.y)*dy)/d,0,1):0;return Math.hypot(point.x-from.x-dx*p,point.y-from.y-dy*p);}
+    function lichBezier(from,control,to,p){const q=1-p;return {x:q*q*from.x+2*q*p*control.x+p*p*to.x,y:q*q*from.y+2*q*p*control.y+p*p*to.y};}
+    function lichHand(en,angle=en.encounterFacing||0){return {x:en.x+en.r*.8*(Math.cos(angle)<0?-1:1),y:en.y-en.r*.2};}
+    function addLichRubble(en,x,y){
+      lichRubble=lichRubble.filter(s=>s.life>0&&encounterCurrent(s.owner));const own=lichRubble.filter(s=>s.owner===en);if(own.some(s=>Math.hypot(s.x-x,s.y-y)<12)||own.length>=2)return;
+      lichRubble.push({owner:en,x,y,r:24,life:900});
+    }
+    function prepareLichChoreography(en,a){
+      a.activeTicks=ENCOUNTER_ATTACKS.zombie[a.key].active;
+      if(a.key==='cathedral'){
+        lichRubble=lichRubble.filter(s=>s.owner!==en);a.gaps=[-105,105,-40].map(d=>slimeClamp(player.x+d,205,595));a.gateSpan=140;a.broken=[false,false];
+        a.pillars=[100,700].map((x,side)=>({x,y:325,r:23,hp:60,maxHp:60,isLichPillar:true,isEncounterObject:true,encounterOwner:en,lichCast:a,side,category:'zombie',stageIndex:0,level:en.level,colors:en.colors,name:'갈비뼈 기둥',isBoss:false,speed:0,floatSeed:0}));enemies.push(...a.pillars);
+      }
+      if(a.key==='reap'){
+        a.hand=lichHand(en,a.angle);const d=Math.min(360,Math.hypot(player.x-a.hand.x,player.y-a.hand.y)+110),angle=Math.atan2(player.y-a.hand.y,player.x-a.hand.x);
+        a.reapEnd={x:slimeClamp(a.hand.x+Math.cos(angle)*d,85,715),y:slimeClamp(a.hand.y+Math.sin(angle)*d,175,765)};
+        a.outControl={x:(a.hand.x+a.reapEnd.x)/2-Math.sin(angle)*100,y:slimeClamp((a.hand.y+a.reapEnd.y)/2+Math.cos(angle)*100,155,785)};
+        a.backControl={x:(a.hand.x+a.reapEnd.x)/2+Math.sin(angle)*130,y:slimeClamp((a.hand.y+a.reapEnd.y)/2-Math.cos(angle)*130,155,785)};a.reapTell=Math.ceil(45*difficultyProfile().warning);a.activeTicks=70+a.reapTell+75;
+      }
+      if(a.key==='coffin'){
+        a.coffinStart={x:slimeClamp(en.x+(player.x>=en.x?-100:100),85,715),y:slimeClamp(en.y+110,205,720)};a.coffinLock=60;
+        if(!lichRubble.some(s=>s.owner===en&&s.life>0)){
+          const angle=Math.atan2(player.y-a.coffinStart.y,player.x-a.coffinStart.x);addLichRubble(en,slimeClamp((a.coffinStart.x+player.x)/2-Math.sin(angle)*70,90,710),slimeClamp((a.coffinStart.y+player.y)/2+Math.cos(angle)*70,200,745));
+        }
+      }
+      if(a.key==='grasp'){a.handTell=Math.ceil(24*difficultyProfile().warning);a.activeTicks=18+a.handTell+18+10;}
+    }
+    function lockLichCoffin(a){
+      const angle=Math.atan2(player.y-a.coffinStart.y,player.x-a.coffinStart.x),d=Math.min(450,Math.hypot(player.x-a.coffinStart.x,player.y-a.coffinStart.y)+100);
+      a.coffinEnd={x:slimeClamp(a.coffinStart.x+Math.cos(angle)*d,75,725),y:slimeClamp(a.coffinStart.y+Math.sin(angle)*d,155,785)};a.angle=Math.atan2(a.coffinEnd.y-a.coffinStart.y,a.coffinEnd.x-a.coffinStart.x);a.x=a.coffinEnd.x;a.y=a.coffinEnd.y;
+    }
+    function tickLichWindup(en,a){if(a.key==='coffin'){const age=a.duration-a.left;if(age<a.coffinLock){a.x=player.x;a.y=player.y;}if(age>=a.coffinLock&&!a.coffinEnd)lockLichCoffin(a);}}
+    function lichRibPose(a,t){
+      const index=Math.min(2,Math.floor(t/a.gateSpan)),part=t-index*a.gateSpan,gap=a.gaps[index],p=part<=20?0:part<=75?(part-20)/55:Math.max(0,1-(part-75)/35),tipY=255+510*p;
+      const arms=[-1,1].map(side=>{const from={x:side<0?100:700,y:325},to={x:gap+side*84,y:tipY},control={x:(from.x+to.x)/2,y:(from.y+to.y)/2-70*Math.sin(p*Math.PI)};return Array.from({length:9},(_,i)=>lichBezier(from,control,to,i/8));});
+      return {index,part,gap,arms,hot:part>20&&part<=75};
+    }
+    function lichReapPose(en,a,t){
+      let point,hot=false,leg='out';if(a.phase==='windup')point=a.hand;else if(a.phase==='recovery')point=lichHand(en);else if(t<=70){point=lichBezier(a.hand,a.outControl,a.reapEnd,slimeClamp(t/70,0,1));hot=true;}else if(t<=70+a.reapTell){point=a.reapEnd;}else{point=lichBezier(a.reapEnd,a.backControl,a.hand,slimeClamp((t-70-a.reapTell)/75,0,1));hot=true;leg='back';}
+      const rotation=(leg==='back'?-1:1)*t*.14+a.angle,local=[{x:10,y:-28},{x:32,y:-37},{x:55,y:-29},{x:62,y:-7},{x:53,y:17},{x:34,y:34}],points=local.map(p=>({x:point.x+p.x*Math.cos(rotation)-p.y*Math.sin(rotation),y:point.y+p.x*Math.sin(rotation)+p.y*Math.cos(rotation)}));
+      return {...point,rotation,points,hot,leg};
+    }
+    function lichCoffinPose(en,a,t){
+      let point;if(a.phase==='windup')point=a.coffinStart;else if(a.phase==='recovery'){const from=a.coffinStop||a.coffinEnd,p=1-a.left/a.duration;point={x:from.x+(en.x-from.x)*p,y:from.y+(en.y+65-from.y)*p};}else point=a.coffinStop||{x:a.coffinStart.x+(a.coffinEnd.x-a.coffinStart.x)*Math.min(1,t/110),y:a.coffinStart.y+(a.coffinEnd.y-a.coffinStart.y)*Math.min(1,t/110)};
+      const angle=a.coffinEnd?a.angle:Math.atan2(a.y-point.y,a.x-point.x);return {...point,angle,from:{x:point.x-Math.cos(angle)*26,y:point.y-Math.sin(angle)*26},to:{x:point.x+Math.cos(angle)*26,y:point.y+Math.sin(angle)*26}};
+    }
+    function lichCoffinContact(a,s){
+      const dx=s.x-a.coffinStart.x,dy=s.y-a.coffinStart.y,along=dx*Math.cos(a.angle)+dy*Math.sin(a.angle),cross=Math.abs(-dx*Math.sin(a.angle)+dy*Math.cos(a.angle)),r=22+s.r,length=Math.hypot(a.coffinEnd.x-a.coffinStart.x,a.coffinEnd.y-a.coffinStart.y);
+      if(cross>r||along+26+r<0||length<1)return null;const p=(along-26-Math.sqrt(r*r-cross*cross))/length;return p<=1?Math.max(0,p):null;
+    }
+    function lichGraspPose(en,a,t){
+      const shoulder={x:en.x+Math.cos(a.angle)*en.r*.45,y:en.y+Math.sin(a.angle)*en.r*.45-en.r*.25},start=18+a.handTell,p=a.phase==='recovery'?0:t<=start?0:t<=start+18?(t-start)/18:Math.max(0,1-(t-start-18)/10),to=a.handTarget||shoulder;
+      return {shoulder,x:shoulder.x+(to.x-shoulder.x)*p,y:shoulder.y+(to.y-shoulder.y)*p,hot:a.phase==='active'&&t>start&&t<=start+18};
+    }
+    function lichHit(en,a,token,base){if(a.hits.includes(token)||!encounterCurrent(en))return;a.hits.push(token);encounterDamage(en,base,ENCOUNTER_ATTACKS.zombie[a.key].name);}
+    function tickLichChoreography(en,a,base){
+      const t=a.elapsed+1;
+      if(a.key==='cathedral'){
+        const pose=lichRibPose(a,t),old=lichRibPose(a,Math.max(0,t-1));if(pose.hot)for(let side=0;side<2;side++){if(a.broken[side])continue;const points=pose.arms[side],previous=old.arms[side];for(let i=1;i<points.length;i++)if(demonSegmentHit(points[i-1],points[i],10)||demonSegmentHit(previous[i],points[i],10)){lichHit(en,a,'gate'+pose.index,base);break;}if(!encounterCurrent(en))return;}
+        if(pose.part===21)encounterEffect(en,'release',pose.gap,325,45);
+      }else if(a.key==='reap'){
+        const pose=lichReapPose(en,a,t),old=lichReapPose(en,a,t-1);if(pose.hot)for(let i=1;i<pose.points.length;i++)if(demonSegmentHit(pose.points[i-1],pose.points[i],7)||demonSegmentHit(old.points[i],pose.points[i],7)){lichHit(en,a,pose.leg,base);break;}
+        if(t===1||t===71+a.reapTell)playSfx('soulCast');
+      }else if(a.key==='coffin'){
+        if(!a.coffinEnd)lockLichCoffin(a);const old=lichCoffinPose(en,a,t-1);let contact=null;
+        if(t<=110){for(const s of lichRubble.filter(s=>s.owner===en&&s.life>0)){const p=lichCoffinContact(a,s);if(p!==null&&p<=t/110&&(!contact||p<contact.p))contact={s,p};}
+          if(contact){a.coffinStop={x:a.coffinStart.x+(a.coffinEnd.x-a.coffinStart.x)*contact.p,y:a.coffinStart.y+(a.coffinEnd.y-a.coffinStart.y)*contact.p};contact.s.life=0;a.collided=true;encounterEffect(en,'interrupt',a.coffinStop.x,a.coffinStop.y,35);playSfx('heavyImpact');impact(4,1,0);a.left=1;}
+          const pose=lichCoffinPose(en,a,t);if(demonSegmentHit(pose.from,pose.to,22)||demonSegmentHit(old.from,pose.from,22)||demonSegmentHit(old.to,pose.to,22))lichHit(en,a,'coffin',base);
+        }
+      }else if(a.key==='grasp'){
+        if(t<=18){const distance=Math.min(35,Math.hypot(a.x-a.fromX,a.y-a.fromY)),p=t/18;en.x=slimeClamp(a.fromX+Math.cos(a.angle)*distance*p,70,730);en.y=slimeClamp(a.fromY+Math.sin(a.angle)*distance*p,160,780);en.encounterMoving=true;}
+        if(t===19){const shoulder=lichGraspPose(en,a,t).shoulder,angle=Math.atan2(player.y-shoulder.y,player.x-shoulder.x),d=Math.min(100,Math.hypot(player.x-shoulder.x,player.y-shoulder.y)+20);a.angle=angle;a.handTarget={x:slimeClamp(shoulder.x+Math.cos(angle)*d,65,735),y:slimeClamp(shoulder.y+Math.sin(angle)*d,155,785)};}
+        const pose=lichGraspPose(en,a,t),old=lichGraspPose(en,a,t-1);if(pose.hot&&demonSegmentHit(old,pose,9))lichHit(en,a,'hand',base);
+      }
+    }
+    function finishLichChoreography(en,a){if(a.key==='cathedral')for(const pillar of a.pillars)addLichRubble(en,pillar.x,pillar.y);}
+    function tickLichRubble(){lichRubble=lichRubble.filter(s=>s.life>0&&encounterCurrent(s.owner));for(const s of lichRubble)s.life--;}
+    function drawLichRubble(){
+      ctx.save();for(const s of lichRubble){ctx.strokeStyle='#303332';ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(s.x-24,s.y+10);ctx.lineTo(s.x+23,s.y+8);ctx.stroke();ctx.fillStyle='#a7b0a0';ctx.strokeStyle='#e6e2c4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(s.x-18,s.y+8);ctx.lineTo(s.x-14,s.y-22);ctx.lineTo(s.x-4,s.y-13);ctx.lineTo(s.x+1,s.y-28);ctx.lineTo(s.x+13,s.y-16);ctx.lineTo(s.x+19,s.y+8);ctx.closePath();ctx.fill();ctx.stroke();for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(s.x-12,s.y-i*6);ctx.lineTo(s.x+12,s.y-i*6);ctx.stroke();}}
+      ctx.restore();
+    }
+    function drawLichPillar(en){
+      ctx.save();ctx.translate(en.x,en.y);const grad=ctx.createLinearGradient(-22,0,22,0);grad.addColorStop(0,'#505f5c');grad.addColorStop(.45,'#e2dfbf');grad.addColorStop(1,'#707c70');ctx.fillStyle=grad;ctx.strokeStyle='#e9e5ca';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-24,12);ctx.lineTo(-16,-70);ctx.lineTo(-25,-87);ctx.lineTo(-12,-119);ctx.lineTo(0,-132);ctx.lineTo(12,-119);ctx.lineTo(25,-87);ctx.lineTo(16,-70);ctx.lineTo(24,12);ctx.closePath();ctx.fill();ctx.stroke();for(let i=0;i<7;i++){ctx.beginPath();ctx.ellipse(0,-i*12,18-i*.7,5,0,0,Math.PI*2);ctx.stroke();}ctx.fillStyle='#111c1b';ctx.beginPath();ctx.ellipse(0,-93,10,13,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c9eea1';ctx.fillRect(-24,24,48*Math.max(0,en.hp/en.maxHp),4);ctx.font='11px sans-serif';ctx.textAlign='center';ctx.fillText('◇ 파괴 가능',0,43);ctx.restore();
+    }
+    function drawLichVault(en,a){
+      const recovering=a.phase==='recovery',fall=recovering?Math.min(1,(1-a.left/a.duration)*3.2):0;if(fall>=1||(recovering&&accessibility.effects===0))return;
+      const build=a.phase==='windup'?Math.min(1,(1-a.left/a.duration)*2):1;ctx.save();ctx.globalAlpha*=1-fall;
+      for(const side of [-1,1]){if(a.broken[side<0?0:1])continue;ctx.save();ctx.translate(400,190);if(recovering){ctx.translate(side*fall*65,fall*150);ctx.rotate(side*fall*.6);}ctx.translate(-400,-190);
+        for(const [width,color] of [[24,'#12231e'],[15,'#7e907b'],[5,'#e0e6c8']]){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(400+side*300,325-120*build);ctx.bezierCurveTo(400+side*270,325-190*build,400+side*80,325-150*build,400,325-220*build);ctx.stroke();}
+        ctx.strokeStyle='#becba9';ctx.lineWidth=4;for(let i=1;i<=3;i++){ctx.beginPath();ctx.moveTo(400+side*(300-i*52),325-(120+i*13)*build);ctx.quadraticCurveTo(400+side*(270-i*60),325-(170+i*5)*build,400+side*25,325-190*build);ctx.stroke();}ctx.restore();
+      }
+      ctx.save();ctx.translate(400,230-55*build+fall*110);ctx.scale(1,Math.max(.15,build));ctx.fillStyle='#152723';ctx.strokeStyle='#bccba6';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,-55);ctx.bezierCurveTo(-55,-22,-45,35,0,65);ctx.bezierCurveTo(45,35,55,-22,0,-55);ctx.fill();ctx.stroke();ctx.strokeStyle='#657c67';ctx.lineWidth=3;for(const dx of [-18,0,18]){ctx.beginPath();ctx.moveTo(0,-50);ctx.lineTo(dx,7);ctx.lineTo(0,58);ctx.stroke();}ctx.fillStyle='#c9d0ad';ctx.beginPath();ctx.ellipse(0,-2,17,22,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#14211c';for(const x of [-7,7]){ctx.beginPath();ctx.ellipse(x,-7,5,7,0,0,Math.PI*2);ctx.fill();}ctx.strokeStyle='#c6e89c';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-9,13);ctx.lineTo(9,13);ctx.stroke();ctx.restore();ctx.restore();
+    }
+    function drawLichChoreography(en,a){
+      if(!isLichChoreography(a))return;const t=a.phase==='windup'?0:a.phase==='recovery'?a.activeTicks:a.elapsed;ctx.save();
+      if(a.key==='cathedral')drawLichVault(en,a);
+      if(a.key==='cathedral'&&a.phase!=='recovery'){
+        const pose=lichRibPose(a,t);for(let side=0;side<2;side++){if(a.broken[side])continue;const points=pose.arms[side];for(const [width,color] of [[27,'#172823'],[19,'#818f7c'],[7,'#e4e4c6']]){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();}ctx.strokeStyle='#b6c8a6';ctx.lineWidth=4;for(let i=1;i<points.length-1;i++){const p=points[i];ctx.beginPath();ctx.moveTo(p.x-7,p.y-5);ctx.lineTo(p.x+7,p.y+6);ctx.stroke();}}
+      }
+      if(a.key==='coffin'){
+        const pose=lichCoffinPose(en,a,t),hand=lichHand(en);ctx.strokeStyle='#c5c5a6';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(hand.x,hand.y);ctx.lineTo(pose.x,pose.y);ctx.stroke();const d=Math.hypot(pose.x-hand.x,pose.y-hand.y);for(let i=0;i<d;i+=17){const p=i/Math.max(1,d),x=hand.x+(pose.x-hand.x)*p,y=hand.y+(pose.y-hand.y)*p;ctx.strokeStyle=i%34?'#758b83':'#dddcc0';ctx.beginPath();ctx.ellipse(x,y,6,4,pose.angle,0,Math.PI*2);ctx.stroke();}
+        ctx.save();ctx.translate(pose.x,pose.y);ctx.rotate(pose.angle);ctx.fillStyle='#101d1c';ctx.strokeStyle='#a7b7a3';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-48,-16);ctx.lineTo(-26,-23);ctx.lineTo(42,-23);ctx.lineTo(48,-13);ctx.lineTo(48,13);ctx.lineTo(42,23);ctx.lineTo(-26,23);ctx.lineTo(-48,16);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#405d50';ctx.fillRect(-27,-16,58,32);ctx.strokeStyle='#d4d8bc';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-15,0);ctx.lineTo(28,0);ctx.moveTo(7,-12);ctx.lineTo(7,12);ctx.stroke();for(const x of [-30,32]){ctx.fillStyle='#b2a477';ctx.fillRect(x,-25,5,50);}ctx.restore();
+      }
+      ctx.restore();
+    }
+    function drawLichWeapon(en,a){
+      if(!isLichChoreography(a))return;const t=a.phase==='windup'?0:a.phase==='recovery'?a.activeTicks:a.elapsed;ctx.save();
+      if(a.key==='reap'){
+        const pose=lichReapPose(en,a,t),hand=lichHand(en);ctx.strokeStyle='#7e9690';ctx.lineWidth=3;ctx.beginPath();
+        if(a.phase==='active'&&t>=70){const p=slimeClamp((t-70-a.reapTell)/75,0,1),control={x:a.backControl.x+(a.hand.x-a.backControl.x)*p,y:a.backControl.y+(a.hand.y-a.backControl.y)*p};ctx.moveTo(pose.x,pose.y);ctx.quadraticCurveTo(control.x,control.y,hand.x,hand.y);ctx.stroke();ctx.strokeStyle='#c6d4b8';ctx.lineWidth=2;for(let i=1;i<14;i++){const point=lichBezier(pose,control,hand,i/14);ctx.beginPath();ctx.ellipse(point.x,point.y,4,3,0,0,Math.PI*2);ctx.stroke();}}
+        else{ctx.moveTo(hand.x,hand.y);ctx.quadraticCurveTo((hand.x+pose.x)/2,(hand.y+pose.y)/2+25,pose.x,pose.y);ctx.stroke();}ctx.save();ctx.translate(pose.x,pose.y);ctx.rotate(pose.rotation);ctx.strokeStyle='#796e56';ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(-31,23);ctx.lineTo(16,-30);ctx.stroke();ctx.fillStyle='#c9d8c2';ctx.strokeStyle='#fbf2d1';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(7,-29);ctx.quadraticCurveTo(69,-63,65,-2);ctx.quadraticCurveTo(60,23,33,36);ctx.quadraticCurveTo(56,0,47,-16);ctx.quadraticCurveTo(34,-31,7,-29);ctx.fill();ctx.stroke();ctx.fillStyle='#a9f1a3';ctx.beginPath();ctx.arc(13,-28,6,0,Math.PI*2);ctx.fill();ctx.restore();
+      }
+      if(a.key==='grasp'){
+        const pose=lichGraspPose(en,a,t),start=pose.shoulder;ctx.strokeStyle='#3e5f49';ctx.lineWidth=en.r*.25;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(start.x,start.y);ctx.quadraticCurveTo((start.x+pose.x)/2,(start.y+pose.y)/2+9,pose.x,pose.y);ctx.stroke();ctx.fillStyle='#a2af81';ctx.beginPath();ctx.ellipse(pose.x,pose.y,9,7,a.angle,0,Math.PI*2);ctx.fill();ctx.save();ctx.translate(pose.x,pose.y);ctx.rotate(a.angle);ctx.strokeStyle='#d6d9ac';ctx.lineWidth=2.5;for(let i=-2;i<=2;i++){ctx.beginPath();ctx.moveTo(3,i*2.5);ctx.lineTo(10,i*3);ctx.lineTo(12,i*3+3);ctx.stroke();}ctx.restore();
+      }
+      ctx.restore();
+    }
+    function drawLichGuide(en,a,range,details){
+      if(a.phase==='recovery')return;const t=a.phase==='windup'?0:a.elapsed;ctx.save();ctx.strokeStyle='#e7d998';ctx.lineWidth=2;ctx.setLineDash([7,6]);
+      if(range&&a.key==='cathedral'){const pose=lichRibPose(a,t),gap=pose.part>75&&pose.index<2?a.gaps[pose.index+1]:pose.gap;for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(gap+side*58,350);ctx.lineTo(gap+side*58,780);ctx.stroke();}if(difficulty==='easy')for(const arm of pose.arms)for(let i=1;i<arm.length;i++){traceEncounterShape({shape:'line',fromX:arm[i-1].x,fromY:arm[i-1].y,angle:Math.atan2(arm[i].y-arm[i-1].y,arm[i].x-arm[i-1].x),length:Math.hypot(arm[i].x-arm[i-1].x,arm[i].y-arm[i-1].y),width:10});ctx.stroke();}}
+      if(range&&a.key==='reap'&&(details||(adminMode.active&&encounterDebugHitboxes)))for(const curve of [[a.hand,a.outControl,a.reapEnd],[a.reapEnd,a.backControl,a.hand]]){ctx.beginPath();ctx.moveTo(curve[0].x,curve[0].y);ctx.quadraticCurveTo(curve[1].x,curve[1].y,curve[2].x,curve[2].y);ctx.save();ctx.lineWidth=172;ctx.lineCap='round';ctx.setLineDash([]);ctx.strokeStyle='rgba(226,219,165,.06)';ctx.stroke();ctx.restore();ctx.stroke();}
+      if(range&&a.key==='coffin'&&a.coffinEnd){traceEncounterShape({shape:'line',fromX:a.coffinStart.x-Math.cos(a.angle)*26,fromY:a.coffinStart.y-Math.sin(a.angle)*26,angle:a.angle,length:Math.hypot(a.coffinEnd.x-a.coffinStart.x,a.coffinEnd.y-a.coffinStart.y)+52,width:22});ctx.stroke();}
+      if(range&&a.key==='grasp'&&a.handTarget){const pose=lichGraspPose(en,a,t);traceEncounterShape({shape:'line',fromX:pose.shoulder.x,fromY:pose.shoulder.y,angle:a.angle,length:Math.hypot(a.handTarget.x-pose.shoulder.x,a.handTarget.y-pose.shoulder.y),width:9});ctx.stroke();}
+      if(details){let stage=a.phase==='windup'?'준비':a.key==='cathedral'?(lichRibPose(a,t).part>75?'다음 문 준비':'갈비뼈 접힘'):a.key==='reap'?(t<=70?'낫 보내기':t<=70+a.reapTell?'회수 예고':'낫 회수'):a.key==='coffin'?'관 끌기':'손 뻗기';ctx.font='bold 13px sans-serif';ctx.fillStyle='#fef3c7';ctx.textAlign='center';ctx.fillText(ENCOUNTER_ATTACKS.zombie[a.key].name+' · '+stage+' '+(a.left/60).toFixed(1)+'초',en.x,en.y+en.r+40);}
+      ctx.restore();
+    }
+
+    function clearEncounterRuntime(){lichRubble=[];demonWalls=[];encounterHazards=[];encounterShots=[];encounterEffects=[];ghostDecoys=[];ghostZones=[];demonZones=[];}
     const encounterCurrent=en=>!!en && en.hp>0 && enemies.includes(en) && COMBAT_STATES.includes(gameState) && combatReportMode!=='death';
     const encounterStage=en=>!en.isBoss?1:en.hp/en.maxHp<=.35?3:en.hp/en.maxHp<=(en.category==='demon'?.7:.65)?2:1;
     function encounterEffect(en,kind,x=en.x,y=en.y,r=en.r){
@@ -4543,6 +4680,7 @@
         }
         if(key==='corridor'){a.angle=(en.encounterSequence||0)%2?0:Math.PI/2;a.safeX=slimeClamp(player.x+(player.x<400?60:-60),100,700);a.safeY=slimeClamp(player.y+(player.y<450?60:-60),180,740);a.width=100;}
       }
+      if(en.category==='zombie'&&def.shape==='lich')prepareLichChoreography(en,a);
       en.encounterAttack=a;en.encounterFacing=angle;en.encounterStage=encounterStage(en);
       enterAttackPhase(en,a,'windup',wind,'encounter');en.damageReduction=0;
       if(key==='ritual'||key==='judgment'){
@@ -4576,7 +4714,7 @@
     }
     function encounterShape(en,a){return {...a,shape:ENCOUNTER_ATTACKS[en.category][a.key].shape};}
     function encounterChoices(en){
-      if(en.category==='zombie')return en.isBoss?(en.encounterStage===3?['scythe','drain','ritual','summon']:en.encounterStage===2?['scythe','summon','drain']:['scythe','drain']):en.stageIndex===0?['grab']:en.stageIndex===1?['slash']:['crush','guard','slash'];
+      if(en.category==='zombie')return en.isBoss?(en.encounterStage===3?['cathedral','coffin','reap','drain','ritual','summon']:en.encounterStage===2?['cathedral','coffin','reap','drain']:['cathedral','coffin','reap']):en.stageIndex===0?['grasp']:en.stageIndex===1?['slash']:['crush','guard','slash'];
       if(en.category==='demon')return en.isBoss?(en.encounterStage===3?['blades','breath','wall','execution','descent','furnace']:en.encounterStage===2?['blades','breath','wall','execution','descent']:['execution','descent','blades']):en.stageIndex===0?['bite','ember']:en.stageIndex===1?['cleave','bulwark']:['blades','wall'];
       if(en.category==='ghost')return en.isBoss?(en.encounterStage===3?['blink','fan','mirror','hands','corridor']:en.encounterStage===2?['blink','fan','mirror','hands']:['blink','fan','hands']):en.stageIndex===0?['touch']:en.stageIndex===1?['blink','fan']:['hands','fan'];
       return [];
@@ -4604,14 +4742,15 @@
         encounterEffect(en,'interrupt');enterAttackPhase(en,a,'recovery',ENCOUNTER_ATTACKS[en.category][a.key].recover,'encounter');en.damageReduction=0;
       }
       if(a.phase==='windup'){
+        if(en.category==='zombie'&&isLichChoreography(a))tickLichWindup(en,a);
         if(--a.left>0)return;
-        enterAttackPhase(en,a,'active',ENCOUNTER_ATTACKS[en.category][a.key].active+(en.category==='demon'&&a.key==='combo'?a.secondAt-36:0),'encounter');a.elapsed=0;
+        enterAttackPhase(en,a,'active',(a.activeTicks||ENCOUNTER_ATTACKS[en.category][a.key].active)+(en.category==='demon'&&a.key==='combo'?a.secondAt-36:0),'encounter');a.elapsed=0;
       }
       if(a.phase==='active'){
         tickEncounterAttack(en,a);
         if(!encounterCurrent(en))return;
         a.elapsed++;
-        if(--a.left<=0){enterAttackPhase(en,a,'recovery',ENCOUNTER_ATTACKS[en.category][a.key].recover,'encounter');en.damageReduction=0;enemies=enemies.filter(e=>!e.isEncounterObject||e.encounterOwner!==en||e.isDemonBlade);}
+        if(--a.left<=0){if(en.category==='zombie'&&isLichChoreography(a))finishLichChoreography(en,a);enterAttackPhase(en,a,'recovery',ENCOUNTER_ATTACKS[en.category][a.key].recover+(a.collided?80:0),'encounter');en.damageReduction=0;enemies=enemies.filter(e=>!e.isEncounterObject||e.encounterOwner!==en||e.isDemonBlade);}
       }else if(a.phase==='recovery'&&--a.left<=0){if(en.category==='demon'&&en.isBoss&&en.encounterStage>=2)en.demonFollowup=a.key==='blades'?'breath':a.key==='wall'?'execution':null;
         en.encounterAttack=null;en.state='idle';en.encounterIdle=en.isBoss?36:50;en.damageReduction=0;}
     }
@@ -4620,6 +4759,7 @@
       if(en.category==='demon'){tickDemonAttack(en,a,base);return;}
       if(en.category==='ghost'){tickGhostAttack(en,a,base);return;}
       if(en.category!=='zombie')return;
+      if(isLichChoreography(a)){tickLichChoreography(en,a,base);return;}
       if(a.key==='drain'){
         if(a.elapsed%18===0){const dealt=encounterStrike(en,a,'drain'+a.elapsed,encounterShape(en,a),10+en.level*.18,'생명력 흡수 (주기 피해)');if(encounterCurrent(en))en.hp=Math.min(en.maxHp,en.hp+dealt*.5);}
       }else if(a.key==='summon'&&a.elapsed===0){
@@ -4634,6 +4774,7 @@
       }
     }
     function removeEncounterOwner(en){
+      lichRubble=lichRubble.filter(s=>s.owner!==en);
       enemies=enemies.filter(e=>e.encounterOwner!==en);
       encounterHazards=encounterHazards.filter(z=>z.owner!==en);encounterShots=encounterShots.filter(s=>s.owner!==en);
       ghostDecoys=ghostDecoys.filter(d=>d.encounterOwner!==en);demonWalls=demonWalls.filter(w=>w.owner!==en);
@@ -4645,7 +4786,7 @@
     }
     function tickEncounterRuntime(){
       if((adminMode.active&&adminMode.freezeAI)||!COMBAT_STATES.includes(gameState)||combatReportMode==='death')return;
-      tickDemonTerrain();
+      tickDemonTerrain();tickLichRubble();
       encounterEffects=encounterEffects.filter(f=>--f.left>0);
       ghostDecoys=ghostDecoys.filter(d=>--d.life>0&&encounterCurrent(d.encounterOwner));
       encounterHazards=encounterHazards.filter(z=>encounterCurrent(z.owner));
@@ -4672,6 +4813,7 @@
     }
     function drawEncounterGuide(en){
       const a=en.encounterAttack;if(!a||!liveEnemyWarning(en))return;const def=ENCOUNTER_ATTACKS[en.category][a.key],showRange=enemyWarningRange(en,a),details=enemyWarningDetails(en);
+      if(en.category==='zombie'&&isLichChoreography(a)){drawLichGuide(en,a,showRange||(adminMode.active&&encounterDebugHitboxes),details);return;}
       ctx.save();ctx.strokeStyle=a.phase==='windup'?'#fde68a':'#fb7185';ctx.fillStyle='rgba(251,191,36,.12)';ctx.lineWidth=2;
       if(showRange&&def.shape==='choreo')drawDemonChoreographyGuide(en,a);
       if(showRange&&(a.phase==='windup'||a.phase==='active')){
@@ -4699,7 +4841,7 @@
     }
     function drawEncounterRuntime(){
       if(!COMBAT_STATES.includes(gameState))return;
-      drawDemonTerrain();
+      drawDemonTerrain();drawLichRubble();
       ctx.save();for(const shot of encounterShots){ctx.fillStyle=shot.color;ctx.strokeStyle='#f5f3ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(shot.x,shot.y,shot.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(shot.x,shot.y);ctx.lineTo(shot.x-shot.vx*5,shot.y-shot.vy*5);ctx.stroke();}ctx.restore();
       ctx.save();for(const f of encounterEffects){if(accessibility.effects===0)continue;const p=1-f.left/f.max;ctx.globalAlpha=(1-p)*accessibility.effects;ctx.strokeStyle=f.color;ctx.fillStyle=f.color;ctx.lineWidth=3;
         if(f.kind==='death'){if(f.snapshot){ctx.save();ctx.translate(f.x,f.y+25*p*p);ctx.rotate(p*(f.isBoss?.4:1.1));ctx.scale(1+p*.1,Math.max(.1,1-p*.65));({zombie:drawZombieMob,ghost:drawGhostMob,demon:drawDemonMob})[f.category](f.snapshot,frameCount/60);ctx.restore();ctx.globalAlpha=(1-p)*accessibility.effects;}for(let i=0;i<9;i++){const angle=i*Math.PI*2/9;ctx.save();ctx.translate(f.x+Math.cos(angle)*f.r*p,f.y+Math.sin(angle)*f.r*p+40*p*p);ctx.rotate(angle+p*4);ctx.fillRect(-4,-3,8*(1-p),6);ctx.restore();}}
@@ -4711,11 +4853,12 @@
     }
     window.adminEncounterPattern=function(){
       if(!adminOnly())return;const cat=document.getElementById('encounter-family').value,key=document.getElementById('encounter-pattern').value;
-      if(!ENCOUNTER_ATTACKS[cat]?.[key])return;prepareAdminArena();enterDungeonStage(cat,2,true,false);const en=enemies[0],stage=Number(document.getElementById('encounter-phase').value);
+      if(!ENCOUNTER_ATTACKS[cat]?.[key])return;prepareAdminArena();enterDungeonStage(cat,key==='grasp'?0:2,key!=='grasp',false);if(key==='grasp')enemies=[createDungeonMob('zombie',0,400,400)];const en=enemies[0],stage=Number(document.getElementById('encounter-phase').value);
+      if(cat==='zombie'){statAgi=20;delete activeBuffs.speed;recalcAllStats();}
       if(cat==='demon'){statAgi=30;delete activeBuffs.speed;recalcAllStats();}
-      en.hp=en.maxHp*({1:1,2:.55,3:.25}[stage]||1);beginEncounterAttack(en,key);openAdminPanel();adminMessage('패턴 준비: '+en.name+' · '+ENCOUNTER_ATTACKS[cat][key].name);
+      en.hp=en.maxHp*(en.isBoss?({1:1,2:.55,3:.25}[stage]||1):1);beginEncounterAttack(en,key);openAdminPanel();adminMessage('패턴 준비: '+en.name+' · '+ENCOUNTER_ATTACKS[cat][key].name);
     };
-    window.updateEncounterPatternOptions=function(){const select=document.getElementById('encounter-pattern');select.replaceChildren();for(const [key,def] of Object.entries(ENCOUNTER_ATTACKS[document.getElementById('encounter-family').value]||{})){if(['grab','slash','crush','guard','touch','bite','ember','cleave','bulwark'].includes(key)|| (document.getElementById('encounter-family').value==='demon'&&['combo','rush','judgment','fissure','tempest','brand'].includes(key)))continue;const opt=document.createElement('option');opt.value=key;opt.textContent=def.name;select.appendChild(opt);}};
+    window.updateEncounterPatternOptions=function(){const select=document.getElementById('encounter-pattern');select.replaceChildren();for(const [key,def] of Object.entries(ENCOUNTER_ATTACKS[document.getElementById('encounter-family').value]||{})){if(['grab','slash','crush','guard','touch','bite','ember','cleave','bulwark'].includes(key)|| (document.getElementById('encounter-family').value==='demon'&&['combo','rush','judgment','fissure','tempest','brand'].includes(key)))continue;const opt=document.createElement('option');opt.value=key;opt.textContent=def.name+(key==='grasp'?' (일반 좀비)':'');select.appendChild(opt);}};
     function updateZombieBossAI(en){tickEncounterActor(en);}
 
     // ===== 사령왕: 환영 분신 / 그림자 손아귀 =====
@@ -5899,14 +6042,16 @@
     }
 
     function drawZombieMob(en,t,showGuide=true){
+      if(en.isLichPillar){drawLichPillar(en);return;}
+      if(encounterCurrent(en))drawLichChoreography(en,en.encounterAttack);
       if(en.isRitualSeal){
         ctx.save();ctx.translate(en.x,en.y);ctx.fillStyle='#172e29';ctx.strokeStyle='#a7f3d0';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,-28);ctx.lineTo(18,-8);ctx.lineTo(14,20);ctx.lineTo(-14,20);ctx.lineTo(-18,-8);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#bef264';ctx.font='bold 22px serif';ctx.textAlign='center';ctx.fillText('封',0,8);ctx.restore();return;
       }
       if(showGuide)drawEncounterGuide(en);
       const r=en.r,c=en.colors,a=en.encounterAttack,boss=en.isBoss,skeleton=en.stageIndex>0||boss,knight=!boss&&en.stageIndex===2;
       const facing=Math.cos(en.encounterFacing||0)<0?-1:1,p=a?slimeClamp(1-a.left/a.duration,0,1):0;
-      const cast=a?.phase==='windup',active=a?.phase==='active',recover=a?.phase==='recovery',walk=en.encounterMoving?Math.sin(t*6+en.floatSeed)*.18:Math.sin(t*2)*.025;
-      ctx.save();ctx.translate(en.x,en.y+(boss?Math.sin(t*2+en.floatSeed)*5-7:0));ctx.scale(facing,1);
+      const cast=a?.phase==='windup',active=a?.phase==='active',recover=a?.phase==='recovery',lich=isLichChoreography(a),gate=lich&&a.key==='cathedral'?lichRibPose(a,a.phase==='windup'?0:a.elapsed):null,walk=en.encounterMoving?Math.sin(t*6+en.floatSeed)*.18:Math.sin(t*2)*.025;
+      ctx.save();ctx.translate(en.x,en.y+(boss?Math.sin(t*2+en.floatSeed)*5-7:0));ctx.scale(facing,1);if(boss&&a?.collided&&recover)ctx.rotate(-.15*Math.max(0,1-(1-a.left/a.duration)*4));
       const limb=(x,y,ex,ey,w,color)=>{ctx.strokeStyle=color;ctx.lineWidth=w;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo((x+ex)/2+walk*r,y+(ey-y)*.5);ctx.lineTo(ex,ey);ctx.stroke();ctx.fillStyle=color;ctx.beginPath();ctx.arc((x+ex)/2+walk*r,y+(ey-y)*.5,w*.65,0,Math.PI*2);ctx.fill();};
       if(boss){
         // Torn layered robes, floating exposed ribcage and independent casting arms.
@@ -5915,23 +6060,24 @@
         ctx.strokeStyle='#bd9c54';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-r*.42,-r*.4);ctx.lineTo(-r*.16,r*.74);ctx.moveTo(r*.42,-r*.4);ctx.lineTo(r*.17,r*.7);ctx.stroke();
         ctx.fillStyle='#0c1620';ctx.beginPath();ctx.ellipse(0,-r*.25,r*.3,r*.4,0,0,Math.PI*2);ctx.fill();
         ctx.strokeStyle='#b1c8a6';ctx.lineWidth=3;for(let i=0;i<4;i++){const yy=-r*.43+i*r*.13;ctx.beginPath();ctx.ellipse(0,yy,r*(.27-i*.025),r*.09,0,0,Math.PI);ctx.stroke();}
-        ctx.fillStyle=en.encounterStage===3?'#fef08a':'#a3e635';ctx.beginPath();ctx.arc(0,-r*.17,r*(recover?.13:.09),0,Math.PI*2);ctx.fill();
-        limb(-r*.4,-r*.35,-r*.85,cast?-r*.78:r*.05,r*.12,'#749f81');limb(r*.4,-r*.35,r*.85,cast?-r*.65:r*.14,r*.12,'#cccfad');
-        ctx.save();ctx.translate(r*.9,cast?-r*.68:0);ctx.rotate(active&&a?.key==='scythe'?-1+p*2.5:cast?-.25:recover?.2:0);
-        ctx.strokeStyle='#8f7352';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(0,-r*.8);ctx.lineTo(0,r*.9);ctx.stroke();ctx.strokeStyle='#dbe6bd';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,-r*.7);ctx.quadraticCurveTo(r*.9,-r*1.1,r*.92,-r*.18);ctx.stroke();ctx.fillStyle='#a3e635';ctx.beginPath();ctx.arc(0,-r*.77,7,0,Math.PI*2);ctx.fill();ctx.restore();
+        ctx.fillStyle=en.encounterStage===3?'#fef08a':'#a3e635';ctx.beginPath();ctx.arc(0,-r*.17,r*(recover&&a?.key==='cathedral'?.19:recover?.13:.09),0,Math.PI*2);ctx.fill();
+        if(lich){ctx.strokeStyle='#d9dec0';ctx.lineWidth=3;for(const side of [-1,1])for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(side*r*.28,-r*.52+i*r*.12);ctx.quadraticCurveTo(side*r*(recover?.7:.5),-r*.7+i*r*.15,side*r*(recover?.54:.4),-r*.38+i*r*.15);ctx.stroke();}}
+        limb(-r*.4,-r*.35,-r*.85,gate?(gate.part>75?-r*.75:-r*.2):cast?-r*.78:a?.collided&&recover?r*.4:r*.05,r*.12,'#749f81');limb(r*.4,-r*.35,r*.85,gate?(gate.part>75?-r*.65:-r*.15):lich?-r*.2:cast?-r*.65:a?.collided&&recover?r*.4:r*.14,r*.12,'#cccfad');
+        if(a?.key!=='reap'){ctx.save();ctx.translate(r*.9,cast?-r*.68:0);ctx.rotate(active&&a?.key==='scythe'?-1+p*2.5:cast?-.25:recover?.2:0);
+        ctx.strokeStyle='#8f7352';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(0,-r*.8);ctx.lineTo(0,r*.9);ctx.stroke();ctx.strokeStyle='#dbe6bd';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,-r*.7);ctx.quadraticCurveTo(r*.9,-r*1.1,r*.92,-r*.18);ctx.stroke();ctx.fillStyle='#a3e635';ctx.beginPath();ctx.arc(0,-r*.77,7,0,Math.PI*2);ctx.fill();ctx.restore();}
       }else{
         limb(-r*.22,r*.15,-r*.28+walk*r,r*.85,r*(skeleton?.13:.26),skeleton?'#c9c5ae':'#41654a');limb(r*.2,r*.15,r*.3-walk*r,r*.86,r*(skeleton?.13:.25),skeleton?'#e4dfc6':'#62855d');
         ctx.fillStyle=skeleton?'#2d3439':'#506641';ctx.beginPath();ctx.roundRect(-r*.4,-r*.5,r*.8,r*.85,7);ctx.fill();
         if(skeleton){ctx.strokeStyle='#dbd8bf';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,-r*.46);ctx.lineTo(0,r*.25);ctx.stroke();for(let i=0;i<4;i++){ctx.beginPath();ctx.ellipse(0,-r*.35+i*r*.15,r*.3,r*.08,0,0,Math.PI);ctx.stroke();}}
         else{ctx.fillStyle='#8b5a49';ctx.fillRect(-r*.3,-r*.32,r*.2,r*.24);ctx.strokeStyle='#b9a582';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.4,-r*.3);ctx.lineTo(r*.25,r*.15);ctx.stroke();}
-        const reach=active?.95:cast?.75:.45;limb(-r*.35,-r*.4,-r*.68,r*(cast?-.3:.2),r*.16,skeleton?'#b6b5a0':'#72935f');limb(r*.35,-r*.38,r*reach,cast?-r*.65:active?r*.1:r*.4,r*.16,skeleton?'#e1ddc6':'#8eaa6a');
+        const reach=active?.95:cast?.75:.45;limb(-r*.35,-r*.4,-r*.68,r*(cast?-.3:.2),r*.16,skeleton?'#b6b5a0':'#72935f');if(a?.key!=='grasp')limb(r*.35,-r*.38,r*reach,cast?-r*.65:active?r*.1:r*.4,r*.16,skeleton?'#e1ddc6':'#8eaa6a');
         if(skeleton){ctx.save();ctx.translate(r*reach,cast?-r*.65:active?r*.1:r*.4);ctx.rotate(cast?-.8:active?1.2:0);ctx.fillStyle='#c0cdd0';ctx.beginPath();ctx.moveTo(-3,0);ctx.lineTo(-5,-r*.65);ctx.lineTo(0,-r*.86);ctx.lineTo(5,-r*.65);ctx.lineTo(3,0);ctx.fill();ctx.fillStyle='#ab8d55';ctx.fillRect(-10,0,20,4);ctx.restore();}
         if(knight){ctx.fillStyle='#48515a';ctx.strokeStyle='#a5afab';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.7,-r*.2);ctx.lineTo(-r*.25,-r*.12);ctx.lineTo(-r*.28,r*.5);ctx.lineTo(-r*.55,r*.7);ctx.lineTo(-r*.83,r*.4);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#8b805f';ctx.fillRect(-r*.72,-r*.43,r*.4,r*.16);}
       }
       // Bone sockets / damaged zombie face remain readable independently of glow settings.
       ctx.save();ctx.translate(0,-r*.7);ctx.rotate(!skeleton?-.16:0);ctx.fillStyle=skeleton?'#dedcc6':'#91a472';ctx.beginPath();ctx.roundRect(-r*.28,-r*.23,r*.56,r*.49,r*.13);ctx.fill();ctx.fillStyle='#16272a';for(const side of [-1,1]){ctx.beginPath();ctx.ellipse(side*r*.13,-r*.03,r*.08,r*.095,side*.2,0,Math.PI*2);ctx.fill();ctx.fillStyle=boss?'#bef264':'#fbbf24';ctx.fillRect(side*r*.13-1,-r*.04,3,3);ctx.fillStyle='#16272a';}ctx.fillRect(-r*.14,r*.14,r*.28,3);if(skeleton){for(let i=0;i<4;i++){ctx.fillRect(-r*.12+i*r*.07,r*.12,2,r*.1);}}ctx.restore();
-      if(boss){ctx.fillStyle='#ac965e';ctx.strokeStyle='#e5d28c';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.35,-r*.9);ctx.lineTo(-r*.4,-r*1.2);ctx.lineTo(-r*.13,-r*1.04);ctx.lineTo(0,-r*1.3);ctx.lineTo(r*.13,-r*1.04);ctx.lineTo(r*.4,-r*1.2);ctx.lineTo(r*.35,-r*.9);ctx.closePath();ctx.fill();ctx.stroke();if(en.encounterStage>=2){ctx.strokeStyle='#ccf7a1';ctx.beginPath();ctx.moveTo(r*.22,-r*1.1);ctx.lineTo(r*.12,-r*.94);ctx.stroke();}}
-      ctx.restore();
+      if(boss){ctx.strokeStyle='#cad2b5';ctx.lineWidth=5;for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(side*r*.26,-r*.86);ctx.lineTo(side*r*.48,-r*1.1);ctx.lineTo(side*r*.4,-r*1.42);ctx.moveTo(side*r*.48,-r*1.1);ctx.lineTo(side*r*.68,-r*1.25);ctx.stroke();}ctx.fillStyle='#a8b59b';ctx.strokeStyle='#e4e7c5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.35,-r*.9);ctx.lineTo(-r*.4,-r*1.2);ctx.lineTo(-r*.13,-r*1.04);ctx.lineTo(0,-r*1.3);ctx.lineTo(r*.13,-r*1.04);ctx.lineTo(r*.4,-r*1.2);ctx.lineTo(r*.35,-r*.9);ctx.closePath();ctx.fill();ctx.stroke();if(en.encounterStage>=2){ctx.strokeStyle='#ccf7a1';ctx.beginPath();ctx.moveTo(r*.22,-r*1.1);ctx.lineTo(r*.12,-r*.94);ctx.stroke();}}
+      ctx.restore();if(encounterCurrent(en))drawLichWeapon(en,a);
     }
 
     function drawGhostMob(en,t,showGuide=true){
@@ -6291,7 +6437,7 @@
     const POTION_BUY_QTYS = [1, 3, 10, 64];
 
     // The journal observes existing combat events; it never supplies combat or reward values.
-    const GAME_VERSION='6.5.1', JOURNAL_RULESET='6.5.1';
+    const GAME_VERSION='6.6.0', JOURNAL_RULESET='6.6.0';
     const JOURNAL_WEAPONS=['sword','bow','staff'];
     const JOURNAL_GRADES=['일반','정예','생존','보스'];
     const JOURNAL_OUTCOMES={victory:'승리',defeat:'패배',escape:'중도 이탈'};
@@ -6461,7 +6607,7 @@
     const JOURNAL_LORE={
       slime:['젖은 바닥을 튀어 다니는 젤 생명체. 몸을 웅크리는 순간 다음 도약을 준비합니다.','단단한 외막의 푸른 개체. 젤 철퇴의 박힘/회수와 짧은 탄성 도약 뒤의 빈틈을 구분하세요.','끓는 핵의 붉은 개체. 두 젤 봉우리가 차례로 솟은 뒤 산성 흔적이 남습니다. 열린 바닥으로 이동하세요.','몸을 해일로 펴고 결정에 붙여 튕기는 젤 군주. 철퇴의 박힘과 회수를 구분하고, 재결합하는 핵을 공략하세요. 기본 민첩10 기준입니다.'],
       wolf:['측면으로 몸을 낮춰 접근하는 회색 사냥꾼. 턱 방향이 고정된 뒤 짧게 물고 지나가며 제동합니다.','낮게 옆으로 도는 검은 사냥꾼. 털을 세운 경계 자세에서는 정면 연타를 멈추거나 측면으로 움직이세요.','뿌리를 찢고 무리를 격려하는 우두머리. 실제 앞발과 짧게 남는 뿌리 자국, 측면 물기의 방향을 읽으세요.','뿌리를 차며 세 번 사냥하는 늑대왕. 새 방향 고정·물기 뒤 제동·찢긴 뿌리를 읽으세요. 민첩15 기준입니다. 올가미의 열린 끝·동료의 공격 순서·정면 반격 자세를 구분하세요.'],
-      zombie:['묘지를 떠도는 망자. 느리게 접근하지만 붙잡기 범위 안에 오래 머물면 위험합니다.','부서진 뼈가 다시 모인 병사. 칼을 드는 준비 자세 뒤 전방을 피하세요.','묘지의 갑옷 수호자. 방패를 든 동안과 내려찍기 뒤의 후딜을 구분하세요.','뼈 제단의 의식을 지휘하는 마법사. 낫·흡수·호위를 구분하고 부활 의식의 봉인석을 활용하세요.'],
+      zombie:['어깨를 내밀고 손을 뻗는 망자. 몸을 낮춰 다가온 뒤 손 방향을 고정하므로 옆으로 비켜서세요.','부서진 뼈가 다시 모인 병사. 칼을 드는 준비 자세 뒤 전방을 피하세요.','묘지의 갑옷 수호자. 방패를 든 동안과 내려찍기 뒤의 후딜을 구분하세요.','갈비뼈 문을 접고 낫과 척추 사슬 관을 다루는 사령술사. 열린 문·낫의 왕복·남은 기둥을 읽고 붕괴와 회수의 빈틈을 노리세요. 민첩20 기준입니다.'],
       ghost:['폐허에 남은 떠도는 영혼. 손을 뻗기 전의 자세와 순간이동 도착 위치를 확인하세요.','거울 파편을 따라 움직이는 망령. 환영과 본체의 모양을 구분하세요.','안개와 함께 나타나는 악령. 여러 위치의 공격은 한꺼번에 끝나지 않으므로 순서를 보세요.','영혼 문을 지키는 사령왕. 왕관과 가면을 가진 본체를 찾고, 고정된 탄막 틈과 회랑을 이용하세요.'],
       demon:['성벽 안을 지키는 악마. 전방을 노리는 타격과 지면에 남는 불꽃을 경계하세요.','흑철 갑옷을 두른 기사. 방패와 검의 준비 자세를 구분하고 타격 뒤에 접근하세요.','군단을 지휘하는 장군. 넓어진 공격과 이어지는 낙인을 확인하세요.','흑철 왕좌의 주인. HP 70%·35%에서 단계가 바뀌며, 왕검·날개 강림·용광로의 회수 후딜이 공격 기회입니다. 민첩30 기준입니다.']
     };
@@ -6484,7 +6630,9 @@
         ['guard','발을 고정하고 털을 세워 정면을 경계합니다.','공격을 멈추고 측면으로 돌거나 반격을 유도한 뒤 고정된 턱 경로 옆으로 움직이세요.','경계가 풀리거나 물기를 마친 뒤 공격하세요. 정면 피격이 있어도 피해 감소나 즉시 반격은 없습니다.']
       ],
       zombie:[
-        ['scythe','낫을 들어 전방의 넓은 부채꼴을 고정합니다.','낫이 향한 방향의 옆이나 리치 뒤로 이동하세요.','낫을 거두는 동안 공격하세요.'],
+        ['cathedral','갈비뼈 기둥에서 세 문이 차례로 접힙니다. 다음 열린 문은 이전 문이 접힌 뒤 미리 표시됩니다.','열린 틈을 따라 이동하거나 기둥 하나를 선택적으로 파괴하세요. 잔해는 이동을 막지 않습니다.','대성당 붕괴 뒤 벌어진 흉부를 공격하세요.'],
+        ['reap','실제 낫이 곡선으로 날아가 멈춘 뒤 다른 곡선으로 돌아옵니다.','나갈 때 옆으로 빠지고 회수할 때 사슬과 낫의 궤적 안쪽으로 진입하세요.','낫을 회수하고 손을 내리는 동안 공격하세요.'],
+        ['coffin','척추 사슬에 매인 관을 준비하다 방향을 고정하고 끌어옵니다.','기둥 뒤로 유도하거나 관 옆으로 비켜서세요. 기둥 충돌은 선택적이며 필수 화력 검사가 아닙니다.','관이 기둥에 걸리면 더 긴 반격 기회가 생깁니다. 일반 회수 후딜에도 공격할 수 있습니다.'],
         ['drain','고정된 직선 통로에 생명력 흡수를 준비합니다.','통로 옆으로 빠져나오세요. 흡수를 맞으면 실제 피해만큼 리치가 회복합니다.','통로 밖에서 공격하고, 흡수가 끝난 뒤 접근하세요.'],
         ['summon','양손을 들고 호위의 등장 위치를 표시합니다.','소환 위치를 피해 호위와 본체가 겹치지 않도록 움직이세요.','소환 동작 뒤 본체의 후딜을 노리세요. 호위는 일반 보상을 주지 않습니다.'],
         ['ritual','의식 문양·안전 원·봉인석을 만듭니다.','안전 원 안으로 이동하거나 봉인석을 파괴해 의식을 중단하세요.','의식이 끝나거나 중단된 뒤의 후딜에 공격하세요.']

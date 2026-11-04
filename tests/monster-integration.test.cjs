@@ -2,6 +2,7 @@ const {test,before,after}=require('node:test');
 const assert=require('node:assert/strict');
 const {createBrowserHarness,startNewAdventure}=require('./helpers/browser.cjs');
 const {manualAnimationClock}=require('./helpers/manual-clock.cjs');
+const {installLichEvasion}=require('./helpers/lich-evasion.cjs');
 const {run}=createBrowserHarness({before,after}),options={init:manualAnimationClock};
 for(const cat of ['zombie','ghost','demon'])test(cat+' all weapons can punish recovery in all three difficulties using actual basic attack input',()=>run(async page=>{
  await startNewAdventure(page);const samples=await page.evaluate(cat=>{const reports=[],random=Math.random;Math.random=()=>.99;ctx.save();ctx.beginPath();ctx.rect(0,0,0,0);ctx.clip();try{
@@ -23,12 +24,15 @@ for(const cat of ['zombie','demon'])for(const slot of ['sword','bow','staff'])te
  for(;ticks<budget&&!a.interrupted;ticks++){frameCount++;canvas.dispatchEvent(new MouseEvent('mousedown',{button:0,bubbles:true,clientX:rect.left+seal.x*rect.width/800,clientY:rect.top+seal.y*rect.height/900}));updateAndDrawProjectiles();tickEncounterActor(en);}
  return {interrupted:!!a.interrupted,within:ticks<budget,sealRemoved:!enemies.includes(seal),noReward:g===gold&&xp===exp,noMana:mp===maxMp};},{cat,slot});assert.deepEqual(r,{interrupted:true,within:true,sealRemoved:true,noReward:true,noMana:true});
 },options));
-for(const cat of ['zombie','ghost','demon'])test(cat+' every damaging boss pattern has a reachable escape with normal running and no movement skill',()=>run(async page=>{
- await startNewAdventure(page);const samples=await page.evaluate(cat=>{
+for(const cat of ['zombie','ghost','demon'])test(cat+' every damaging boss pattern has a reachable escape at its movement threshold without a movement skill',()=>run(async page=>{
+ await startNewAdventure(page);if(cat==='zombie')await page.evaluate(installLichEvasion);const samples=await page.evaluate(cat=>{
  const results=[];accessibility.hitStop=false;ctx.save();ctx.beginPath();ctx.rect(0,0,0,0);ctx.clip();
  try{for(const [key,def] of Object.entries(ENCOUNTER_ATTACKS[cat])){
-  if(['grab','slash','crush','guard','touch','bite','ember','cleave','bulwark','blink','mirror','summon'].includes(key))continue;
-  clearBattleRuntime();difficulty='normal';statAgi=cat==='demon'?30:10;recalcAllStats();hp=maxHp=5000;enterDungeonStage(cat,2,true,false);const en=enemies[0];en.x=350;en.y=400;player.x=480;player.y=400;portalCooldown=99999;beginEncounterAttack(en,key);const a=en.encounterAttack;
+  if(['grasp','grab','slash','crush','guard','touch','bite','ember','cleave','bulwark','blink','mirror','summon'].includes(key))continue;
+  clearBattleRuntime();difficulty='normal';statAgi=cat==='demon'?30:cat==='zombie'?20:10;recalcAllStats();hp=maxHp=5000;enterDungeonStage(cat,2,true,false);const en=enemies[0];en.x=350;en.y=400;player.x=480;player.y=400;portalCooldown=99999;beginEncounterAttack(en,key);const a=en.encounterAttack;
+  if(cat==='zombie'&&def.shape==='lich'){
+   const before=hp,state={};let ticks=0;while(a.phase!=='recovery'&&ticks++<1200){walkLichEvasion(en,a,state);stepGame(false);}keys={};results.push({key,reachable:a.phase==='recovery',safe:hp===before,loss:before-hp,walkingAgility:statAgi,ticks});continue;
+  }
   const dangerous=(x,y)=>{
    if(def.shape==='choreo'){
     if(key==='blades'&&a.bladePoints.some(p=>Math.hypot(x-p.x,y-p.y)<55))return true;

@@ -78,7 +78,7 @@ test('recent detail stays at twenty while lifetime totals and bests survive repe
 },options));
 
 test('previous rules remain labeled and a new victory starts the current best without comparing old times',()=>run(async page=>{
- await page.evaluate(setupJournalBoss);const r=await page.evaluate(()=>{createBasicAttack();damageEnemy(enemies[0],1e9,false);const old=getSaveData();for(const r of [...old.adventureJournal.recent,...old.adventureJournal.bests]){r.rules='5.6.0';r.version='5.6.0';}applySaveData(old,true);bossRespawnCooldown.slime=0;enterDungeonStage('slime',2,true,false);enemies[0].stateTimer=100000;for(let i=0;i<5;i++)stepGame(false);createBasicAttack();damageEnemy(enemies[0],1e9,false);return {bests:adventureJournal.bests,kind:adventureJournal.recent[0].bestKind,old:adventureJournal.recent[1].rules,improvements:adventureJournal.totals[0].improvements};});assert.equal(r.bests[0].ticks,5);assert.equal(r.bests[0].rules,'6.5.1');assert.equal(r.kind,'rules');assert.equal(r.old,'5.6.0');assert.equal(r.improvements,0);
+ await page.evaluate(setupJournalBoss);const r=await page.evaluate(()=>{createBasicAttack();damageEnemy(enemies[0],1e9,false);const old=getSaveData();for(const r of [...old.adventureJournal.recent,...old.adventureJournal.bests]){r.rules='5.6.0';r.version='5.6.0';}applySaveData(old,true);bossRespawnCooldown.slime=0;enterDungeonStage('slime',2,true,false);enemies[0].stateTimer=100000;for(let i=0;i<5;i++)stepGame(false);createBasicAttack();damageEnemy(enemies[0],1e9,false);return {bests:adventureJournal.bests,kind:adventureJournal.recent[0].bestKind,old:adventureJournal.recent[1].rules,improvements:adventureJournal.totals[0].improvements};});assert.equal(r.bests[0].ticks,5);assert.equal(r.bests[0].rules,'6.6.0');assert.equal(r.kind,'rules');assert.equal(r.old,'5.6.0');assert.equal(r.improvements,0);
 },options));
 
 test('invalid journal identities, duplicate records, impossible contexts and corrupt counts are rejected before mutation',()=>run(async page=>{
@@ -108,7 +108,7 @@ test('boss guides expose every real boss pattern with avoidance and recovery inf
   const before=JSON.stringify(getSaveData(),(k,v)=>k==='savedAt'?0:v),pixels=canvas.toDataURL(),random=Math.random;let randomCalls=0;Math.random=()=>{randomCalls++;return .5;};const counts=[];
   try{openJournal();for(const c of TOWER_CATS){journalView.selected=c+':boss';renderJournal();counts.push(document.querySelectorAll('#journal-detail .journal-guide').length);}}finally{Math.random=random;}
   return {counts,randomCalls,pure:before===JSON.stringify(getSaveData(),(k,v)=>k==='savedAt'?0:v),pixels:pixels===canvas.toDataURL(),text:document.getElementById('journal-detail').textContent};
- });assert.deepEqual(r.counts,[6,6,4,5,6]);assert.equal(r.randomCalls,0);assert.equal(r.pure,true);assert.equal(r.pixels,true);assert.match(r.text,/노출된 흉부/);assert.match(r.text,/공격 기회/);
+ });assert.deepEqual(r.counts,[6,6,6,5,6]);assert.equal(r.randomCalls,0);assert.equal(r.pure,true);assert.equal(r.pixels,true);assert.match(r.text,/노출된 흉부/);assert.match(r.text,/공격 기회/);
 },options));
 
 test('journal and weapon-filtered result views pause actual RAF time and block gameplay input until explicitly resumed',()=>run(async page=>{

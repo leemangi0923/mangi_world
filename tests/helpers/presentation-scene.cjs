@@ -12,7 +12,7 @@ function runPresentationScene({category,mode,ticks=1200,effects=.65,traceMoves=f
     const rect=canvas.getBoundingClientRect(),moves=new Set();
     for(let tick=0;tick<ticks;tick++){
       if(tick%60===0)canvas.dispatchEvent(new MouseEvent('mousedown',{button:0,bubbles:true,clientX:rect.left+boss.x*rect.width/800,clientY:rect.top+boss.y*rect.height/900}));
-      stepGame(false);if(traceMoves&&boss.wolfAttack)moves.add(boss.wolfAttack.key);
+      stepGame(false);if(traceMoves&&(boss.wolfAttack||boss.encounterAttack))moves.add((boss.wolfAttack||boss.encounterAttack).key);
     }
     const attack=a=>a?Object.fromEntries(['key','phase','left','duration','angle','x','y','fromX','fromY','elapsed'].filter(k=>a[k]!==undefined).map(k=>[k,a[k]])):null;
     const fight={hp,mp,frameCount,player:{x:player.x,y:player.y},enemies:enemies.map(en=>({x:en.x,y:en.y,hp:en.hp,state:en.state,stateTimer:en.stateTimer,category:en.category,isBoss:!!en.isBoss,slime:attack(en.slimeAttack),wolf:attack(en.wolfAttack),encounter:attack(en.encounterAttack)})),shots:[...projectiles,...encounterShots].map(p=>({x:p.x,y:p.y,vx:p.vx,vy:p.vy,life:p.life})),damageLog:JSON.parse(JSON.stringify(damageLog)),trait:{count:weaponTraitState.count,procs:weaponTraitState.procs,readyAt:weaponTraitState.readyAt},randomCalls,seed};

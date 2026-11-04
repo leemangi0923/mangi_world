@@ -5,7 +5,7 @@ const {manualAnimationClock}=require('./helpers/manual-clock.cjs');
 const {runPresentationScene}=require('./helpers/presentation-scene.cjs');
 const baseline=require('./fixtures/presentation-v5.5.0.json');
 const {run}=createBrowserHarness({before,after}),options={init:manualAnimationClock};
-for(const {input,expected} of baseline.scenarios.filter(s=>!['demon','slime','wolf'].includes(s.input.category)))test(input.category+' '+input.mode+' keeps v5.5.0 damage, attacks, movement, RNG and rewards across 1200 actual game ticks',()=>run(async page=>{
+for(const {input,expected} of baseline.scenarios.filter(s=>!['demon','slime','wolf','zombie'].includes(s.input.category)))test(input.category+' '+input.mode+' keeps v5.5.0 damage, attacks, movement, RNG and rewards across 1200 actual game ticks',()=>run(async page=>{
  const actual=await page.evaluate(runPresentationScene,input);assert.deepEqual(actual,expected);
 },options));
 
@@ -61,3 +61,5 @@ for(const mode of ['easy','normal','hard'])test('v6 demon '+mode+' rendering str
 for(const mode of ['easy','normal','hard'])test('v6 slime '+mode+' rendering strength preserves combat, RNG and rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'slime',mode,effects:0});const b=await page.evaluate(runPresentationScene,{category:'slime',mode,effects:1});assert.deepEqual(a,b);},options));
 
 for(const mode of ['easy','normal','hard'])test('v6 wolf '+mode+' render strength preserves combat, RNG and rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'wolf',mode,effects:0,ticks:4200,traceMoves:true});const b=await page.evaluate(runPresentationScene,{category:'wolf',mode,effects:1,ticks:4200,traceMoves:true});assert.deepEqual(a,b);assert.deepEqual(a.fight.moves,['guard','hunt','pincer','rake','snare','stalk']);},options));
+
+for(const mode of ['easy','normal','hard'])test('v6 lich '+mode+' effects-zero and full rendering preserve all six current moves, combat, RNG and rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'zombie',mode,effects:0,ticks:3400,traceMoves:true});const b=await page.evaluate(runPresentationScene,{category:'zombie',mode,effects:1,ticks:3400,traceMoves:true});assert.deepEqual(a,b);assert.deepEqual(a.fight.moves,['cathedral','coffin','drain','reap','ritual','summon']);},options));
