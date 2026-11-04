@@ -1,6 +1,6 @@
 {
   "name": "mangi-world",
-  "version": "6.7.0",
+  "version": "6.9.0",
   "private": true,
   "description": "Standalone HTML canvas RPG with browser regression tests",
   "scripts": {
@@ -22,9 +22,9 @@
     "test:slime": "node --test tests/slime-regression.test.cjs tests/slime-choreography.test.cjs tests/slime-stage4.test.cjs",
     "test:wolf": "node --test tests/wolf-regression.test.cjs tests/wolf-choreography.test.cjs tests/wolf-stage6.test.cjs",
     "test:undead": "node --test tests/undead-regression.test.cjs tests/lich-choreography.test.cjs tests/lich-stage8.test.cjs",
-    "test:ghost": "node --test tests/ghost-regression.test.cjs",
+    "test:ghost": "node --test tests/ghost-regression.test.cjs tests/ghost-choreography.test.cjs",
     "test:demon": "node --test tests/demon-regression.test.cjs tests/demon-choreography.test.cjs tests/demon-stage2.test.cjs",
-    "test:monsters": "node --test tests/slime-regression.test.cjs tests/wolf-regression.test.cjs tests/undead-regression.test.cjs tests/ghost-regression.test.cjs tests/demon-regression.test.cjs tests/monster-integration.test.cjs tests/demon-choreography.test.cjs tests/demon-stage2.test.cjs tests/slime-choreography.test.cjs tests/slime-stage4.test.cjs tests/wolf-choreography.test.cjs tests/wolf-stage6.test.cjs tests/lich-choreography.test.cjs tests/lich-stage8.test.cjs",
+    "test:monsters": "node --test tests/slime-regression.test.cjs tests/wolf-regression.test.cjs tests/undead-regression.test.cjs tests/ghost-regression.test.cjs tests/demon-regression.test.cjs tests/monster-integration.test.cjs tests/demon-choreography.test.cjs tests/demon-stage2.test.cjs tests/slime-choreography.test.cjs tests/slime-stage4.test.cjs tests/wolf-choreography.test.cjs tests/wolf-stage6.test.cjs tests/lich-choreography.test.cjs tests/lich-stage8.test.cjs tests/ghost-choreography.test.cjs tests/boss-completion.test.cjs",
     "test:rewards": "node --test tests/rewards-regression.test.cjs",
     "test:traits": "node --test tests/traits-regression.test.cjs",
     "test:presentation": "node --test tests/presentation-regression.test.cjs",

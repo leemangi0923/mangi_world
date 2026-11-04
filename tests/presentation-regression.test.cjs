@@ -3,12 +3,7 @@ const assert=require('node:assert/strict');
 const {createBrowserHarness,startNewAdventure}=require('./helpers/browser.cjs');
 const {manualAnimationClock}=require('./helpers/manual-clock.cjs');
 const {runPresentationScene}=require('./helpers/presentation-scene.cjs');
-const baseline=require('./fixtures/presentation-v5.5.0.json');
 const {run}=createBrowserHarness({before,after}),options={init:manualAnimationClock};
-for(const {input,expected} of baseline.scenarios.filter(s=>!['demon','slime','wolf','zombie'].includes(s.input.category)))test(input.category+' '+input.mode+' keeps v5.5.0 damage, attacks, movement, RNG and rewards across 1200 actual game ticks',()=>run(async page=>{
- const actual=await page.evaluate(runPresentationScene,input);assert.deepEqual(actual,expected);
-},options));
-
 test('all twenty dungeon grade scenes are distinct, deterministic and independent of gameplay RNG',()=>run(async page=>{
  const r=await page.evaluate(()=>{let randomCalls=0;const original=Math.random;Math.random=()=>{randomCalls++;return .5;};const scenes=[];try{for(const category of TOWER_CATS)for(const grade of [0,1,2,'boss']){const a=makeDungeonArt(category,grade==='boss'?2:grade,grade==='boss'),b=makeDungeonArt(category,grade==='boss'?2:grade,grade==='boss');scenes.push({same:a.toDataURL()===b.toDataURL(),url:a.toDataURL()});}}finally{Math.random=original;}return {randomCalls,deterministic:scenes.every(s=>s.same),distinct:new Set(scenes.map(s=>s.url)).size};});assert.deepEqual(r,{randomCalls:0,deterministic:true,distinct:20});
 },options));
@@ -63,3 +58,5 @@ for(const mode of ['easy','normal','hard'])test('v6 slime '+mode+' rendering str
 for(const mode of ['easy','normal','hard'])test('v6 wolf '+mode+' render strength preserves combat, RNG and rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'wolf',mode,effects:0,ticks:4200,traceMoves:true});const b=await page.evaluate(runPresentationScene,{category:'wolf',mode,effects:1,ticks:4200,traceMoves:true});assert.deepEqual(a,b);assert.deepEqual(a.fight.moves,['guard','hunt','pincer','rake','snare','stalk']);},options));
 
 for(const mode of ['easy','normal','hard'])test('v6 lich '+mode+' effects-zero and full rendering preserve all six current moves, combat, RNG and rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'zombie',mode,effects:0,ticks:4500,traceMoves:true});const b=await page.evaluate(runPresentationScene,{category:'zombie',mode,effects:1,ticks:4500,traceMoves:true});assert.deepEqual(a,b);assert.deepEqual(a.fight.moves,['cathedral','coffin','dragon','reap','reassemble','scales']);},options));
+
+for(const mode of ['easy','normal','hard'])test('v6 ghost '+mode+' effects-zero and full rendering preserve all six new moves, recorded paths, combat, RNG and rewards',()=>run(async page=>{const a=await page.evaluate(runPresentationScene,{category:'ghost',mode,effects:0,ticks:6500,traceMoves:true});const b=await page.evaluate(runPresentationScene,{category:'ghost',mode,effects:1,ticks:6500,traceMoves:true});assert.deepEqual(a,b);assert.deepEqual(a.fight.moves,['clasp','echo','fold','footprints','theatre','threshold']);},options));
