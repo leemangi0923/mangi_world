@@ -2,6 +2,17 @@
 function installLichEvasion(){
  window.walkLichEvasion=(en,a,state)=>{
   let token,goal,leg;
+  if(a.key==='scales'){
+   token='scales';goal=Math.hypot(player.x-a.scaleOrigin.x,player.y-a.scaleOrigin.y)>a.scaleReach+35?{x:player.x,y:player.y}:{x:slimeClamp(a.scaleOrigin.x-Math.cos(a.angle)*120,85,715),y:slimeClamp(a.scaleOrigin.y-Math.sin(a.angle)*120,170,770)};
+  }else if(a.key==='dragon'){
+   token='dragon';const path=a.dragonPath,points=Array.from({length:31},(_,i)=>lichBezier(path.from,path.control,path.to,i/30)),choices=[[-170,0],[170,0],[0,-170],[0,170],[-150,-150],[-150,150],[150,-150],[150,150]].map(([x,y])=>({x:slimeClamp(player.x+x,85,715),y:slimeClamp(player.y+y,170,770)})),score=p=>Math.min(...points.map(q=>Math.hypot(p.x-q.x,p.y-q.y)));choices.sort((p,q)=>score(q)-score(p));goal=choices[0];
+  }else if(a.key==='reassemble'){
+   const i=a.armLocks[1]?1:a.armLocks[0]?0:-1;if(i>=0){token='arm'+i;const root=a.heapSites[i],angle=a.armLocks[i].angle,d=Math.hypot(player.x-root.x,player.y-root.y);goal=d>215?{x:player.x,y:player.y}:d<65?{x:slimeClamp(root.x-Math.cos(angle)*100,85,715),y:slimeClamp(root.y-Math.sin(angle)*100,170,770)}:{x:slimeClamp(player.x+Math.cos(angle)*150,85,715),y:slimeClamp(player.y+Math.sin(angle)*150,170,770)};}
+  }else if(a.key==='bonecut'){
+   if(a.cutAngleReady){token='bonecut';const d=Math.hypot(player.x-en.x,player.y-en.y),angle=a.cutAngle;goal=d<65?{x:slimeClamp(en.x-Math.cos(angle)*110,85,715),y:slimeClamp(en.y-Math.sin(angle)*110,170,770)}:{x:slimeClamp(player.x+Math.cos(angle)*120,85,715),y:slimeClamp(player.y+Math.sin(angle)*120,170,770)};}
+  }else if(a.key==='shieldmarch'){
+   if(a.slamTarget){token='axe';const angle=Math.atan2(a.slamTarget.y-en.y,a.slamTarget.x-en.x),points=[-1,1].map(side=>({x:slimeClamp(player.x-Math.sin(angle)*120*side,85,715),y:slimeClamp(player.y+Math.cos(angle)*120*side,170,770)}));points.sort((p,q)=>Math.hypot(q.x-a.slamTarget.x,q.y-a.slamTarget.y)-Math.hypot(p.x-a.slamTarget.x,p.y-a.slamTarget.y));goal=points[0];}
+  }else
   if(a.key==='cathedral'){
    const pose=lichRibPose(a,a.phase==='windup'?0:a.elapsed),index=pose.part>75&&pose.index<2?pose.index+1:pose.index;
    token='gate'+index;goal={x:a.gaps[index],y:player.y};

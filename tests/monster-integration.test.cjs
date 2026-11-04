@@ -28,7 +28,7 @@ for(const cat of ['zombie','ghost','demon'])test(cat+' every damaging boss patte
  await startNewAdventure(page);if(cat==='zombie')await page.evaluate(installLichEvasion);const samples=await page.evaluate(cat=>{
  const results=[];accessibility.hitStop=false;ctx.save();ctx.beginPath();ctx.rect(0,0,0,0);ctx.clip();
  try{for(const [key,def] of Object.entries(ENCOUNTER_ATTACKS[cat])){
-  if(['grasp','grab','slash','crush','guard','touch','bite','ember','cleave','bulwark','blink','mirror','summon'].includes(key))continue;
+  if(['bonecut','shieldmarch','grasp','grab','slash','crush','guard','touch','bite','ember','cleave','bulwark','blink','mirror','summon'].includes(key))continue;
   clearBattleRuntime();difficulty='normal';statAgi=cat==='demon'?30:cat==='zombie'?20:10;recalcAllStats();hp=maxHp=5000;enterDungeonStage(cat,2,true,false);const en=enemies[0];en.x=350;en.y=400;player.x=480;player.y=400;portalCooldown=99999;beginEncounterAttack(en,key);const a=en.encounterAttack;
   if(cat==='zombie'&&def.shape==='lich'){
    const before=hp,state={};let ticks=0;while(a.phase!=='recovery'&&ticks++<1200){walkLichEvasion(en,a,state);stepGame(false);}keys={};results.push({key,reachable:a.phase==='recovery',safe:hp===before,loss:before-hp,walkingAgility:statAgi,ticks});continue;
